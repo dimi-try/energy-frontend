@@ -1,11 +1,6 @@
 
 # Energy-Library Frontend
 
-Developed by Stylua Inc (c) Developers
-
--   [Jenkneo](https://github.com/Jenkneo)
--   [nuafirytiasewo](https://github.com/nuafirytiasewo)
-
 💻 Languages and Tools : ![Технологии](https://skillicons.dev/icons?i=js,html,css,react)
 
 ## Общая структура проекта
