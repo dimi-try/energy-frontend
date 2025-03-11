@@ -53,8 +53,8 @@ function App() {
       {/* <Profile /> */}
       <Routes>
         <Route index element={<Profile />}/>
-        <Route path={'/energy'} element={<EnergyList />}/>
-        <Route path={"/energy/:id"} element={<Energy />} />
+        <Route path={'/energies'} element={<EnergyList />}/>
+        <Route path={"/energies/:id"} element={<Energy />} />
       </Routes>
       {showBackButton && <BackButton onClick={() => navigate(-1)} />}
       {/* <Navigation /> */}
