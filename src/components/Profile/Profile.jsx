@@ -8,7 +8,7 @@ const Profile = () => {
     const navigate = useNavigate();  // Хук для программной навигации
 
     const handleClick = () => {
-        navigate('/energy');  // Перенаправляем пользователя на страницу с энергетиками
+        navigate('/energies');  // Перенаправляем пользователя на страницу с энергетиками
     };
 
     return (

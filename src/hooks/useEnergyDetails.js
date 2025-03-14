@@ -9,7 +9,7 @@ const useProductDetails = (id) => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`${config.API_URL}/energy/${id}`);
+                const response = await fetch(`${config.API_URL}/energies/${id}`);
                 if (!response.ok) {
                     throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
                 }

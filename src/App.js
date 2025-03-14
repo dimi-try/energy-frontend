@@ -7,9 +7,21 @@ import { useUserVerification } from "./hooks/useUserVerification";
 
 import './App.css';
 
-import Profile from "./components/Profile/Profile";
-import EnergyList from "./components/EnergyList/EnergyList";
-import Energy from "./components/Energy/Energy";
+//стари ванючи пон
+// import Profile from "./components/Profile/Profile";
+// import EnergyList from "./components/EnergyList/EnergyList";
+// import Energy from "./components/Energy/Energy";
+
+//нови блистящи пон
+import Top100 from './pages/Top100';
+import Search from './pages/Search';
+import Favorites from './pages/Favorites';
+import Profile from './pages/Profile';
+import EnergyDrinkPage from './pages/EnergyDrinkPage';
+import BrandPage from './pages/BrandPage';
+import BottomNav from './components/BottomNav';
+
+
 // import Navigation from './components/Navigation/Navigation';
 
 
@@ -52,10 +64,19 @@ function App() {
       {/* <EnergyList /> */}
       {/* <Profile /> */}
       <Routes>
-        <Route index element={<Profile />}/>
-        <Route path={'/energy'} element={<EnergyList />}/>
-        <Route path={"/energy/:id"} element={<Energy />} />
+
+        {/* <Route index element={<Profile />}/>
+        <Route path={'/energies'} element={<EnergyList />}/>
+        <Route path={"/energies/:id"} element={<Energy />} /> */}
+
+        <Route path="/top100" element={<Top100 />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/energy/:id" element={<EnergyDrinkPage />} />
+        <Route path="/brand/:id" element={<BrandPage />} />
       </Routes>
+      <BottomNav />
       {showBackButton && <BackButton onClick={() => navigate(-1)} />}
       {/* <Navigation /> */}
       <goBack />
