@@ -20,7 +20,7 @@ const NavItem = styled(NavLink)`
 
 const BottomNav = () => (
   <NavBar>
-    <NavItem to="/top100">🏆 Топ 100</NavItem>
+    <NavItem to="/">🏆 Топ 100</NavItem>
     <NavItem to="/search">🔍 Поиск</NavItem>
     <NavItem to="/favorites">⭐ Избранное</NavItem>
     <NavItem to="/profile">👤 Профиль</NavItem>

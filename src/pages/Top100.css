@@ -1,0 +1,109 @@
+/* Общий контейнер */
+.top100-container {
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+    font-family: "Arial", sans-serif;
+  }
+  
+  /* Кнопки переключения */
+  .toggle-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .toggle-buttons button {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    background: #e0e0e0;
+    transition: 0.3s;
+    border-radius: 50px;
+    margin: 0 8px;
+  }
+  
+  .toggle-buttons .active {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    font-weight: bold;
+  }
+  
+  /* Лоадер и ошибки */
+  .loading, .error {
+    text-align: center;
+    font-size: 18px;
+  }
+  
+  /* Контейнер карточек */
+  .list-container {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 10px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f4f4f4, #ffffff);
+  }
+  
+  /* Карточки */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  /* Карточка */
+  .card {
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    background: white;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+  }
+  
+  .card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Номер в топе */
+  .rank {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: gold;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+  
+  .card h3 {
+    margin: 15px 0;
+    color: #333;
+    font-size: 20px;
+  }
+  
+  .card .rating {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .card p {
+    margin: 5px 0;
+    color: #666;
+  }
+  
+  /* Адаптация под мобильные устройства */
+  @media (max-width: 600px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+  
+    .card {
+      width: 100%;
+    }
+  }
+  

@@ -5,7 +5,7 @@ import { BackButton } from '@vkruglikov/react-telegram-web-app';
 import { useTelegram } from "./hooks/useTelegram";
 import { useUserVerification } from "./hooks/useUserVerification";
 
-import './App.css';
+// import './App.css';
 
 //стари ванючи пон
 // import Profile from "./components/Profile/Profile";
@@ -69,7 +69,7 @@ function App() {
         <Route path={'/energies'} element={<EnergyList />}/>
         <Route path={"/energies/:id"} element={<Energy />} /> */}
 
-        <Route path="/top100" element={<Top100 />} />
+        <Route index element={<Top100 />} />
         <Route path="/search" element={<Search />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/profile" element={<Profile />} />
