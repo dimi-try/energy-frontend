@@ -104,8 +104,9 @@ const Top100 = () => {
                     <h3>{item.brand?.name || "Неизвестный бренд"}</h3>
                     <p>{item.name || "Без названия"}</p>
                     <div className="rating">
-                      ⭐ {item.average_rating || "N/A"} ({item.votes || 0} оценок)
+                      ⭐ {item.average_rating || "N/A"} ({item.review_count || 0} оценок)
                     </div>
+                    <p>{item.category.name || "Без категории"}</p>
                   </motion.div>
                 ))
               : brands.map((item, index) => (
