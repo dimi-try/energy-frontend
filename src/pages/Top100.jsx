@@ -123,8 +123,8 @@ const Top100 = () => {
                     <div className="rank">#{index + 1}</div>
                     <h3>{item.name || "Неизвестный бренд"}</h3>
                     <div className="rating">⭐ {item.average_rating || "N/A"}</div>
-                    <p>📦 Энергетиков: {item.energies_count || 0}</p>
-                    <p>👥 Оценок: {item.total_votes || 0}</p>
+                    <p>📦 Энергетиков всего: {item.energy_count || 0}</p>
+                    <p>👥 Отзывов всего: {item.review_count || 0}</p>
                   </motion.div>
                 ))}
           </motion.div>
