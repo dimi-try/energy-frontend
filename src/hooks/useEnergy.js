@@ -1,45 +1,21 @@
-import { useState, useEffect } from 'react'; 
-import config from '../config';
+import { useState, useEffect } from 'react';
 
-// Кастомный хук для получения данных об энергетиках
-const useProducts = () => {
-    // Состояния: список продуктов, загрузка, ошибки
-    const [products, setProducts] = useState([]);
+const API_URL = process.env.REACT_APP_API_URL;
+
+const useProductDetails = (id) => {
+    const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Функция для запроса данных с API
-        const fetchProducts = async () => {
+        const fetchProduct = async () => {
             try {
-                // Запрос к эндпоинту /energies/
-                const response = await fetch(`${config.API_URL}/energies/`);
-                
-                // Обработка HTTP-ошибок
+                const response = await fetch(`${API_URL}/energy/${id}`);
                 if (!response.ok) {
                     throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
                 }
-
-                // Парсинг JSON-ответа
                 const data = await response.json();
-
-                // Преобразование данных:
-                // - Используем brand.name вместо brand_id
-                // - Добавляем другие поля из ответа API
-                const formattedData = data.map((item) => ({
-                    id: item.id,
-                    brand: item.brand.name,
-                    name: item.name,
-                    // Дополнительные поля из эндпоинта (можно раскомментировать при необходимости):
-                    description: item.description,
-                    category: item.category.name,
-                    image: item.image_url,
-                    energyType: item.energy_type,
-                    brandId: item.brand_id,
-                    categoryId: item.category_id
-                }));
-
-                setProducts(formattedData);
+                setProduct(data);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -47,10 +23,10 @@ const useProducts = () => {
             }
         };
 
-        fetchProducts();
-    }, []);
+        fetchProduct();
+    }, [id]);
 
-    return { products, loading, error };
+    return { product, loading, error };
 };
 
-export default useProducts;
+export default useProductDetails;

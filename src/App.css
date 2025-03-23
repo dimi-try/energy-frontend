@@ -1,102 +1,126 @@
-/*=============== GOOGLE FONTS ===============*/
-@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;600&display=swap');
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  text-decoration: none;
-  color: inherit;  
-}
-
-ul {
-  list-style: none;
-}
-
-a {
-  text-decoration: none;
-}
-
-a:hover {
-  color: inherit;
-}
-
-button {
-  all: unset;
-  display: inline-block;
-}
-
-
-:root {
-  --hue: 207;
-  --sat: 90%;
-  --lig: 61%;
-  --first-color: hsl(var(--hue), var(--sat), var(--lig));
-
-  /* Unused */
-  --first-color-alt: hsl(var(--hue), var(--sat), 57%); /* -4% */
-  --title-color: hsl(var(--hue), 12%, 15%);
-  --text-color: hsl(var(--hue), 12%, 45%);
-  --text-color-light: hsl(var(--hue), 8%, 75%);
-  --text-color-lighten: hsl(var(--hue), 8%, 92%);
-  --body-color: hsl(var(--hue), 100%, 99%);
-  --container-color: #fff;
-
-  /*================= Шрифт =================*/
-  /*.5rem = 8px | 1rem = 16px ...*/
-  --h2-font-size: 1.25rem;
-  --small-font-size: .813rem;
-  --body-font: 'Geologica', sans-serif;
-
-  /* Unused  */
-  --h3-font-size: 1rem;
-  --normal-font-size: .938rem;
-  --smaller-font-size: .75rem;
-}
-
-
-
+/* Стили для корневого элемента приложения */
 .App {
-  font-family: var(--body-font);
-  font-size: var(--normal-font-size);
-  background-color: var(--body-color);
-  color: var(--text-color);
-  transition: .3s; /* Для анимации темной темы */
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  justify-content: space-between;
+  /* Светлая тема по умолчанию */
+  --background-color: #f5f5f5; /* Светло-серый фон */
+  --text-color: #333333; /* Темный текст */
+  --primary-color: #007aff; /* Синий для акцентов */
+  --secondary-color: #666666; /* Серый для второстепенного текста */
+  --card-background: #ffffff; /* Белый фон для карточек */
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Легкая тень */
+  --transition: all 0.3s ease; /* Плавные переходы */
+  --border-radius: 16px; /* Скругленные углы */
 }
 
-/* Dark Theme */
-.App.dark{
-  --title-color: hsl(var(--hue), 12%, 95%);
-  --text-color: hsl(var(--hue), 12%, 75%);
-  --body-color: hsl(var(--hue), 40%, 8%);
-  --container-color: hsl(var(--hue), 24%, 12%);
+/* Темная тема */
+.App.dark {
+  --background-color: #1a1a1a; /* Темный фон */
+  --text-color: #e0e0e0; /* Светлый текст */
+  --primary-color: #40c4ff; /* Более яркий синий для акцентов */
+  --secondary-color: #b0b0b0; /* Светло-серый для второстепенного текста */
+  --card-background: #2a2a2a; /* Темный фон для карточек */
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Более темная тень */
 }
 
-/*========== 
-    Некоторые элементы, которые не
-    переключаются автоматически на темную тему
-==========*/
-.dark .stats__info{
-  background-color: var(--container-color);
+/* Основные стили для тела страницы */
+body {
+  font-family: 'Poppins', sans-serif; /* Устанавливаем шрифт */
+  background-color: var(--background-color); /* Фон страницы */
+  color: var(--text-color); /* Цвет текста */
+  margin: 0; /* Убираем отступы */
+  padding: 0; /* Убираем внутренние отступы */
+  overflow-x: hidden; /* Запрещаем горизонтальную прокрутку */
 }
 
-.dark .nav{
-  background-color: var(--container-color);
+/* Контейнер для центрирования контента */
+.container {
+  max-width: 100%; /* Максимальная ширина контейнера */
+  padding: 15px; /* Внутренние отступы */
+  margin: 0 auto; /* Центрируем контейнер */
+  box-sizing: border-box; /* Учитываем padding в ширине */
+  padding-bottom: 80px; /* Отступ для навигационной панели */
 }
 
-
+/* Стили для заголовков */
 h1, h2, h3 {
-  color: var(--title-color);
-  font-weight: 600;
+  font-weight: 600; /* Полужирный шрифт */
+  margin: 0 0 12px; /* Отступы снизу */
+  color: var(--text-color); /* Цвет текста */
 }
 
+/* Стили для кнопок */
+button {
+  background-color: var(--primary-color); /* Цвет фона кнопки */
+  color: #ffffff; /* Цвет текста */
+  border: none; /* Убираем границу */
+  padding: 10px 20px; /* Внутренние отступы */
+  border-radius: 12px; /* Скругленные углы */
+  font-size: 14px; /* Размер шрифта */
+  cursor: pointer; /* Курсор в виде указателя */
+  transition: var(--transition); /* Плавные переходы */
+}
 
+/* Эффект наведения на кнопку */
+button:hover {
+  background-color: #005bb5; /* Темнее при наведении */
+}
 
-img {
-  max-width: 100%;
-  height: auto;
+/* Стили для карточек */
+.card {
+  background-color: var(--card-background); /* Фон карточки */
+  padding: 15px; /* Внутренние отступы */
+  border-radius: var(--border-radius); /* Скругленные углы */
+  box-shadow: var(--shadow); /* Тень */
+  display: flex; /* Flexbox для выравнивания */
+  align-items: center; /* Выравнивание по центру */
+  gap: 10px; /* Отступ между элементами */
+  transition: var(--transition); /* Плавные переходы */
+}
+
+/* Контейнер для списков */
+.list-container {
+  width: 100%; /* Полная ширина */
+  max-width: 100%; /* Максимальная ширина */
+  height: auto; /* Автоматическая высота */
+  padding: 15px; /* Внутренние отступы */
+  overflow-y: auto; /* Прокрутка по вертикали */
+}
+
+/* Стили для рейтингов */
+.rating {
+  color: #ff9500; /* Оранжевый цвет для рейтингов */
+  font-weight: 600; /* Полужирный шрифт */
+}
+
+/* Стили для звезд рейтинга */
+.star {
+  color: #ffd700; /* Желтый цвет для звезд */
+}
+
+/* Стили для медалей */
+.medal-gold { color: #ffd700; } /* Золотая медаль */
+.medal-silver { color: #c0c0c0; } /* Серебряная медаль */
+.medal-bronze { color: #cd7f32; } /* Бронзовая медаль */
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px; /* Уменьшаем отступы */
+    padding-bottom: 80px; /* Отступ для навигационной панели */
+  }
+  .list-container {
+    height: calc(100vh - 100px); /* Учитываем высоту навигационной панели */
+    padding: 10px; /* Уменьшаем отступы */
+  }
+  .card {
+    padding: 10px; /* Уменьшаем отступы в карточках */
+  }
+  h1 {
+    font-size: 18px; /* Уменьшаем размер заголовка */
+  }
+  h2 {
+    font-size: 16px; /* Уменьшаем размер подзаголовка */
+  }
+  h3 {
+    font-size: 14px; /* Уменьшаем размер текста */
+  }
 }

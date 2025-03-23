@@ -1,37 +1,53 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
-import { motion } from "framer-motion"; // Библиотека для анимаций
 import axios from "axios";
-import "./BrandPage.css"; // Импорт стилей
+import Card from "../components/Card";
+import BottomNav from "../components/BottomNav";
+import "./BrandPage.css";
 
-const API_URL = process.env.REACT_APP_API_URL; // Базовый URL API
+// URL API из переменных окружения
+const API_URL = process.env.REACT_APP_API_URL;
 
+// Компонент страницы бренда
 const BrandPage = () => {
-  const { id } = useParams(); // Получаем ID бренда из URL
-  const [brand, setBrand] = useState(null); // Состояние для данных бренда
-  const [energies, setEnergies] = useState([]); // Состояние для списка энергетиков
-  const [loading, setLoading] = useState(true); // Состояние загрузки
-  const [error, setError] = useState(null); // Состояние ошибки
-  const listRef = useRef(null); // Ref для контейнера списка
+  // Получаем ID бренда из URL
+  const { id } = useParams();
+  // Состояние для данных о бренде
+  const [brand, setBrand] = useState(null);
+  // Состояние для списка энергетиков бренда
+  const [energies, setEnergies] = useState([]);
+  // Состояние для индикации загрузки
+  const [loading, setLoading] = useState(true);
+  // Состояние для ошибок
+  const [error, setError] = useState(null);
+  // Ссылка на контейнер списка для сохранения позиции прокрутки
+  const listRef = useRef(null);
 
-  // Эффект для загрузки данных при монтировании
+  // Загружаем данные о бренде и энергетиках
   useEffect(() => {
-    setLoading(true);
-    setError(null);
+    setLoading(true); // Устанавливаем состояние загрузки
+    setError(null); // Сбрасываем ошибки
 
-    // Запрос данных бренда
-    axios.get(`${API_URL}/brand/${id}`)
-      .then((res) => setBrand(res.data))
-      .catch((err) => setError(err.message));
+    const fetchData = async () => {
+      try {
+        const [brandRes, energiesRes] = await Promise.all([
+          axios.get(`${API_URL}/brand/${id}`),
+          axios.get(`${API_URL}/brands/${id}/energies/`)
+        ]);
 
-    // Запрос списка энергетиков бренда
-    axios.get(`${API_URL}/brands/${id}/energies/`)
-      .then((res) => setEnergies(res.data))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, [id]); // Зависимость от ID
+        setBrand(brandRes.data); // Сохраняем данные о бренде
+        setEnergies(energiesRes.data); // Сохраняем энергетики
+      } catch (err) {
+        setError(err.message); // Сохраняем ошибку
+      } finally {
+        setLoading(false); // Снимаем состояние загрузки
+      }
+    };
 
-  // Восстановление позиции скролла
+    fetchData();
+  }, [id]);
+
+  // Восстанавливаем позицию прокрутки при загрузке
   useEffect(() => {
     const scrollPos = sessionStorage.getItem(`scrollPosition-brand-${id}`);
     if (listRef.current && scrollPos) {
@@ -39,65 +55,56 @@ const BrandPage = () => {
     }
   }, [id]);
 
-  // Сохранение позиции скролла перед переходом
+  // Функция для сохранения позиции прокрутки при клике
   const handleLinkClick = () => {
     sessionStorage.setItem(`scrollPosition-brand-${id}`, listRef.current.scrollTop);
   };
 
-  // Состояния загрузки и ошибок
-  if (loading) return <p className="loading">⏳ Загрузка...</p>;
-  if (error) return <p className="error">❌ Ошибка: {error}</p>;
-  if (!brand) return <p className="not-found">⚠️ Информация о бренде не найдена</p>;
+  // Показываем индикатор загрузки
+  if (loading) return <p>Загрузка...</p>;
+  // Показываем сообщение об ошибке
+  if (error) return <p>Ошибка: {error}</p>;
+  // Показываем сообщение, если бренд не найден
+  if (!brand) return <p>Бренд не найден</p>;
 
   return (
-    <div className="brand-container">
-      {/* Анимированный заголовок Название бренда*/}
-      <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-        {brand.name}
-      </motion.h1>
-
+    <div className="brand-container container">
+      {/* Заголовок страницы */}
+      <h1>{brand.name}</h1>
       {/* Информация о бренде */}
-      <div className="brand-info">
-        <p><strong>⭐ Средняя оценка:</strong> {brand.average_rating || "N/A"}</p>
-        <p><strong>📦 Количество энергетиков:</strong> { brand.energy_count || "N/A"}</p> {/*можно и energies.length*/}
-        <p><strong>👥 Количество отзывов:</strong> { brand.review_count || "N/A"}</p>
+      <div className="brand-info card">
+        <p><strong>Оценка:</strong> <span className="star">★</span> {brand.average_rating || "N/A"} ({brand.review_count} оценок)</p>
+        <p><strong>Энергетиков:</strong> {brand.energy_count || "N/A"}</p>
+        <p><strong>Отзывов:</strong> {brand.review_count || "N/A"}</p>
       </div>
 
       {/* Список энергетиков */}
-      <h2>⚡ Энергетики бренда:</h2>
+      <h2>Энергетики</h2>
       <div className="list-container" ref={listRef}>
         {energies.length > 0 ? (
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            transition={{ duration: 0.5 }} 
-            className="cards"
-          >
+          <div className="cards-grid">
             {energies.map((energy, index) => (
-              <motion.div
-                key={energy.id}
-                className="card"
-                whileHover={{ scale: 1.03 }} // Анимация при наведении
-                whileTap={{ scale: 0.97 }} // Анимация при клике
-              >
-                <div className="rank">#{index + 1}</div>
-                <h3>{energy.name}</h3>
-                <p>⭐ {energy.average_rating || "N/A"}</p>
-                <p>👥 {energy.review_count || 0} оценок</p>
-                <Link 
-                  to={`/energy/${energy.id}`} 
-                  onClick={handleLinkClick} 
-                  className="details-link"
-                >
-                  Подробнее →
-                </Link>
-              </motion.div>
+              // Карточка энергетика
+              <Card key={energy.id}>
+                <span className="rank">{index + 1}</span>
+                <img src={energy.image} alt={energy.name} style={{ width: "50px", borderRadius: "8px" }} />
+                <div>
+                  <h3>{energy.name}</h3>
+                  <p><span className="star">★</span> {energy.average_rating || "N/A"} ({energy.review_count || 0} оценок)</p>
+                  <Link to={`/energy/${energy.id}`} onClick={handleLinkClick} className="details-link">
+                    Подробнее
+                  </Link>
+                </div>
+              </Card>
             ))}
-          </motion.div>
+          </div>
         ) : (
-          <p className="no-energy">⚠️ У этого бренда пока нет энергетиков</p>
+          <p className="no-energy">Пока нет энергетиков</p>
         )}
       </div>
+
+      {/* Нижняя навигационная панель */}
+      <BottomNav />
     </div>
   );
 };

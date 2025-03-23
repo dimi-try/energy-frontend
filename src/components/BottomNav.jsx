@@ -1,30 +1,27 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import "./BottomNav.css";
 
-const NavBar = styled.nav`
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  background: #222;
-  padding: 10px 0;
-`;
-
-const NavItem = styled(NavLink)`
-  color: white;
-  text-decoration: none;
-  &.active { font-weight: bold; }
-`;
-
+// Компонент нижней навигационной панели
 const BottomNav = () => (
-  <NavBar>
-    <NavItem to="/">🏆 Топ 100</NavItem>
-    <NavItem to="/search">🔍 Поиск</NavItem>
-    <NavItem to="/favorites">⭐ Избранное</NavItem>
-    <NavItem to="/profile">👤 Профиль</NavItem>
-  </NavBar>
+  <nav className="bottom-nav">
+    {/* Ссылка на страницу Топ 100 */}
+    <NavLink to="/" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+      <span>🏆</span> Топ 100
+    </NavLink>
+    {/* Ссылка на страницу поиска */}
+    <NavLink to="/search" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+      <span>🔍</span> Поиск
+    </NavLink>
+    {/* Ссылка на страницу избранного */}
+    <NavLink to="/favorites" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+      <span>⭐</span> Избранное
+    </NavLink>
+    {/* Ссылка на страницу профиля */}
+    <NavLink to="/profile" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+      <span>👤</span> Профиль
+    </NavLink>
+  </nav>
 );
 
 export default BottomNav;

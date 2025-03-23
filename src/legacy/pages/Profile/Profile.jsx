@@ -1,6 +1,6 @@
 import React from 'react';
-import Stats from './Stats/Stats';
-import Info from './Info/Info';
+import Stats from '../../components/ProfileStats/ProfileStats';
+import Info from '../../components/ProfileInfo/ProfileInfo';
 import './Profile.css';
 import { useNavigate } from 'react-router-dom';
 

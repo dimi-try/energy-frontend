@@ -1,109 +1,50 @@
-/* Общий контейнер */
+/* Стили для контейнера страницы Топ 100 */
 .top100-container {
-    padding: 20px;
-    max-width: 900px;
-    margin: auto;
-    font-family: "Arial", sans-serif;
+  text-align: center; /* Центрируем текст */
+}
+
+/* Стили для кнопок переключения */
+.toggle-buttons {
+  display: flex; /* Flexbox для выравнивания */
+  justify-content: center; /* Центрируем кнопки */
+  gap: 10px; /* Отступ между кнопками */
+  margin-bottom: 15px; /* Отступ снизу */
+}
+
+/* Стили для кнопок переключения */
+.toggle-buttons button {
+  background-color: #f2f2f7; /* Фон кнопки */
+  color: var(--primary-color); /* Цвет текста */
+  border: none; /* Убираем границу */
+  padding: 8px 16px; /* Внутренние отступы */
+  border-radius: 8px; /* Скругленные углы */
+}
+
+/* Стили для активной кнопки */
+.toggle-buttons button.active {
+  background-color: var(--primary-color); /* Фон активной кнопки */
+  color: #ffffff; /* Цвет текста */
+}
+
+/* Стили для сетки карточек */
+.cards-grid {
+  display: flex; /* Flexbox для выравнивания */
+  flex-direction: column; /* Вертикальное расположение */
+  gap: 10px; /* Отступ между карточками */
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .cards-grid {
+    gap: 5px; /* Уменьшаем отступ между карточками */
   }
-  
-  /* Кнопки переключения */
-  .toggle-buttons {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .toggle-buttons button {
-    padding: 12px 24px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    background: #e0e0e0;
-    transition: 0.3s;
-    border-radius: 50px;
-    margin: 0 8px;
-  }
-  
-  .toggle-buttons .active {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: white;
-    font-weight: bold;
-  }
-  
-  /* Лоадер и ошибки */
-  .loading, .error {
-    text-align: center;
-    font-size: 18px;
-  }
-  
-  /* Контейнер карточек */
-  .list-container {
-    max-height: 70vh;
-    overflow-y: auto;
-    padding: 10px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #f4f4f4, #ffffff);
-  }
-  
-  /* Карточки */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  /* Карточка */
   .card {
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    background: white;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-    position: relative;
+    padding: 10px; /* Уменьшаем отступы в карточках */
   }
-  
-  .card:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  .card img {
+    width: 40px; /* Уменьшаем размер изображения */
   }
-  
-  /* Номер в топе */
-  .rank {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: gold;
-    padding: 5px 10px;
-    font-weight: bold;
-    border-radius: 10px;
+  h3 {
+    font-size: 14px; /* Уменьшаем размер текста */
   }
-  
-  .card h3 {
-    margin: 15px 0;
-    color: #333;
-    font-size: 20px;
-  }
-  
-  .card .rating {
-    font-size: 14px;
-    font-weight: bold;
-  }
-  
-  .card p {
-    margin: 5px 0;
-    color: #666;
-  }
-  
-  /* Адаптация под мобильные устройства */
-  @media (max-width: 600px) {
-    .cards {
-      grid-template-columns: 1fr;
-    }
-  
-    .card {
-      width: 100%;
-    }
-  }
-  
+}

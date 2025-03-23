@@ -5,14 +5,8 @@ import { BackButton } from '@vkruglikov/react-telegram-web-app';
 import { useTelegram } from "./hooks/useTelegram";
 import { useUserVerification } from "./hooks/useUserVerification";
 
-// import './App.css';
+import './App.css';
 
-//стари ванючи пон
-// import Profile from "./components/Profile/Profile";
-// import EnergyList from "./components/EnergyList/EnergyList";
-// import Energy from "./components/Energy/Energy";
-
-//нови блистящи пон
 import Top100 from './pages/Top100';
 import Search from './pages/Search';
 import Favorites from './pages/Favorites';
@@ -21,12 +15,14 @@ import EnergyDrinkPage from './pages/EnergyDrinkPage';
 import BrandPage from './pages/BrandPage';
 import BottomNav from './components/BottomNav';
 
-
-// import Navigation from './components/Navigation/Navigation';
-
+/*Legacy*/
+import LegacyProfile from "./legacy/pages/Profile/Profile";
+import LegacyEnergies from "./legacy/pages/Energies/Energies";
+import LegacyEnergy from "./legacy/pages/Energy/Energy";
+import Navigation from './legacy/components/Navigation/Navigation';
+/********/
 
 function App() {
-  // const [ result, setResult ] = useState(null);
   const { telegram } = useTelegram();
   const { result, verifyUser } = useUserVerification(telegram);
 
@@ -47,6 +43,7 @@ function App() {
     }
   }, [location]);
 
+  /*Legacy*/
   // useEffect(() => {
   //   verifyUser(telegram.initData); // Автоматическая верификация при монтировании компонента
   // }, verifyUser);
@@ -58,23 +55,23 @@ function App() {
   //     </div>
   //   </div>
   // );
+  /********/
   
   return (
     <div className={`App ${telegram.colorScheme}`}>
-      {/* <EnergyList /> */}
-      {/* <Profile /> */}
       <Routes>
-
-        {/* <Route index element={<Profile />}/>
-        <Route path={'/energies'} element={<EnergyList />}/>
-        <Route path={"/energies/:id"} element={<Energy />} /> */}
-
         <Route index element={<Top100 />} />
         <Route path="/search" element={<Search />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/energy/:id" element={<EnergyDrinkPage />} />
         <Route path="/brand/:id" element={<BrandPage />} />
+
+        {/* Legacy */}
+        <Route path={'/legacy/profile'} element={<LegacyProfile />}/>
+        <Route path={'/legacy/energies'} element={<LegacyEnergies />}/>
+        <Route path={"/legacy/energy/:id"} element={<LegacyEnergy />} />
+        {/*  */}
       </Routes>
       <BottomNav />
       {showBackButton && <BackButton onClick={() => navigate(-1)} />}
