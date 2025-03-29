@@ -1,153 +1,47 @@
+/* Стили для контейнера страницы энергетика */
 .energy-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+  text-align: center; /* Центрируем текст */
 }
 
-.energy-info {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+/* Стили для заголовка с изображением */
+.energy-header {
+  display: flex; /* Flexbox для выравнивания */
+  align-items: center; /* Выравнивание по центру */
+  gap: 15px; /* Отступ между элементами */
+  margin-bottom: 20px; /* Отступ снизу */
 }
 
-.energy-info p {
-  margin: 0.8rem 0;
-  font-size: 1.1rem;
+/* Стили для полей ввода формы */
+.review-form input, .review-form textarea {
+  width: 100%; /* Полная ширина */
+  padding: 10px; /* Внутренние отступы */
+  margin-bottom: 10px; /* Отступ снизу */
+  border: 1px solid #ddd; /* Граница */
+  border-radius: 8px; /* Скругленные углы */
+  box-sizing: border-box; /* Учитываем padding в ширине */
 }
 
-.review-form {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-  margin-bottom: 2rem;
-}
-
-.review-form form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.review-form input,
-.review-form textarea {
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  width: 100%;
-}
-
-.review-form textarea {
-  height: 120px;
-  resize: vertical;
-}
-
-.ratings-form {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-}
-
-.rating-input label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.rating-input input {
-  padding: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-}
-
-.submit-btn {
-  background: #007bff;
-  color: white;
-  padding: 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
-  font-size: 1rem;
-}
-
-.submit-btn:hover {
-  background: #0056b3;
-}
-
-.list-container {
-  max-height: 600px;
-  overflow-y: auto;
-  padding-right: 1rem;
-}
-
-.reviews-list {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.review-card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
+/* Стили для заголовка отзыва */
 .review-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  color: #666;
+  display: flex; /* Flexbox для выравнивания */
+  justify-content: space-between; /* Распределяем элементы */
+  font-size: 12px; /* Размер шрифта */
+  color: var(--secondary-color); /* Цвет текста */
 }
 
-.review-text {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-.ratings-list {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.rating-item {
-  background: #f8f9fa;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  display: flex;
-  gap: 0.5rem;
-}
-
-.rating-category {
-  font-weight: 500;
-}
-
-.rating-value {
-  color: #007bff;
-}
-
-.no-reviews {
-  text-align: center;
-  color: #666;
-  padding: 2rem;
-}
-
-.loading, .error, .not-found {
-  text-align: center;
-  padding: 2rem;
-  font-size: 1.2rem;
-}
-
-.error {
-  color: #dc3545;
-}
-
-.not-found {
-  color: #ffc107;
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .energy-header {
+    flex-direction: column; /* Вертикальное расположение */
+    align-items: center; /* Центрируем элементы */
+  }
+  .energy-header img {
+    width: 60px; /* Уменьшаем размер изображения */
+  }
+  h1 {
+    font-size: 18px; /* Уменьшаем размер заголовка */
+  }
+  .review-form input, .review-form textarea {
+    font-size: 14px; /* Уменьшаем размер шрифта */
+  }
 }

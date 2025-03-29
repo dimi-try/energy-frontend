@@ -33,8 +33,8 @@ energy-frontend/
 │         ├── Stats/      # Статистика профиля
 │
 │   ├── hooks/                    # Пользовательские хуки
-│      ├── UseEnergy.js           # Хук для получения списка энергетиков
-│      ├── UseEnergyDetails.js    # Хук для получения деталей энергетика
+│      ├── useEnergies.js           # Хук для получения списка энергетиков
+│      ├── useEnergy.js    # Хук для получения деталей энергетика
 │      ├── UseTelegram.js         # Хук для работы с API Telegram
 │      ├── UseUserVerification.js # Хук для верификации пользователя
 │

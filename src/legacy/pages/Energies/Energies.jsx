@@ -1,12 +1,12 @@
 import React from 'react';
-import Card from '../Card/Card';
-import useEnergy from '../../hooks/useEnergy';
-import './EnergyList.css';
+import Card from '../../components/EnergiesCard/EnergiesCard';
+import useEnergies from '../../../hooks/useEnergies';
+import './Energies.css';
 
 // Компонент для отображения списка энергетиков
 const EnergyList = () => {
     // Получаем данные из хука
-    const { products, loading, error } = useEnergy();
+    const { products, loading, error } = useEnergies();
 
     // Состояние загрузки
     if (loading) {

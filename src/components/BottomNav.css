@@ -1,0 +1,43 @@
+/* Стили для нижней навигационной панели */
+.bottom-nav {
+  position: fixed; /* Фиксируем внизу экрана */
+  bottom: 0; /* Прижимаем к нижнему краю */
+  left: 0; /* Растягиваем на всю ширину */
+  right: 0;
+  background-color: var(--card-background); /* Фон панели */
+  display: flex; /* Flexbox для выравнивания */
+  justify-content: space-around; /* Равномерное распределение элементов */
+  padding: 10px 0; /* Внутренние отступы */
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1); /* Тень сверху */
+  z-index: 1000; /* Устанавливаем поверх других элементов */
+}
+
+/* Стили для элементов навигации */
+.nav-item {
+  display: flex; /* Flexbox для выравнивания */
+  flex-direction: column; /* Вертикальное расположение */
+  align-items: center; /* Центрируем элементы */
+  color: var(--secondary-color); /* Цвет текста */
+  text-decoration: none; /* Убираем подчеркивание */
+  font-size: 12px; /* Размер шрифта */
+  transition: all 0.3s ease; /* Плавные переходы */
+}
+
+/* Стили для иконок в навигации */
+.nav-item span {
+  font-size: 20px; /* Размер иконки */
+  margin-bottom: 4px; /* Отступ снизу */
+}
+
+/* Стили для активного элемента навигации */
+.nav-item.active {
+  color: var(--primary-color); /* Цвет активного элемента */
+  font-weight: 600; /* Полужирный шрифт */
+}
+
+/* Скрываем навигацию на десктопе */
+@media (min-width: 769px) {
+  .bottom-nav {
+    display: none;
+  }
+}
