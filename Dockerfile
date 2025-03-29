@@ -4,6 +4,12 @@ FROM node:22.14.0-alpine AS build
 # 2. Задаем рабочую директорию в контейнере
 WORKDIR /src
 
+# Определяем аргумент
+ARG REACT_APP_API_URL
+
+# Устанавливаем переменную окружения из аргумента
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+
 # 3. Копируем package.json и package-lock.json в контейнер
 COPY package*.json ./
 
