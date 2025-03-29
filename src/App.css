@@ -101,6 +101,18 @@ button:hover {
 .medal-silver { color: #c0c0c0; } /* Серебряная медаль */
 .medal-bronze { color: #cd7f32; } /* Бронзовая медаль */
 
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #888;
+}
+
+.error {
+  text-align: center;
+  color: red;
+  font-weight: bold;
+}
+
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
   .container {
