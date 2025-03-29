@@ -18,7 +18,7 @@ RUN npm run build
 
 # 7. Используем Nginx для запуска нашего приложения
 FROM nginx:1.23-alpine
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /src/build /usr/share/nginx/html
 
 # 8. Копируем пользовательскую конфигурацию Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
