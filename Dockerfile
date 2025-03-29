@@ -5,13 +5,13 @@ FROM node:22.14.0 AS build
 WORKDIR /src
 
 # 3. Копируем package.json и package-lock.json в контейнер
-COPY package*.json ./
+COPY package*.json /src/
 
 # 4. Устанавливаем зависимости
 RUN npm install
 
 # 5. Копируем весь проект в контейнер
-COPY . .
+COPY . /src
 
 # 6. Собираем приложение для production
 RUN npm run build
