@@ -13,7 +13,7 @@ RUN npm install
 # 5. Копируем весь проект в контейнер
 COPY . .
 
-# Определяем аргумент
+# Определяем аргумент для переменной окружения (значение придёт из CI/CD)
 ARG REACT_APP_API_URL
 
 # Устанавливаем переменную окружения из аргумента
@@ -22,14 +22,14 @@ ENV REACT_APP_API_URL=$REACT_APP_API_URL
 # Выводим переменные окружения для отладки
 RUN echo "REACT_APP_API_URL during build: $REACT_APP_API_URL" > build-env.log
 
-# 6. Собираем приложение для production
-RUN npm run build
+# 6. Собираем приложение для production, явно передавая переменную
+RUN REACT_APP_API_URL=$REACT_APP_API_URL npm run build
 
 # 7. Используем Nginx для запуска нашего приложения
 FROM nginx:1.23-alpine
 COPY --from=build /src/build /usr/share/nginx/html
 
-# Временное решение
+# Временное решение для отладки
 COPY --from=build /src/build-env.log /usr/share/nginx/html/build-env.log
 
 # 8. Копируем пользовательскую конфигурацию Nginx
