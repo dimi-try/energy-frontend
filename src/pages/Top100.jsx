@@ -29,9 +29,7 @@ const Top100 = () => {
   useEffect(() => {
     setLoading(true); // Устанавливаем состояние загрузки
     setError(null); // Сбрасываем ошибку перед новым запросом
-    const url = `${API_URL}/top/${topType}`;
-    console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL); // Проверяем переменную
-    console.log("Fetching from:", url); // Логируем полный URL
+    const url = `${API_URL}/top/${topType}/`;
     axios.get(url) // Запрашиваем данные с API
       .then((res) => {
         const data = Array.isArray(res.data) ? res.data : []; // Убеждаемся, что данные — массив
@@ -93,7 +91,7 @@ const Top100 = () => {
                     <Card
                       key={item.id}
                       rank={index + 1}
-                      onClick={() => handleNavigate(`/energy/${item.id}`)}
+                      onClick={() => handleNavigate(`/energy/${item.id}/`)}
                     >
                       <img
                         src={item.image}
@@ -119,7 +117,7 @@ const Top100 = () => {
                   <Card
                     key={item.id}
                     rank={index + 1}
-                    onClick={() => handleNavigate(`/brand/${item.id}`)}
+                    onClick={() => handleNavigate(`/brand/${item.id}/`)}
                   >
                     <h3>{item.name}</h3>
                     <p>
