@@ -46,6 +46,7 @@ energy-frontend/
 ├── .env.sample              # Пример конфигурационного файла
 ├── .gitignore               # Игнорируемые файлы
 ├── package.json             # Зависимости и скрипты
+├── .dockerignore            # Игнорируемые файлы для Docker
 ├── README.md                # Документация проекта
 ```
 
