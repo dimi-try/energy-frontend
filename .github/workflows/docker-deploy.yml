@@ -26,4 +26,4 @@ jobs:
             context: .
             tags: ${{ secrets.DOCKER_USERNAME }}/energy-charts-frontend:latest
             build-args: |
-              REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
+              BACKEND_URL=${{ secrets.BACKEND_URL }}

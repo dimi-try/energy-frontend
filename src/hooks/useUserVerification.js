@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const BACKEND_URL = process.env.BACKEND_URL;
 
 export const useUserVerification = (telegram) => {
     const [result, setResult] = useState(null);
 
     const verifyUser = async (authorizationData) => {
         try {
-            const response = await fetch(`${API_URL}/auth/verify`, {
+            const response = await fetch(`${BACKEND_URL}/auth/verify`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
