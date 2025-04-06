@@ -6,7 +6,7 @@ import BottomNav from "../components/BottomNav";
 import "./Top100.css";
 
 // URL API из переменных окружения
-const API_URL = process.env.REACT_APP_API_URL;
+const BACKEND_URL = process.env.BACKEND_URL;
 
 // Компонент страницы Топ 100
 const Top100 = () => {
@@ -29,7 +29,7 @@ const Top100 = () => {
   useEffect(() => {
     setLoading(true); // Устанавливаем состояние загрузки
     setError(null); // Сбрасываем ошибку перед новым запросом
-    const url = `${API_URL}/top/${topType}/`;
+    const url = `${BACKEND_URL}/top/${topType}/`;
     axios.get(url) // Запрашиваем данные с API
       .then((res) => {
         const data = Array.isArray(res.data) ? res.data : []; // Убеждаемся, что данные — массив
