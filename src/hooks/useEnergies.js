@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'; 
 
-const BACKEND_URL = process.env.BACKEND_URL;
+const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 // Кастомный хук для получения данных об энергетиках
 const useProducts = () => {
@@ -14,7 +14,7 @@ const useProducts = () => {
         const fetchProducts = async () => {
             try {
                 // Запрос к эндпоинту /energies/
-                const response = await fetch(`${BACKEND_URL}/energies/`);
+                const response = await fetch(`${REACT_APP_BACKEND_URL}/energies/`);
                 
                 // Обработка HTTP-ошибок
                 if (!response.ok) {
