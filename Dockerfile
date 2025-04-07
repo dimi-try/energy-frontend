@@ -14,13 +14,13 @@ RUN npm install
 COPY . .
 
 # Определяем аргумент для переменной окружения (значение придёт из CI/CD)
-ARG BACKEND_URL
+ARG REACT_APP_BACKEND_URL
 
 # Устанавливаем переменную окружения из аргумента
-ENV BACKEND_URL=$BACKEND_URL
+ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
 
 # Собираем приложение для production, явно передавая переменную
-RUN BACKEND_URL=$BACKEND_URL npm run build
+RUN REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL npm run build
 
 
 # Используем Nginx для запуска нашего приложения

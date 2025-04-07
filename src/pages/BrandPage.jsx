@@ -6,7 +6,7 @@ import BottomNav from "../components/BottomNav";
 import "./BrandPage.css";
 
 // URL API из переменных окружения
-const BACKEND_URL = process.env.BACKEND_URL;
+const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 // Компонент страницы бренда
 const BrandPage = () => {
@@ -31,8 +31,8 @@ const BrandPage = () => {
     const fetchData = async () => {
       try {
         const [brandRes, energiesRes] = await Promise.all([
-          axios.get(`${BACKEND_URL}/brand/${id}`),
-          axios.get(`${BACKEND_URL}/brands/${id}/energies/`)
+          axios.get(`${REACT_APP_BACKEND_URL}/brand/${id}`),
+          axios.get(`${REACT_APP_BACKEND_URL}/brands/${id}/energies/`)
         ]);
 
         setBrand(brandRes.data); // Сохраняем данные о бренде

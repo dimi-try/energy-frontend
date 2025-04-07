@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const BACKEND_URL = process.env.BACKEND_URL;
+const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const useProductDetails = (id) => {
     const [product, setProduct] = useState(null);
@@ -10,7 +10,7 @@ const useProductDetails = (id) => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`${BACKEND_URL}/energy/${id}`);
+                const response = await fetch(`${REACT_APP_BACKEND_URL}/energy/${id}`);
                 if (!response.ok) {
                     throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
                 }

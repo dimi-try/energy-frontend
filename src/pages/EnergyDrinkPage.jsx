@@ -6,7 +6,7 @@ import BottomNav from "../components/BottomNav";
 import "./EnergyDrinkPage.css";
 
 // URL API из переменных окружения
-const BACKEND_URL = process.env.BACKEND_URL;
+const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 // Компонент страницы энергетика
 const EnergyDrinkPage = () => {
@@ -25,9 +25,9 @@ const EnergyDrinkPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const [energyRes, reviewsRes, criteriaRes] = await Promise.all([
-        axios.get(`${BACKEND_URL}/energy/${id}`),
-        axios.get(`${BACKEND_URL}/energy/${id}/reviews/`),
-        axios.get(`${BACKEND_URL}/criteria/`)
+        axios.get(`${REACT_APP_BACKEND_URL}/energy/${id}`),
+        axios.get(`${REACT_APP_BACKEND_URL}/energy/${id}/reviews/`),
+        axios.get(`${REACT_APP_BACKEND_URL}/criteria/`)
       ]);
 
       setEnergy(energyRes.data); // Сохраняем данные об энергетике
@@ -48,7 +48,7 @@ const EnergyDrinkPage = () => {
       rating_value: parseFloat(value)
     }));
     // Отправляем отзыв на сервер
-    const response = await axios.post(`${BACKEND_URL}/review/`, {
+    const response = await axios.post(`${REACT_APP_BACKEND_URL}/review/`, {
       user_id: newReview.user_id,
       review_text: newReview.review_text,
       energy_id: parseInt(id),
