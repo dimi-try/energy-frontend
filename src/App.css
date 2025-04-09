@@ -1,24 +1,15 @@
 /* Стили для корневого элемента приложения */
-.App {
+:root {
   /* Светлая тема по умолчанию */
   --background-color: #f5f5f5; /* Светло-серый фон */
   --text-color: #333333; /* Темный текст */
   --primary-color: #007aff; /* Синий для акцентов */
   --secondary-color: #666666; /* Серый для второстепенного текста */
   --card-background: #ffffff; /* Белый фон для карточек */
+  --button-text-color: #ffffff; /* Светлый текст для текста на кнопке */
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Легкая тень */
   --transition: all 0.3s ease; /* Плавные переходы */
   --border-radius: 16px; /* Скругленные углы */
-}
-
-/* Темная тема */
-.App.dark {
-  --background-color: #1a1a1a; /* Темный фон */
-  --text-color: #e0e0e0; /* Светлый текст */
-  --primary-color: #40c4ff; /* Более яркий синий для акцентов */
-  --secondary-color: #b0b0b0; /* Светло-серый для второстепенного текста */
-  --card-background: #2a2a2a; /* Темный фон для карточек */
-  --shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Более темная тень */
 }
 
 /* Основные стили для тела страницы */
@@ -50,7 +41,7 @@ h1, h2, h3 {
 /* Стили для кнопок */
 button {
   background-color: var(--primary-color); /* Цвет фона кнопки */
-  color: #ffffff; /* Цвет текста */
+  color: var(--button-text-color); /* Цвет текста */
   border: none; /* Убираем границу */
   padding: 10px 20px; /* Внутренние отступы */
   border-radius: 12px; /* Скругленные углы */
