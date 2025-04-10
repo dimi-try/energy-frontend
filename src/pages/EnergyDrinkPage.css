@@ -11,6 +11,12 @@
   margin-bottom: 20px; /* Отступ снизу */
 }
 
+/* Стили для блока с информацией об энергетике */
+.energy-info {
+  display: block;
+  margin: 0 0 10px 0; /* Отступ между строками */
+}
+
 /* Стили для полей ввода формы */
 .review-form input, .review-form textarea {
   width: 100%; /* Полная ширина */
