@@ -5,7 +5,7 @@ const ReviewCard = ({ review, criteria }) => (
   <div className="card" style={{ flexDirection: "column", alignItems: "flex-start" }}>
     {/* Заголовок отзыва с именем пользователя и датой */}
     <div className="review-header" style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-      <span>{review.user_name}</span>
+      <span>{review.user.username}</span>
       <span>{new Date(review.created_at).toLocaleDateString()}</span>
     </div>
     {/* Текст отзыва */}

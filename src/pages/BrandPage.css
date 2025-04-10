@@ -34,7 +34,7 @@
 .no-energy {
   text-align: center; /* Центрируем текст */
   font-size: 18px; /* Размер шрифта */
-  color: var(--secondary-color); /* Цвет текста */
+  color: var(--text-color); /* Цвет текста */
 }
 
 /* Адаптивность для мобильных устройств */

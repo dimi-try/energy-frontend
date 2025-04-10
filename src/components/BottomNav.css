@@ -17,7 +17,7 @@
   display: flex; /* Flexbox для выравнивания */
   flex-direction: column; /* Вертикальное расположение */
   align-items: center; /* Центрируем элементы */
-  color: var(--secondary-color); /* Цвет текста */
+  color: var(--text-color); /* Цвет текста */
   text-decoration: none; /* Убираем подчеркивание */
   font-size: 12px; /* Размер шрифта */
   transition: all 0.3s ease; /* Плавные переходы */

@@ -11,9 +11,9 @@
   margin-bottom: 15px; /* Отступ снизу */
 }
 
-/* Стили для кнопок переключения */
+/* Стили для кнопок переключения (неактивная кнопка)*/
 .toggle-buttons button {
-  background-color: #f2f2f7; /* Фон кнопки */
+  background-color: var(--card-background); /* Фон кнопки */
   color: var(--primary-color); /* Цвет текста */
   border: none; /* Убираем границу */
   padding: 8px 16px; /* Внутренние отступы */
@@ -23,7 +23,7 @@
 /* Стили для активной кнопки */
 .toggle-buttons button.active {
   background-color: var(--primary-color); /* Фон активной кнопки */
-  color: #ffffff; /* Цвет текста */
+  color: var(--button-text-color); /* Цвет текста */
 }
 
 /* Стили для сетки карточек */
