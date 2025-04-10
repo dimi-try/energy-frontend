@@ -16,15 +16,6 @@
   gap: 10px; /* Отступ между карточками */
 }
 
-/* Стили для ссылки "Подробнее" */
-.details-link {
-  color: var(--primary-color); /* Цвет ссылки */
-  text-decoration: none; /* Убираем подчеркивание */
-  font-weight: 600; /* Полужирный шрифт */
-  margin-top: 10px; /* Отступ сверху */
-  display: block; /* Блочный элемент */
-}
-
 /* Эффект наведения на ссылку */
 .details-link:hover {
   text-decoration: underline; /* Подчеркивание при наведении */

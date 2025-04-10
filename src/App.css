@@ -77,8 +77,17 @@ button:hover {
 
 /* Стили для рейтингов */
 .rating {
-  color: #ff9500; /* Оранжевый цвет для рейтингов */
+  color: var(--primary-color); /* Цвет для рейтингов */
   font-weight: 600; /* Полужирный шрифт */
+}
+
+/* Стили для ссылок */
+.details-link {
+  color: var(--primary-color); /* Цвет ссылки */
+  text-decoration: none; /* Убираем подчеркивание */
+  font-weight: 600; /* Полужирный шрифт */
+  margin-top: 10px; /* Отступ сверху */
+  display: block; /* Блочный элемент */
 }
 
 /* Стили для звезд рейтинга */
