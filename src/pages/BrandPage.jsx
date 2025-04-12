@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Card from "../components/Card";
-import BottomNav from "../components/BottomNav";
 import "./BrandPage.css";
 
 // URL API из переменных окружения
@@ -20,6 +19,8 @@ const BrandPage = () => {
   const [loading, setLoading] = useState(true);
   // Состояние для ошибок
   const [error, setError] = useState(null);
+  // Хук для навигации
+  const navigate = useNavigate();
   // Ссылка на контейнер списка для сохранения позиции прокрутки
   const listRef = useRef(null);
 
@@ -56,8 +57,9 @@ const BrandPage = () => {
   }, [id]);
 
   // Функция для сохранения позиции прокрутки при клике
-  const handleLinkClick = () => {
+  const handleNavigate = (path) => {
     sessionStorage.setItem(`scrollPosition-brand-${id}`, listRef.current.scrollTop);
+    navigate(path); // Переходим по указанному пути
   };
 
   // Показываем индикатор загрузки
@@ -73,9 +75,25 @@ const BrandPage = () => {
       <h1>{brand.name}</h1>
       {/* Информация о бренде */}
       <div className="brand-info card">
-        <p><strong>Оценка:</strong> <span className="star">★</span> {brand.average_rating || "N/A"} ({brand.review_count} оценок)</p>
-        <p><strong>Энергетиков:</strong> {brand.energy_count || "N/A"}</p>
-        <p><strong>Отзывов:</strong> {brand.review_count || "N/A"}</p>
+        <p>
+          <strong>Оценка:</strong> 
+          <span className="star">★</span> 
+          <span className="rating">
+            {brand.average_rating || "N/A"} ({brand.review_count} отзывов)
+          </span>
+        </p>
+        <p>
+          <strong>Отзывов:</strong> 
+          <span className="rating">
+            {brand.review_count || "N/A"}
+          </span>
+        </p>
+        <p>
+          <strong>Энергетиков:</strong> 
+          <span className="rating">
+            {brand.energy_count || "N/A"}
+          </span>
+        </p>
       </div>
 
       {/* Список энергетиков */}
@@ -85,15 +103,18 @@ const BrandPage = () => {
           <div className="cards-grid">
             {energies.map((energy, index) => (
               // Карточка энергетика
-              <Card key={energy.id}>
-                <span className="rank">{index + 1}</span>
-                <img src={energy.image} alt={energy.name} style={{ width: "50px", borderRadius: "8px" }} />
+              <Card
+                key={energy.id}
+                rank={index + 1}
+                onClick={() => handleNavigate(`/energy/${energy.id}/`)}
+              >
+                <img src={energy.image_url} alt={energy.name} style={{ width: "50px", borderRadius: "8px" }} />
                 <div>
-                  <h3>{energy.name}</h3>
-                  <p><span className="star">★</span> {energy.average_rating || "N/A"} ({energy.review_count || 0} оценок)</p>
-                  <Link to={`/energy/${energy.id}`} onClick={handleLinkClick} className="details-link">
-                    Подробнее
-                  </Link>
+                  <h2>{energy.name}</h2>
+                  <p><span className="star">★</span> {energy.average_rating || "N/A"} ({energy.review_count || 0} отзывов)</p>
+                  <p>
+                    {energy.category.name}
+                  </p>
                 </div>
               </Card>
             ))}
@@ -102,9 +123,6 @@ const BrandPage = () => {
           <p className="no-energy">Пока нет энергетиков</p>
         )}
       </div>
-
-      {/* Нижняя навигационная панель */}
-      <BottomNav />
     </div>
   );
 };

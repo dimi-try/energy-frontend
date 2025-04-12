@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import ReviewCard from "../components/ReviewCard";
-import BottomNav from "../components/BottomNav";
 import "./EnergyDrinkPage.css";
 
 // URL API из переменных окружения
@@ -67,19 +66,31 @@ const EnergyDrinkPage = () => {
     <div className="energy-container container">
       {/* Заголовок с изображением и рейтингом */}
       <div className="energy-header">
-        <img src={energy.image} alt={energy.name} style={{ width: "80px", borderRadius: "8px" }} />
+        <img src={energy.image_url} alt={energy.name} style={{ width: "80px", borderRadius: "8px" }} />
         <div>
           <h1>{energy.brand?.name} {energy.name}</h1>
-          <p><span className="star">★</span> {energy.average_rating} <span className="rating">({energy.review_count} оценок)</span></p>
+          <p>
+            <span className="star">★</span> 
+              {energy.average_rating} 
+            <span className="rating">
+              ({energy.review_count} отзывов)
+            </span>
+          </p>
         </div>
       </div>
 
       {/* Информация об энергетике */}
       <div className="energy-info card">
         <h2>Об энергике</h2>
-        <p><strong>Производитель:</strong> {energy.brand?.name}</p>
-        <p><strong>Вкус:</strong> {energy.flavor}</p>
-        <p><strong>Объём:</strong> {energy.volume} мл</p>
+        <p><strong>Производитель:</strong></p>
+        <p>
+          <Link to={`/brand/${energy.brand.id}`} className="details-link">
+            {energy.brand?.name}
+          </Link>
+        </p>
+        <p><strong>Категория:</strong> {energy.category.name}</p>
+        <p><strong>Описание:</strong> {energy.description}</p>
+        <p><strong>Ингридиенты:</strong> {energy.ingredients}</p>
       </div>
 
       {/* Форма для отправки отзыва */}
@@ -125,9 +136,6 @@ const EnergyDrinkPage = () => {
           <ReviewCard key={review.id} review={review} criteria={criteria} />
         ))}
       </div>
-
-      {/* Нижняя навигационная панель */}
-      <BottomNav />
     </div>
   );
 };
