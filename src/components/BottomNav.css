@@ -34,10 +34,3 @@
   color: var(--primary-color); /* Цвет активного элемента */
   font-weight: 600; /* Полужирный шрифт */
 }
-
-/* Скрываем навигацию на десктопе */
-@media (min-width: 769px) {
-  .bottom-nav {
-    display: none;
-  }
-}

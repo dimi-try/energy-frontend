@@ -34,20 +34,3 @@
   font-size: 12px; /* Размер шрифта */
   color: var(--text-color); /* Цвет текста */
 }
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-  .energy-header {
-    flex-direction: column; /* Вертикальное расположение */
-    align-items: center; /* Центрируем элементы */
-  }
-  .energy-header img {
-    width: 60px; /* Уменьшаем размер изображения */
-  }
-  h1 {
-    font-size: 18px; /* Уменьшаем размер заголовка */
-  }
-  .review-form input, .review-form textarea {
-    font-size: 14px; /* Уменьшаем размер шрифта */
-  }
-}
