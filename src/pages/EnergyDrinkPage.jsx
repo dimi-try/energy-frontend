@@ -71,10 +71,7 @@ const EnergyDrinkPage = () => {
           <h1>{energy.brand?.name} {energy.name}</h1>
           <p>
             <span className="star">★</span> 
-              {energy.average_rating} 
-            <span className="rating">
-              ({energy.review_count} отзывов)
-            </span>
+              {energy.average_rating}/10 ({energy.review_count} отзывов)
           </p>
         </div>
       </div>

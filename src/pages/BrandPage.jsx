@@ -33,7 +33,7 @@ const BrandPage = () => {
       try {
         const [brandRes, energiesRes] = await Promise.all([
           axios.get(`${REACT_APP_BACKEND_URL}/brand/${id}`),
-          axios.get(`${REACT_APP_BACKEND_URL}/brands/${id}/energies/`)
+          axios.get(`${REACT_APP_BACKEND_URL}/brand/${id}/energies/`)
         ]);
 
         setBrand(brandRes.data); // Сохраняем данные о бренде
@@ -77,22 +77,13 @@ const BrandPage = () => {
       <div className="brand-info card">
         <p>
           <strong>Оценка:</strong> 
-          <span className="star">★</span> 
-          <span className="rating">
-            {brand.average_rating || "N/A"} ({brand.review_count} отзывов)
-          </span>
+          <span className="star">★</span> {brand.average_rating || "0.0"}/10 ({brand.review_count} отзывов)
         </p>
         <p>
-          <strong>Отзывов:</strong> 
-          <span className="rating">
-            {brand.review_count || "N/A"}
-          </span>
+          <strong>Отзывов:</strong> {brand.review_count || "0.0"}
         </p>
         <p>
-          <strong>Энергетиков:</strong> 
-          <span className="rating">
-            {brand.energy_count || "N/A"}
-          </span>
+          <strong>Энергетиков:</strong> {brand.energy_count || "0.0"}
         </p>
       </div>
 
@@ -111,7 +102,7 @@ const BrandPage = () => {
                 <img src={energy.image_url} alt={energy.name} style={{ width: "50px", borderRadius: "8px" }} />
                 <div>
                   <h2>{energy.name}</h2>
-                  <p><span className="star">★</span> {energy.average_rating || "N/A"} ({energy.review_count || 0} отзывов)</p>
+                  <p><span className="star">★</span> {energy.average_rating || "0.0"}/10 ({energy.review_count || 0} отзывов)</p>
                   <p>
                     {energy.category.name}
                   </p>

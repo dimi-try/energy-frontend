@@ -50,8 +50,6 @@ const Top100 = () => {
 
   return (
     <div className="top100-container container">
-      {/* Заголовок страницы */}
-      <h1>Топ 100</h1>
       {/* Кнопки переключения между типами топа */}
       <div className="toggle-buttons">
         <button
@@ -102,7 +100,7 @@ const Top100 = () => {
                           {item.brand?.name} {item.name}
                         </h2>
                         <p>
-                          <span className="star">★</span> {item.average_rating} (
+                          <span className="star">★</span> {item.average_rating}/10 (
                           {item.review_count} отзывов)
                         </p>
                         <p>
@@ -124,7 +122,7 @@ const Top100 = () => {
                     <div>
                       <h3>{item.name}</h3>
                       <p>
-                        <span className="star">★</span> {item.average_rating} (
+                        <span className="star">★</span> {item.average_rating}/10 (
                         {item.review_count} отзывов, {item.energy_count} энергетиков)
                       </p>
                     </div>
