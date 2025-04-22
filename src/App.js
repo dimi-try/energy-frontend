@@ -81,22 +81,14 @@ function App() {
     }
   }, [location]);
 
-  /*Legacy*/
-  // useEffect(() => {
-  //   verifyUser(telegram.initData); // Автоматическая верификация при монтировании компонента
-  // }, verifyUser);
-
-  // return (
-  //   <div className="App">
-  //     <div>
-  //       <p>{result}</p> {/* Выводим результат верификации */}
-  //     </div>
-  //   </div>
-  // );
-  /********/
+  useEffect(() => {
+    verifyUser(telegram.initData); // Автоматическая верификация при монтировании компонента
+  }, [verifyUser, telegram.initData]);
   
   return (
     <div className={`App ${telegram?.colorScheme || 'light'}`}>
+      {/* Выводим результат верификации */}
+      {/* <p>{result}</p>  */}
       <Routes>
         <Route index element={<Top100 />} />
         <Route path="/search" element={<Search />} />
