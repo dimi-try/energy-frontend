@@ -11,6 +11,12 @@
   margin-bottom: 20px; /* Отступ снизу */
 }
 
+/* Стили для блока с информацией об энергетике */
+.energy-info {
+  display: block;
+  margin: 0 0 10px 0; /* Отступ между строками */
+}
+
 /* Стили для полей ввода формы */
 .review-form input, .review-form textarea {
   width: 100%; /* Полная ширина */
@@ -26,22 +32,5 @@
   display: flex; /* Flexbox для выравнивания */
   justify-content: space-between; /* Распределяем элементы */
   font-size: 12px; /* Размер шрифта */
-  color: var(--secondary-color); /* Цвет текста */
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-  .energy-header {
-    flex-direction: column; /* Вертикальное расположение */
-    align-items: center; /* Центрируем элементы */
-  }
-  .energy-header img {
-    width: 60px; /* Уменьшаем размер изображения */
-  }
-  h1 {
-    font-size: 18px; /* Уменьшаем размер заголовка */
-  }
-  .review-form input, .review-form textarea {
-    font-size: 14px; /* Уменьшаем размер шрифта */
-  }
+  color: var(--text-color); /* Цвет текста */
 }

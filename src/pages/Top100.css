@@ -11,9 +11,9 @@
   margin-bottom: 15px; /* Отступ снизу */
 }
 
-/* Стили для кнопок переключения */
+/* Стили для кнопок переключения (неактивная кнопка)*/
 .toggle-buttons button {
-  background-color: #f2f2f7; /* Фон кнопки */
+  background-color: var(--card-background); /* Фон кнопки */
   color: var(--primary-color); /* Цвет текста */
   border: none; /* Убираем границу */
   padding: 8px 16px; /* Внутренние отступы */
@@ -23,7 +23,7 @@
 /* Стили для активной кнопки */
 .toggle-buttons button.active {
   background-color: var(--primary-color); /* Фон активной кнопки */
-  color: #ffffff; /* Цвет текста */
+  color: var(--button-text-color); /* Цвет текста */
 }
 
 /* Стили для сетки карточек */
@@ -31,20 +31,4 @@
   display: flex; /* Flexbox для выравнивания */
   flex-direction: column; /* Вертикальное расположение */
   gap: 10px; /* Отступ между карточками */
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-  .cards-grid {
-    gap: 5px; /* Уменьшаем отступ между карточками */
-  }
-  .card {
-    padding: 10px; /* Уменьшаем отступы в карточках */
-  }
-  .card img {
-    width: 40px; /* Уменьшаем размер изображения */
-  }
-  h3 {
-    font-size: 14px; /* Уменьшаем размер текста */
-  }
 }
