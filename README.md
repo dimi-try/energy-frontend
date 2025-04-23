@@ -11,43 +11,53 @@
 ```sh
 energy-frontend/
 │
+├── .github/
+│   └── workflows/
+│       └── docker-deploy.yml         # CI/CD: деплой Docker-контейнера
+│
 ├── public/
-│   ├── favicon.ico       # Иконка для вкладки браузера
-│   ├── index.html        # Основной HTML-файл приложения
-│   ├── logo192.png       # Логотип 192x192 для PWA
-│   ├── logo512.png       # Логотип 512x512 для PWA
-│   ├── manifest.json     # Конфигурация для PWA
-│   └── robots.txt        # Указания для поисковых систем
+│   ├── favicon.ico                   # Иконка вкладки
+│   ├── index.html                    # Главный HTML-шаблон
+│   ├── logo192.png                   # Логотип для PWA (192x192)
+│   ├── logo512.png                   # Логотип для PWA (512x512)
+│   ├── manifest.json                 # PWA-манифест
+│   └── robots.txt                    # Инструкции для поисковых систем
 │
 ├── src/
-│   ├── components/       # Каталог компонентов
-│   ├── pages/            # Каталог страниц
-│   ├── legacy/           # Старый код
-│      ├── Card/          # Компонент для карточек товара
-│      ├── Energy/        
-│         ├── EnergyCard/ # Компонент для отображения карточки продукта
-│      ├── EnergyList/    # Компонент для списка продуктов
-│      ├── Navigation/    # Компоненты для навигации
-│      ├── Profile/       # Компоненты профиля пользователя
-│         ├── Info/       # Информация о пользователе
-│         ├── Stats/      # Статистика профиля
+│   ├── components/                   # Переиспользуемые UI-компоненты
+│   │   ├── BottomNav.jsx
+│   │   ├── BottomNav.css
+│   │   ├── Card.jsx
+│   │   └── ReviewCard.jsx
 │
-│   ├── hooks/                    # Пользовательские хуки
-│      ├── useEnergies.js           # Хук для получения списка энергетиков
-│      ├── useEnergy.js    # Хук для получения деталей энергетика
-│      ├── UseTelegram.js         # Хук для работы с API Telegram
-│      ├── UseUserVerification.js # Хук для верификации пользователя
+│   ├── pages/                        # Страницы (роуты)
+│   │   ├── EnergyDrinkPage.jsx
+│   │   ├── EnergyDrinkPage.css
+│   │   ├── Favorites.jsx
+│   │   ├── Profile.jsx
+│   │   ├── Search.jsx
+│   │   ├── Top100.jsx
+│   │   └── Top100.css
 │
-│   ├── App.css           # Основные стили приложения
-│   ├── App.js            # Главный компонент приложения
-│   ├── config.js         # Конфигурация приложения (например, API URL)
-│   └── index.js          # Точка входа приложения, подключает React
+│   ├── hooks/                        # Кастомные хуки
+│   │   ├── useTelegram.js            # Telegram WebApp API
+│   │   └── useUserVerification.js    # Верификация пользователя
 │
-├── .env.sample              # Пример конфигурационного файла
-├── .gitignore               # Игнорируемые файлы
-├── package.json             # Зависимости и скрипты
-├── .dockerignore            # Игнорируемые файлы для Docker
-├── README.md                # Документация проекта
+│   ├── styles/                       # Общие стили
+│   │   └── App.css
+│
+│   ├── App.js                        # Главный компонент приложения
+│   ├── App.css                       # Основные стили (если отдельно от layout)
+│   ├── config.js                     # Конфигурации: URL, ключи и т.д.
+│   └── index.js                      # Точка входа, рендер React-приложения
+│
+├── .dockerignore                    # Исключения для сборки контейнера
+├── .env.sample                      # Пример файла переменных окружения
+├── .gitignore                       # Git-игнорируемые файлы
+├── Dockerfile                       # Docker-сборка фронта
+├── nginx.conf                       # Конфиг Nginx для продакшн-сервера
+├── package.json                     # Зависимости, скрипты, мета
+└── README.md                        # Документация проекта
 ```
 
 ---
