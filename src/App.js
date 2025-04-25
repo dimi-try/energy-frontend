@@ -5,7 +5,7 @@ import { BackButton } from '@vkruglikov/react-telegram-web-app';
 import { useTelegram } from "./hooks/useTelegram";
 import { useUserVerification } from "./hooks/useUserVerification";
 
-import './App.css';
+import './styles/App.css';
 
 import Top100 from './pages/Top100';
 import Search from './pages/Search';
