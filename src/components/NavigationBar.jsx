@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { IoTrophyOutline, IoSettingsOutline, IoPersonOutline } from "react-icons/io5";
+import { IoTrophyOutline, IoSettingsOutline, IoPersonOutline, IoAddCircleOutline } from "react-icons/io5";
 
 import "./NavigationBar.css";
 
@@ -12,6 +12,7 @@ const NavigationBar = ({ role }) => {
   const navItems = [
     { to: "/", icon: <IoTrophyOutline />, label: "Чарты и поиск" },
     ...(role === "admin" ? [{ to: "/admin", icon: <IoSettingsOutline />, label: "Админ-панель" }] : []),
+    { to: "/my-suggestions", icon: <IoAddCircleOutline />, label: "Предложить" },
     { to: "/profile", icon: <IoPersonOutline />, label: "Профиль" },
   ];
 

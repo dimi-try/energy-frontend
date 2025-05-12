@@ -12,6 +12,9 @@ import Profile from "./pages/Profile";
 import EnergyDrinkPage from "./pages/EnergyDrinkPage";
 import BrandPage from "./pages/BrandPage";
 
+import SuggestionForm from "./pages/SuggestionForm";
+import MySuggestions from "./pages/MySuggestions";
+
 import AdminPanel from "./pages/AdminPanel";
 import BrandAdminPage from "./pages/admin/BrandAdminPage";
 import EnergyAdminPage from "./pages/admin/EnergyAdminPage";
@@ -20,6 +23,7 @@ import CategoryAdminPage from "./pages/admin/CategoryAdminPage";
 import UserAdminPage from "./pages/admin/UserAdminPage";
 import ReviewAdminPage from "./pages/admin/ReviewAdminPage";
 import BlacklistAdminPage from "./pages/admin/BlacklistAdminPage";
+import AdminSuggestionPage from "./pages/admin/AdminSuggestionPage";
 
 import "./styles/App.css";
 
@@ -111,9 +115,15 @@ function App() {
         <Route path="/profile/:profileUserId" element={<Profile userId={userId} token={token} />} />
         <Route path="/energies/:id" element={<EnergyDrinkPage userId={userId} token={token} />} />
         <Route path="/brands/:id" element={<BrandPage />} />
+        
+        <Route path="/suggest" element={<SuggestionForm userId={userId} token={token} />} />
+        <Route path="/my-suggestions" element={<MySuggestions userId={userId} token={token} />} />
+        
         {role === "admin" && (
           <>
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/admin/suggestions" element={<AdminSuggestionPage token={token} />} />
+            <Route path="/admin/suggestions/edit/:id" element={<SuggestionForm userId={userId} token={token} isAdmin={true} />} />
             <Route path="/admin/brands" element={<BrandAdminPage token={token} />} />
             <Route path="/admin/energies" element={<EnergyAdminPage token={token} />} />
             <Route path="/admin/criteria" element={<CriteriaAdminPage token={token} />} />
