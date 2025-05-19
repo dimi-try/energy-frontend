@@ -31,6 +31,9 @@ const AdminPanel = () => {
         <Link to="/admin/blacklist">
           <Button variant="primary">Черный список</Button>
         </Link>
+        <Link to="/admin/suggestions">
+          <Button variant="primary">Предложка</Button>
+        </Link>
       </div>
     </div>
   );
