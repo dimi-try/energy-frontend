@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
+import api from "../hooks/api";
 import ReviewCard from "../components/ReviewCard";
 import "./EnergyDrinkPage.css";
-
-// URL API из переменных окружения
-const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 // Компонент страницы энергетика
 const EnergyDrinkPage = () => {
@@ -24,9 +21,9 @@ const EnergyDrinkPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const [energyRes, reviewsRes, criteriaRes] = await Promise.all([
-        axios.get(`${REACT_APP_BACKEND_URL}/energy/${id}`),
-        axios.get(`${REACT_APP_BACKEND_URL}/energy/${id}/reviews/`),
-        axios.get(`${REACT_APP_BACKEND_URL}/criteria/`)
+        api.get(`/energies/${id}`),
+        api.get(`/energies/${id}/reviews/`),
+        api.get(`/criteria/`)
       ]);
 
       setEnergy(energyRes.data); // Сохраняем данные об энергетике
@@ -47,7 +44,7 @@ const EnergyDrinkPage = () => {
       rating_value: parseFloat(value)
     }));
     // Отправляем отзыв на сервер
-    const response = await axios.post(`${REACT_APP_BACKEND_URL}/review/`, {
+    const response = await api.post(`/reviews/`, {
       user_id: newReview.user_id,
       review_text: newReview.review_text,
       energy_id: parseInt(id),
@@ -81,7 +78,7 @@ const EnergyDrinkPage = () => {
         <h2>Об энергике</h2>
         <p><strong>Производитель:</strong></p>
         <p>
-          <Link to={`/brand/${energy.brand.id}`} className="details-link">
+          <Link to={`/brands/${energy.brand.id}`} className="details-link">
             {energy.brand?.name}
           </Link>
         </p>
