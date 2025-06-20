@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-
-// URL API из переменных окружения
-const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import api from "../hooks/api";
 
 const Profile = () => {
   // Получаем ID энергетика из URL
@@ -23,9 +20,9 @@ const Profile = () => {
     const fetchData = async () => {
       try {
         const [userRes, reviewsRes, criteriaRes] = await Promise.all([
-          axios.get(`${REACT_APP_BACKEND_URL}/users/${id}/profile`),
-          axios.get(`${REACT_APP_BACKEND_URL}/users/${id}`),///reviews/
-          axios.get(`${REACT_APP_BACKEND_URL}/criteria/`)
+          api.get(`/users/${id}/profile`),
+          api.get(`/users/${id}`),///reviews/
+          api.get(`/criteria/`)
         ]);
   
         setUser(userRes.data); // Сохраняем данные об энергетике
