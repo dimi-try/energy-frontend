@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-
-const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import api from "../hooks/api";
 
 const Search = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
 
   const handleSearch = () => {
-    axios.get(`${REACT_APP_BACKEND_URL}/search?q=${query}`).then((res) => setResults(res.data));
+    api.get(`/search?q=${query}`).then((res) => setResults(res.data));
   };
 
   return (
