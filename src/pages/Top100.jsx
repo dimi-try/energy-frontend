@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../hooks/api";
 import Card from "../components/Card";
 import "./Top100.css";
-
-// URL API из переменных окружения
-const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 // Компонент страницы Топ 100
 const Top100 = () => {
@@ -28,8 +25,8 @@ const Top100 = () => {
   useEffect(() => {
     setLoading(true); // Устанавливаем состояние загрузки
     setError(null); // Сбрасываем ошибку перед новым запросом
-    const url = `${REACT_APP_BACKEND_URL}/top/${topType}/`;
-    axios.get(url) // Запрашиваем данные с API
+    const url = `/top/${topType}/`;
+    api.get(url) // Запрашиваем данные с API
       .then((res) => {
         const data = Array.isArray(res.data) ? res.data : []; // Убеждаемся, что данные — массив
         if (topType === "energies") setEnergies(data); // Сохраняем энергетики
@@ -88,7 +85,7 @@ const Top100 = () => {
                     <Card
                       key={item.id}
                       rank={index + 1}
-                      onClick={() => handleNavigate(`/energy/${item.id}/`)}
+                      onClick={() => handleNavigate(`/energies/${item.id}/`)}
                     >
                       <img
                         src={item.image_url}
@@ -117,7 +114,7 @@ const Top100 = () => {
                   <Card
                     key={item.id}
                     rank={index + 1}
-                    onClick={() => handleNavigate(`/brand/${item.id}/`)}
+                    onClick={() => handleNavigate(`/brands/${item.id}/`)}
                   >
                     <div>
                       <h3>{item.name}</h3>
