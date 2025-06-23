@@ -94,8 +94,8 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/energy/:id" element={<EnergyDrinkPage />} />
-        <Route path="/brand/:id" element={<BrandPage />} />
+        <Route path="/energies/:id" element={<EnergyDrinkPage />} />
+        <Route path="/brands/:id" element={<BrandPage />} />
 
         {/* Legacy */}
           <Route path={'/legacy/profile'} element={<LegacyProfile />}/>

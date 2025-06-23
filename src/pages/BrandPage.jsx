@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../hooks/api"; // Импортируем настроенный axios
 import Card from "../components/Card";
 import "./BrandPage.css";
-
-// URL API из переменных окружения
-const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 // Компонент страницы бренда
 const BrandPage = () => {
@@ -32,8 +29,8 @@ const BrandPage = () => {
     const fetchData = async () => {
       try {
         const [brandRes, energiesRes] = await Promise.all([
-          axios.get(`${REACT_APP_BACKEND_URL}/brand/${id}`),
-          axios.get(`${REACT_APP_BACKEND_URL}/brand/${id}/energies/`)
+          api.get(`/brands/${id}`),
+          api.get(`/brands/${id}/energies/`)
         ]);
 
         setBrand(brandRes.data); // Сохраняем данные о бренде
@@ -97,7 +94,7 @@ const BrandPage = () => {
               <Card
                 key={energy.id}
                 rank={index + 1}
-                onClick={() => handleNavigate(`/energy/${energy.id}/`)}
+                onClick={() => handleNavigate(`/energies/${energy.id}/`)}
               >
                 <img src={energy.image_url} alt={energy.name} style={{ width: "50px", borderRadius: "8px" }} />
                 <div>
