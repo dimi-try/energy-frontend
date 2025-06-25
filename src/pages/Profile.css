@@ -1,0 +1,151 @@
+/* Контейнер профиля (использует .container из общих стилей) */
+.profile-container {
+  text-align: center; /* Центрируем контент */
+  padding-top: 20px; /* Отступ сверху */
+}
+
+/* Заголовок профиля */
+.profile-header {
+  margin-bottom: 30px; /* Отступ снизу */
+}
+
+.profile-avatar img {
+  width: 120px; /* Размер аватарки */
+  height: 120px;
+  border-radius: 50%; /* Круглая форма */
+  border: 2px solid var(--primary-color); /* Граница с акцентом */
+  margin-bottom: 15px; /* Отступ снизу */
+  transition: var(--transition); /* Плавный переход */
+}
+
+.profile-avatar img:hover {
+  transform: scale(1.05); /* Лёгкое увеличение при наведении */
+}
+
+.profile-header h1 {
+  font-size: 1.8rem; /* Размер шрифта имени */
+}
+
+/* Ряд статистики */
+.stats-row {
+  display: flex; /* Flexbox для двух колонок */
+  gap: 20px; /* Отступ между карточками */
+  margin-bottom: 30px; /* Отступ снизу */
+  flex-wrap: wrap; /* Перенос на маленьких экранах */
+}
+
+.stat-card {
+  flex: 1; /* Равная ширина */
+  min-width: 200px; /* Минимальная ширина */
+  padding: 20px; /* Внутренние отступы */
+  text-align: center; /* Центрируем текст */
+}
+
+.stat-card h3 {
+  font-size: 1.2rem; /* Размер заголовка */
+  margin-bottom: 10px; /* Отступ снизу */
+}
+
+.stat-value {
+  font-size: 1.5rem; /* Размер значения */
+  font-weight: 600; /* Полужирный шрифт */
+  color: var(--primary-color); /* Акцентный цвет */
+}
+
+/* Секция отзывов */
+.reviews-section {
+  margin-top: 40px; /* Отступ сверху */
+}
+
+.reviews-section h2 {
+  font-size: 1.6rem; /* Размер заголовка */
+  text-align: left; /* Выравнивание слева */
+}
+
+.no-reviews {
+  text-align: center; /* Центрируем текст */
+  color: #888; /* Серый цвет */
+  font-size: 1.1rem; /* Размер шрифта */
+}
+
+/* Карточка отзыва */
+.review-card {
+  flex-direction: column; /* Вертикальное выравнивание */
+  align-items: flex-start; /* Выравнивание слева */
+  text-align: left; /* Текст слева */
+}
+
+.review-header {
+  display: flex; /* Flexbox для заголовка */
+  justify-content: space-between; /* Распределяем элементы */
+  width: 100%; /* Полная ширина */
+  margin-bottom: 10px; /* Отступ снизу */
+}
+
+.review-header h3 {
+  font-size: 1.1rem; /* Размер заголовка */
+}
+
+.review-header p {
+  font-size: 0.9rem; /* Размер даты */
+  color: #888; /* Серый цвет */
+}
+
+.review-text {
+  font-size: 1rem; /* Размер текста */
+  margin-bottom: 10px; /* Отступ снизу */
+}
+
+.review-text.truncated {
+  display: -webkit-box; /* Ограничение текста */
+  -webkit-line-clamp: 3; /* Максимум 3 строки */
+  -webkit-box-orient: vertical;
+  overflow: hidden; /* Скрываем лишний текст */
+}
+
+.toggle-button {
+  padding: 5px 10px; /* Уменьшенные отступы */
+  font-size: 0.9rem; /* Меньший шрифт */
+  background: transparent; /* Прозрачный фон */
+  border: 1px solid var(--primary-color); /* Граница */
+  color: var(--primary-color); /* Цвет текста */
+  border-radius: 8px; /* Скругленные углы */
+}
+
+.toggle-button:hover {
+  background-color: var(--primary-color); /* Фон при наведении */
+  color: var(--button-text-color); /* Белый текст */
+}
+
+.ratings {
+  display: flex; /* Flexbox для рейтингов */
+  gap: 10px; /* Отступ между рейтингами */
+  flex-wrap: wrap; /* Перенос на новую строку */
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .stats-row {
+    flex-direction: column; /* Вертикальное расположение */
+    gap: 15px; /* Уменьшенный отступ */
+  }
+
+  .profile-avatar img {
+    width: 100px; /* Меньший размер аватарки */
+    height: 100px;
+  }
+
+  .profile-header h1 {
+    font-size: 1.5rem; /* Меньший размер имени */
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-card {
+    padding: 15px; /* Уменьшенные отступы */
+  }
+
+  .review-card {
+    padding: 12px; /* Уменьшенные отступы */
+  }
+}
