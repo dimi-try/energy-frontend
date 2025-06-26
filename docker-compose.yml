@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
+    image: ${DOCKER_USERNAME}/energy-charts-frontend:latest
