@@ -10,8 +10,8 @@
 }
 
 .profile-avatar img {
-  width: 120px; /* Размер аватарки */
-  height: 120px;
+  width: 100px; /* Размер аватарки */
+  height: 100px;
   border-radius: 50%; /* Круглая форма */
   border: 2px solid var(--primary-color); /* Граница с акцентом */
   margin-bottom: 15px; /* Отступ снизу */
@@ -20,6 +20,7 @@
 
 .profile-avatar img:hover {
   transform: scale(1.05); /* Лёгкое увеличение при наведении */
+  box-shadow: var(--shadow); /* Тень при наведении */
 }
 
 .profile-header h1 {
@@ -68,59 +69,54 @@
   font-size: 1.1rem; /* Размер шрифта */
 }
 
-/* Карточка отзыва */
-.review-card {
-  flex-direction: column; /* Вертикальное выравнивание */
-  align-items: flex-start; /* Выравнивание слева */
-  text-align: left; /* Текст слева */
+/* Стили для rating-item (для ReviewCard) */
+.rating-item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 8px;
 }
 
-.review-header {
-  display: flex; /* Flexbox для заголовка */
-  justify-content: space-between; /* Распределяем элементы */
-  width: 100%; /* Полная ширина */
-  margin-bottom: 10px; /* Отступ снизу */
+.rating-item span:first-child {
+  font-size: 1rem;
+  color: var(--text-color);
 }
 
-.review-header h3 {
-  font-size: 1.1rem; /* Размер заголовка */
+.rating-item .rating {
+  font-size: 1rem;
 }
 
-.review-header p {
-  font-size: 0.9rem; /* Размер даты */
-  color: #888; /* Серый цвет */
+/* Стили для среднего рейтинга отзыва */
+.review-average-rating {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-color);
 }
 
-.review-text {
-  font-size: 1rem; /* Размер текста */
-  margin-bottom: 10px; /* Отступ снизу */
+.review-average-rating .star {
+  margin-right: 5px;
 }
 
-.review-text.truncated {
-  display: -webkit-box; /* Ограничение текста */
-  -webkit-line-clamp: 3; /* Максимум 3 строки */
-  -webkit-box-orient: vertical;
-  overflow: hidden; /* Скрываем лишний текст */
+/* Улучшение стиля ссылок */
+.details-link:hover {
+  text-decoration: underline; /* Подчёркивание при наведении */
 }
 
-.toggle-button {
-  padding: 5px 10px; /* Уменьшенные отступы */
-  font-size: 0.9rem; /* Меньший шрифт */
-  background: transparent; /* Прозрачный фон */
-  border: 1px solid var(--primary-color); /* Граница */
-  color: var(--primary-color); /* Цвет текста */
-  border-radius: 8px; /* Скругленные углы */
+/* Анимация появления карточек */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.toggle-button:hover {
-  background-color: var(--primary-color); /* Фон при наведении */
-  color: var(--button-text-color); /* Белый текст */
-}
-
-.ratings {
-  display: flex; /* Flexbox для рейтингов */
-  gap: 10px; /* Отступ между рейтингами */
-  flex-wrap: wrap; /* Перенос на новую строку */
+.card, .stat-card {
+  animation: fadeIn 0.3s ease-in;
 }
 
 /* Адаптивность */
@@ -131,8 +127,8 @@
   }
 
   .profile-avatar img {
-    width: 100px; /* Меньший размер аватарки */
-    height: 100px;
+    width: 80px; /* Меньший размер аватарки */
+    height: 80px;
   }
 
   .profile-header h1 {
@@ -145,7 +141,8 @@
     padding: 15px; /* Уменьшенные отступы */
   }
 
-  .review-card {
-    padding: 12px; /* Уменьшенные отступы */
+  .rating-item {
+    flex-direction: column; /* Вертикальное расположение для рейтингов */
+    gap: 5px;
   }
 }

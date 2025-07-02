@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../hooks/api";
+import ReviewCard from "../components/ReviewCard";
 import "./Profile.css";
 
 // Компонент страницы профиля пользователя
@@ -11,6 +12,8 @@ const Profile = () => {
   const [profile, setProfile] = useState(null);
   // Состояние для списка отзывов
   const [reviews, setReviews] = useState([]);
+  // Состояние для критериев оценки
+  const [criteria, setCriteria] = useState([]);
   // Состояние для ошибок
   const [error, setError] = useState(null);
   // Состояние для загрузки
@@ -23,13 +26,15 @@ const Profile = () => {
 
     const fetchData = async () => {
       try {
-        const [profileRes, reviewsRes] = await Promise.all([
+        const [profileRes, reviewsRes, criteriaRes] = await Promise.all([
           api.get(`/users/${id}/profile`),
           api.get(`/users/${id}/reviews`),
+          api.get(`/criteria/`),
         ]);
 
         setProfile(profileRes.data); // Сохраняем данные профиля
         setReviews(reviewsRes.data.reviews); // Сохраняем отзывы
+        setCriteria(criteriaRes.data);  // Сохраняем критерии оценки
       } catch (err) {
         setError(err.message); // Сохраняем ошибку
       } finally {
@@ -39,43 +44,6 @@ const Profile = () => {
     fetchData();
   }, [id]);
 
-  // Компонент для отображения отзыва
-  const ReviewCard = ({ review }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
-
-    return (
-      <div className="card review-card">
-        <div className="review-header">
-          <h3>
-            <Link to={`/energies/${review.energy_id}`} className="details-link">
-              {review.brand}{" "}{review.energy}
-            </Link>
-          </h3>
-          <p>{new Date(review.created_at).toLocaleDateString()}</p>
-        </div>
-        <p className={`review-text ${isExpanded ? "" : "truncated"}`}>
-          {review.review_text}
-        </p>
-        {review.review_text.length > 100 && (
-          <button
-            className="toggle-button"
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            {isExpanded ? "Свернуть" : "Читать далее"}
-          </button>
-        )}
-        <div className="ratings">
-          {review.ratings.map((rating) => (
-            <span key={rating.id} className="rating">
-              Критерий {rating.criteria_id}: {rating.rating_value}/10
-            </span>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  // Отображаем загрузку, ошибку или контент
   if (loading) return <div className="loading">Загрузка...</div>;
   if (error) return <div className="error">Ошибка: {error}</div>;
   if (!profile) return <div className="error">Профиль не найден</div>;
@@ -149,7 +117,12 @@ const Profile = () => {
         ) : (
           <div className="list-container">
             {reviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
+              <ReviewCard
+                key={review.id}
+                review={review}
+                criteria={criteria}
+                isProfile={true}
+              />
             ))}
           </div>
         )}

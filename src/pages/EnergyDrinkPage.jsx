@@ -23,14 +23,17 @@ const EnergyDrinkPage = () => {
       const [energyRes, reviewsRes, criteriaRes] = await Promise.all([
         api.get(`/energies/${id}`),
         api.get(`/energies/${id}/reviews/`),
-        api.get(`/criteria/`)
+        api.get(`/criteria/`),
       ]);
 
       setEnergy(energyRes.data); // Сохраняем данные об энергетике
       setReviews(reviewsRes.data); // Сохраняем отзывы
       setCriteria(criteriaRes.data); // Сохраняем критерии
       // Инициализируем состояние для нового отзыва
-      setNewReview({ ...newReview, ratings: criteriaRes.data.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}) });
+      setNewReview({
+        ...newReview,
+        ratings: criteriaRes.data.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}),
+      });
     };
     fetchData();
   }, [id]);
@@ -41,34 +44,37 @@ const EnergyDrinkPage = () => {
     // Формируем массив оценок
     const ratings = Object.entries(newReview.ratings).map(([criteriaId, value]) => ({
       criteria_id: parseInt(criteriaId),
-      rating_value: parseFloat(value)
+      rating_value: parseFloat(value),
     }));
     // Отправляем отзыв на сервер
     const response = await api.post(`/reviews/`, {
       user_id: newReview.user_id,
       review_text: newReview.review_text,
       energy_id: parseInt(id),
-      ratings
+      ratings,
     });
     // Добавляем новый отзыв в список
     setReviews([...reviews, response.data]);
     // Сбрасываем форму
-    setNewReview({ user_id: "", review_text: "", ratings: criteria.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}) });
+    setNewReview({
+      user_id: "",
+      review_text: "",
+      ratings: criteria.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}),
+    });
   };
 
   // Показываем индикатор загрузки, если данные еще не загружены
-  if (!energy) return <p>Загрузка...</p>;
+  if (!energy) return <p className="loading">Загрузка...</p>;
 
   return (
     <div className="energy-container container">
-      {/* Заголовок с изображением и рейтингом */}
       <div className="energy-header">
         <img src={energy.image_url} alt={energy.name} style={{ width: "80px", borderRadius: "8px" }} />
         <div>
           <h1>{energy.brand?.name} {energy.name}</h1>
           <p>
-            <span className="star">★</span> 
-              {energy.average_rating}/10 ({energy.review_count} отзывов)
+            <span className="star">★</span>
+            {energy.average_rating}/10 ({energy.review_count} отзывов)
           </p>
         </div>
       </div>
@@ -76,18 +82,24 @@ const EnergyDrinkPage = () => {
       {/* Информация об энергетике */}
       <div className="energy-info card">
         <h2>Об энергике</h2>
-        <p><strong>Производитель:</strong></p>
+        <p>
+          <strong>Производитель:</strong>
+        </p>
         <p>
           <Link to={`/brands/${energy.brand.id}`} className="details-link">
             {energy.brand?.name}
           </Link>
         </p>
-        <p><strong>Категория:</strong> {energy.category.name}</p>
-        <p><strong>Описание:</strong> {energy.description}</p>
-        <p><strong>Ингридиенты:</strong> {energy.ingredients}</p>
+        <p>
+          <strong>Категория:</strong> {energy.category.name}
+        </p>
+        <p>
+          <strong>Описание:</strong> {energy.description}
+        </p>
+        <p>
+          <strong>Ингридиенты:</strong> {energy.ingredients}
+        </p>
       </div>
-
-      {/* Форма для отправки отзыва */}
       <div className="review-form card">
         <h2>Оставить отзыв</h2>
         <form onSubmit={handleSubmit}>
@@ -106,7 +118,7 @@ const EnergyDrinkPage = () => {
             onChange={(e) => setNewReview({ ...newReview, review_text: e.target.value })}
             required
           />
-          {criteria.map(criterion => (
+          {criteria.map((criterion) => (
             <div key={criterion.id}>
               <label>{criterion.name}</label>
               <input
@@ -114,7 +126,12 @@ const EnergyDrinkPage = () => {
                 min="0"
                 max="10"
                 value={newReview.ratings[criterion.id] || ""}
-                onChange={(e) => setNewReview({ ...newReview, ratings: { ...newReview.ratings, [criterion.id]: e.target.value } })}
+                onChange={(e) =>
+                  setNewReview({
+                    ...newReview,
+                    ratings: { ...newReview.ratings, [criterion.id]: e.target.value },
+                  })
+                }
                 required
               />
             </div>
@@ -126,8 +143,8 @@ const EnergyDrinkPage = () => {
       {/* Список отзывов */}
       <h2>Отзывы</h2>
       <div className="list-container">
-        {reviews.map(review => (
-          <ReviewCard key={review.id} review={review} criteria={criteria} />
+        {reviews.map((review) => (
+          <ReviewCard key={review.id} review={review} criteria={criteria} isProfile={false} />
         ))}
       </div>
     </div>
