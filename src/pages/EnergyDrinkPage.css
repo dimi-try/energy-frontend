@@ -26,11 +26,3 @@
   border-radius: 8px; /* Скругленные углы */
   box-sizing: border-box; /* Учитываем padding в ширине */
 }
-
-/* Стили для заголовка отзыва */
-.review-header {
-  display: flex; /* Flexbox для выравнивания */
-  justify-content: space-between; /* Распределяем элементы */
-  font-size: 12px; /* Размер шрифта */
-  color: var(--text-color); /* Цвет текста */
-}
