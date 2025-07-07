@@ -15,13 +15,6 @@ import EnergyDrinkPage from './pages/EnergyDrinkPage';
 import BrandPage from './pages/BrandPage';
 import BottomNav from './components/BottomNav';
 
-/*Legacy*/
-import LegacyProfile from "./legacy/pages/Profile/Profile";
-import LegacyEnergies from "./legacy/pages/Energies/Energies";
-import LegacyEnergy from "./legacy/pages/Energy/Energy";
-import Navigation from './legacy/components/Navigation/Navigation';
-/********/
-
 function App() {
   const { telegram } = useTelegram();
   const { result, verifyUser } = useUserVerification(telegram);
@@ -96,17 +89,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/energies/:id" element={<EnergyDrinkPage />} />
         <Route path="/brands/:id" element={<BrandPage />} />
-
-        {/* Legacy */}
-          <Route path={'/legacy/profile'} element={<LegacyProfile />}/>
-          <Route path={'/legacy/energies'} element={<LegacyEnergies />}/>
-          <Route path={"/legacy/energy/:id"} element={<LegacyEnergy />} />
-        {/*  */}
       </Routes>
       <BottomNav />
-      {/* Legacy */}
-        {/* <Navigation /> */}
-      {/*  */}
       {showBackButton && <BackButton onClick={() => navigate(-1)} />}
     </div>
   );
