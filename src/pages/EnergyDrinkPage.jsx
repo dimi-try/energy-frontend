@@ -22,7 +22,7 @@ const EnergyDrinkPage = () => {
     const fetchData = async () => {
       const [energyRes, reviewsRes, criteriaRes] = await Promise.all([
         api.get(`/energies/${id}`),
-        api.get(`/energies/${id}/reviews/`),
+        api.get(`/energies/${id}/reviews`),
         api.get(`/criteria/`),
       ]);
 
