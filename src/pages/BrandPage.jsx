@@ -30,7 +30,7 @@ const BrandPage = () => {
       try {
         const [brandRes, energiesRes] = await Promise.all([
           api.get(`/brands/${id}`),
-          api.get(`/brands/${id}/energies/`)
+          api.get(`/brands/${id}/energies`)
         ]);
 
         setBrand(brandRes.data); // Сохраняем данные о бренде
