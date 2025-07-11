@@ -45,12 +45,14 @@ const EnergyDrinkPage = () => {
     const ratings = Object.entries(newReview.ratings).map(([criteriaId, value]) => ({
       criteria_id: parseInt(criteriaId),
       rating_value: parseFloat(value),
+      created_at: new Date().toISOString(),
     }));
     // Отправляем отзыв на сервер
     const response = await api.post(`/reviews/`, {
       user_id: newReview.user_id,
       review_text: newReview.review_text,
       energy_id: parseInt(id),
+      created_at: new Date().toISOString(),
       ratings,
     });
     // Добавляем новый отзыв в список
