@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../hooks/api";
 import ReviewCard from "../components/ReviewCard";
+import { ToastContainer, toast } from "react-toastify";
 import "./EnergyDrinkPage.css";
 
 // Компонент страницы энергетика
@@ -20,20 +21,31 @@ const EnergyDrinkPage = () => {
   // Загружаем данные об энергетике, отзывах и критериях
   useEffect(() => {
     const fetchData = async () => {
-      const [energyRes, reviewsRes, criteriaRes] = await Promise.all([
-        api.get(`/energies/${id}`),
-        api.get(`/energies/${id}/reviews`),
-        api.get(`/criteria/`),
-      ]);
+      try {
+        const [energyRes, reviewsRes, criteriaRes] = await Promise.all([
+          api.get(`/energies/${id}`),
+          api.get(`/energies/${id}/reviews`),
+          api.get(`/criteria/`),
+        ]);
 
-      setEnergy(energyRes.data); // Сохраняем данные об энергетике
-      setReviews(reviewsRes.data); // Сохраняем отзывы
-      setCriteria(criteriaRes.data); // Сохраняем критерии
-      // Инициализируем состояние для нового отзыва
-      setNewReview({
-        ...newReview,
-        ratings: criteriaRes.data.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}),
-      });
+        setEnergy(energyRes.data); // Сохраняем данные об энергетике
+        setReviews(reviewsRes.data); // Сохраняем отзывы
+        setCriteria(criteriaRes.data); // Сохраняем критерии
+        // Инициализируем состояние для нового отзыва
+        setNewReview({
+          ...newReview,
+          ratings: criteriaRes.data.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}),
+        });
+      } catch (err) {
+        toast.error("Ошибка при загрузке данных. Попробуйте позже.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
     };
     fetchData();
   }, [id]);
@@ -41,28 +53,50 @@ const EnergyDrinkPage = () => {
   // Функция для отправки отзыва
   const handleSubmit = async (e) => {
     e.preventDefault(); // Предотвращаем перезагрузку страницы
-    // Формируем массив оценок
-    const ratings = Object.entries(newReview.ratings).map(([criteriaId, value]) => ({
-      criteria_id: parseInt(criteriaId),
-      rating_value: parseFloat(value),
-      created_at: new Date().toISOString(),
-    }));
-    // Отправляем отзыв на сервер
-    const response = await api.post(`/reviews/`, {
-      user_id: newReview.user_id,
-      review_text: newReview.review_text,
-      energy_id: parseInt(id),
-      created_at: new Date().toISOString(),
-      ratings,
-    });
-    // Добавляем новый отзыв в список
-    setReviews([...reviews, response.data]);
-    // Сбрасываем форму
-    setNewReview({
-      user_id: "",
-      review_text: "",
-      ratings: criteria.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}),
-    });
+    try {
+      // Формируем массив оценок
+      const ratings = Object.entries(newReview.ratings).map(([criteriaId, value]) => ({
+        criteria_id: parseInt(criteriaId),
+        rating_value: parseFloat(value),
+        created_at: new Date().toISOString(),
+      }));
+      // Отправляем отзыв на сервер
+      const response = await api.post(`/reviews/`, {
+        user_id: newReview.user_id,
+        review_text: newReview.review_text,
+        energy_id: parseInt(id),
+        created_at: new Date().toISOString(),
+        ratings,
+      });
+      // Добавляем новый отзыв в список
+      setReviews([...reviews, response.data]);
+      // Сбрасываем форму
+      setNewReview({
+        user_id: "",
+        review_text: "",
+        ratings: criteria.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}),
+      });
+      toast.success("Отзыв успешно отправлен!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } catch (err) {
+      toast.error(
+        err.response?.data?.detail || "Ошибка при отправке отзыва. Попробуйте позже.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
+    }
   };
 
   // Показываем индикатор загрузки, если данные еще не загружены
@@ -70,6 +104,20 @@ const EnergyDrinkPage = () => {
 
   return (
     <div className="energy-container container">
+      {/* Контейнер для уведомлений */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+
       <div className="energy-header">
         <img src={energy.image_url} alt={energy.name} style={{ width: "80px", borderRadius: "8px" }} />
         <div>
