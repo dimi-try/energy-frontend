@@ -61,15 +61,16 @@ const EnergyDrinkPage = () => {
         created_at: new Date().toISOString(),
       }));
       // Отправляем отзыв на сервер
-      const response = await api.post(`/reviews/`, {
+      await api.post(`/reviews/`, {
         user_id: newReview.user_id,
         review_text: newReview.review_text,
         energy_id: parseInt(id),
         created_at: new Date().toISOString(),
         ratings,
       });
-      // Добавляем новый отзыв в список
-      setReviews([...reviews, response.data]);
+      // Загружаем обновленный список отзывов
+      const reviewsRes = await api.get(`/energies/${id}/reviews`);
+      setReviews(reviewsRes.data);
       // Сбрасываем форму
       setNewReview({
         user_id: "",
