@@ -16,7 +16,11 @@ const EnergyDrinkPage = () => {
   // Состояние для критериев оценки
   const [criteria, setCriteria] = useState([]);
   // Состояние для нового отзыва
-  const [newReview, setNewReview] = useState({ user_id: "", review_text: "", ratings: {} });
+  const [newReview, setNewReview] = useState({ review_text: "", ratings: {} });
+  const [hoveredStars, setHoveredStars] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 5;
+  const user_id = 2;
 
   // Загружаем данные об энергетике, отзывах и критериях
   useEffect(() => {
@@ -50,6 +54,21 @@ const EnergyDrinkPage = () => {
     fetchData();
   }, [id]);
 
+  const handleStarClick = (criterionId, rating) => {
+    setNewReview({
+      ...newReview,
+      ratings: { ...newReview.ratings, [criterionId]: rating },
+    });
+  };
+
+  const handleStarHover = (criterionId, rating) => {
+    setHoveredStars({ ...hoveredStars, [criterionId]: rating });
+  };
+
+  const handleStarLeave = (criterionId) => {
+    setHoveredStars({ ...hoveredStars, [criterionId]: 0 });
+  };
+
   // Функция для отправки отзыва
   const handleSubmit = async (e) => {
     e.preventDefault(); // Предотвращаем перезагрузку страницы
@@ -62,7 +81,7 @@ const EnergyDrinkPage = () => {
       }));
       // Отправляем отзыв на сервер
       await api.post(`/reviews/`, {
-        user_id: newReview.user_id,
+        user_id: user_id,
         review_text: newReview.review_text,
         energy_id: parseInt(id),
         created_at: new Date().toISOString(),
@@ -73,10 +92,11 @@ const EnergyDrinkPage = () => {
       setReviews(reviewsRes.data);
       // Сбрасываем форму
       setNewReview({
-        user_id: "",
         review_text: "",
         ratings: criteria.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}),
       });
+      setHoveredStars({});
+      setCurrentPage(1);
       toast.success("Отзыв успешно отправлен!", {
         position: "top-right",
         autoClose: 5000,
@@ -100,6 +120,15 @@ const EnergyDrinkPage = () => {
     }
   };
 
+  const indexOfLastReview = currentPage * reviewsPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+  const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
+  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   // Показываем индикатор загрузки, если данные еще не загружены
   if (!energy) return <p className="loading">Загрузка...</p>;
 
@@ -120,48 +149,73 @@ const EnergyDrinkPage = () => {
       />
 
       <div className="energy-header">
-        <img src={energy.image_url} alt={energy.name} style={{ width: "80px", borderRadius: "8px" }} />
-        <div>
+        <div className="energy-image">
+          {energy.image_url ? (
+            <img src={energy.image_url} alt={energy.name} />
+          ) : (
+            <div className="no-image">Нет фото</div>
+          )}
+        </div>
+        <div className="energy-details">
           <h1>{energy.brand?.name} {energy.name}</h1>
-          <p>
-            <span className="star">★</span>
+          <p className="rating">
+            <span className="rating-star">★</span>
             {energy.average_rating}/10 ({energy.review_count} отзывов)
           </p>
+          {/* Информация об энергетике */}
+          <div className="energy-info card">
+            <h2>Об энергетике</h2>
+            <p>
+              <strong>Производитель:</strong>
+            </p>
+            <p>
+              <Link to={`/brands/${energy.brand.id}`} className="details-link">
+                {energy.brand?.name}
+              </Link>
+            </p>
+            <p>
+              <strong>Категория:</strong> {energy.category.name}
+              </p>
+            <p>
+              <strong>Описание:</strong> {energy.description}
+              </p>
+            <p>
+              <strong>Ингредиенты:</strong> {energy.ingredients}
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Информация об энергетике */}
-      <div className="energy-info card">
-        <h2>Об энергике</h2>
-        <p>
-          <strong>Производитель:</strong>
-        </p>
-        <p>
-          <Link to={`/brands/${energy.brand.id}`} className="details-link">
-            {energy.brand?.name}
-          </Link>
-        </p>
-        <p>
-          <strong>Категория:</strong> {energy.category.name}
-        </p>
-        <p>
-          <strong>Описание:</strong> {energy.description}
-        </p>
-        <p>
-          <strong>Ингридиенты:</strong> {energy.ingredients}
-        </p>
+      {/* Список отзывов */}
+      <div className="reviews-section card">
+        <h2>Отзывы</h2>
+        <div className="list-container">
+          {currentReviews.length > 0 ? (
+            currentReviews.map((review) => (
+              <ReviewCard key={review.id} review={review} criteria={criteria} isProfile={false} />
+            ))
+          ) : (
+            <p>Отзывов пока нет.</p>
+          )}
+        </div>
+        {totalPages > 1 && (
+          <div className="pagination">
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={currentPage === index + 1 ? "active" : ""}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
+
       <div className="review-form card">
         <h2>Оставить отзыв</h2>
         <form onSubmit={handleSubmit}>
-          <input
-            type="number"
-            name="user_id"
-            placeholder="Ваш User ID"
-            value={newReview.user_id}
-            onChange={(e) => setNewReview({ ...newReview, user_id: e.target.value })}
-            required
-          />
           <textarea
             name="review_text"
             placeholder="Текст отзыва"
@@ -170,33 +224,34 @@ const EnergyDrinkPage = () => {
             required
           />
           {criteria.map((criterion) => (
-            <div key={criterion.id}>
+            <div key={criterion.id} className="star-rating">
               <label>{criterion.name}</label>
-              <input
-                type="number"
-                min="0"
-                max="10"
-                value={newReview.ratings[criterion.id] || ""}
-                onChange={(e) =>
-                  setNewReview({
-                    ...newReview,
-                    ratings: { ...newReview.ratings, [criterion.id]: e.target.value },
-                  })
-                }
-                required
-              />
+              <div
+                className="stars"
+                onMouseLeave={() => handleStarLeave(criterion.id)}
+              >
+                {[...Array(10)].map((_, index) => {
+                  const ratingValue = index + 1;
+                  return (
+                    <span
+                      key={index}
+                      className={`star ${
+                        ratingValue <= (hoveredStars[criterion.id] || newReview.ratings[criterion.id] || 0)
+                          ? "filled"
+                          : ""
+                      }`}
+                      onClick={() => handleStarClick(criterion.id, ratingValue)}
+                      onMouseEnter={() => handleStarHover(criterion.id, ratingValue)}
+                    >
+                      ★
+                    </span>
+                  );
+                })}
+              </div>
             </div>
           ))}
           <button type="submit">Отправить</button>
         </form>
-      </div>
-
-      {/* Список отзывов */}
-      <h2>Отзывы</h2>
-      <div className="list-container">
-        {reviews.map((review) => (
-          <ReviewCard key={review.id} review={review} criteria={criteria} isProfile={false} />
-        ))}
       </div>
     </div>
   );
