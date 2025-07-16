@@ -7,7 +7,7 @@ import "./Profile.css";
 // Компонент страницы профиля пользователя
 const Profile = () => {
   // ID пользователя (тест - 1)
-  const id = 1;
+  const user_id = 2;
   // Состояние для данных профиля
   const [profile, setProfile] = useState(null);
   // Состояние для списка отзывов
@@ -27,8 +27,8 @@ const Profile = () => {
     const fetchData = async () => {
       try {
         const [profileRes, reviewsRes, criteriaRes] = await Promise.all([
-          api.get(`/users/${id}/profile`),
-          api.get(`/users/${id}/reviews`),
+          api.get(`/users/${user_id}/profile`),
+          api.get(`/users/${user_id}/reviews`),
           api.get(`/criteria/`),
         ]);
 
@@ -42,7 +42,7 @@ const Profile = () => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [user_id]);
 
   if (loading) return <div className="loading">Загрузка...</div>;
   if (error) return <div className="error">Ошибка: {error}</div>;
