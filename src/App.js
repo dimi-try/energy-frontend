@@ -9,7 +9,6 @@ import './styles/App.css';
 
 import Top100 from './pages/Top100';
 import Search from './pages/Search';
-import Favorites from './pages/Favorites';
 import Profile from './pages/Profile';
 import EnergyDrinkPage from './pages/EnergyDrinkPage';
 import BrandPage from './pages/BrandPage';
@@ -85,7 +84,6 @@ function App() {
       <Routes>
         <Route index element={<Top100 />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/favorites" element={<Favorites />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/energies/:id" element={<EnergyDrinkPage />} />
         <Route path="/brands/:id" element={<BrandPage />} />
