@@ -64,10 +64,6 @@
   margin-bottom: 20px;
 }
 
-.rating-star {
-  color: #f39c12; /* Желтый цвет для звезды в рейтинге */
-}
-
 /* Стили для блока с информацией об энергетике */
 .energy-info {
   display: block;
@@ -149,31 +145,31 @@
 }
 
 /* Стили для рейтинга со звездами */
-.star-rating {
+.star-criteria {
   margin-bottom: 15px;
   text-align: left;
 }
 
-.star-rating label {
+.star-criteria label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.stars {
+.stars-rating {
   display: flex;
   gap: 5px;
   flex-wrap: nowrap; /* Предотвращаем перенос звезд */
 }
 
-.star {
+.star-rating {
   font-size: 20px; /* Уменьшен размер звезд для маленьких экранов */
   color: #ccc; /* Серый для неактивных звезд в форме */
   cursor: pointer;
   transition: color 0.2s;
 }
 
-.star.filled {
+.star-rating.filled {
   color: #f39c12; /* Желтый для активных звезд */
 }
 
@@ -249,7 +245,7 @@
     margin: 30px 0; /* Сохраняем одинаковый отступ */
   }
 
-  .stars {
+  .stars-rating {
     font-size: 18px; /* Еще меньший размер звезд для средних экранов */
   }
 }
@@ -286,7 +282,7 @@
     margin: 30px 0; /* Сохраняем одинаковый отступ */
   }
 
-  .stars {
+  .stars-rating {
     font-size: 16px; /* Минимальный размер звезд для маленьких экранов */
   }
 }

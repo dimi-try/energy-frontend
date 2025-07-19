@@ -159,7 +159,7 @@ const EnergyDrinkPage = () => {
         <div className="energy-details">
           <h1>{energy.brand?.name} {energy.name}</h1>
           <p className="rating">
-            <span className="rating-star">★</span>
+            <span className="star">★</span>
             {energy.average_rating}/10 ({energy.review_count} отзывов)
           </p>
           {/* Информация об энергетике */}
@@ -224,10 +224,10 @@ const EnergyDrinkPage = () => {
             required
           />
           {criteria.map((criterion) => (
-            <div key={criterion.id} className="star-rating">
+            <div key={criterion.id} className="star-criteria">
               <label>{criterion.name}</label>
               <div
-                className="stars"
+                className="stars-rating"
                 onMouseLeave={() => handleStarLeave(criterion.id)}
               >
                 {[...Array(10)].map((_, index) => {
@@ -235,7 +235,7 @@ const EnergyDrinkPage = () => {
                   return (
                     <span
                       key={index}
-                      className={`star ${
+                      className={`star-rating ${
                         ratingValue <= (hoveredStars[criterion.id] || newReview.ratings[criterion.id] || 0)
                           ? "filled"
                           : ""
