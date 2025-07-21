@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../hooks/api";
 import ReviewCard from "../components/ReviewCard";
+import UnifiedCard from "../components/UnifiedCard";
 import { ToastContainer, toast } from "react-toastify";
 import "./EnergyDrinkPage.css";
 
@@ -163,7 +164,7 @@ const EnergyDrinkPage = () => {
             {energy.average_rating}/10 ({energy.review_count} отзывов)
           </p>
           {/* Информация об энергетике */}
-          <div className="energy-info card">
+          <UnifiedCard className="energy-info">
             <h2>Об энергетике</h2>
             <p>
               <strong>Производитель:</strong>
@@ -175,19 +176,19 @@ const EnergyDrinkPage = () => {
             </p>
             <p>
               <strong>Категория:</strong> {energy.category.name}
-              </p>
+            </p>
             <p>
               <strong>Описание:</strong> {energy.description}
-              </p>
+            </p>
             <p>
               <strong>Ингредиенты:</strong> {energy.ingredients}
             </p>
-          </div>
+          </UnifiedCard>
         </div>
       </div>
 
       {/* Список отзывов */}
-      <div className="reviews-section card">
+      <UnifiedCard className="reviews-section">
         <h2>Отзывы</h2>
         <div className="list-container">
           {currentReviews.length > 0 ? (
@@ -211,9 +212,9 @@ const EnergyDrinkPage = () => {
             ))}
           </div>
         )}
-      </div>
+      </UnifiedCard>
 
-      <div className="review-form card">
+      <UnifiedCard className="review-form">
         <h2>Оставить отзыв</h2>
         <form onSubmit={handleSubmit}>
           <textarea
@@ -252,7 +253,7 @@ const EnergyDrinkPage = () => {
           ))}
           <button type="submit">Отправить</button>
         </form>
-      </div>
+      </UnifiedCard>
     </div>
   );
 };

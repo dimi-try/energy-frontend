@@ -64,34 +64,6 @@
   margin-bottom: 20px;
 }
 
-/* Стили для блока с информацией об энергетике */
-.energy-info {
-  display: block;
-  margin: 30px 0; /* Одинаковый внешний отступ для всех разделов */
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-}
-
-.energy-info h2 {
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-
-/* Стили для раздела отзывов */
-.reviews-section {
-  display: block;
-  margin: 30px 0; /* Одинаковый внешний отступ */
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-}
-
-.reviews-section h2 {
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-
 /* Стили для пагинации */
 .pagination {
   display: flex;
@@ -120,21 +92,7 @@
   color: white;
 }
 
-/* Стили для формы отзыва */
-.review-form {
-  display: block;
-  margin: 30px 0; /* Одинаковый внешний отступ */
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-}
-
-.review-form h2 {
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-
-.review-form input,
+/* Стили для формы отзыва (внутренние элементы) */
 .review-form textarea {
   width: 100%;
   padding: 10px;
@@ -275,12 +233,6 @@
     text-align: right;
   }
 
-  .energy-info,
-  .reviews-section,
-  .review-form {
-    margin: 30px 0; /* Сохраняем одинаковый отступ */
-  }
-
   .stars-rating {
     font-size: 18px; /* Еще меньший размер звезд для средних экранов */
   }
@@ -310,12 +262,6 @@
 
   .rating {
     text-align: center;
-  }
-
-  .energy-info,
-  .reviews-section,
-  .review-form {
-    margin: 30px 0; /* Сохраняем одинаковый отступ */
   }
 
   .stars-rating {
