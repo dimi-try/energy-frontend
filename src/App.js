@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes, useNavigate, useLocation  } from 'react-router-dom'
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { BackButton } from '@vkruglikov/react-telegram-web-app';
 
-import { useTelegram } from "./hooks/useTelegram";
-import { useUserVerification } from "./hooks/useUserVerification";
+import { useTelegram } from './hooks/useTelegram';
+import { useUserVerification } from './hooks/useUserVerification';
 
 import './styles/App.css';
 
@@ -15,9 +15,8 @@ import BrandPage from './pages/BrandPage';
 import BottomNav from './components/BottomNav';
 
 function App() {
-  const { telegram } = useTelegram();
-  const { result, verifyUser } = useUserVerification(telegram);
-
+  const { telegram, initData } = useTelegram(); // Получаем telegram и initData
+  const { result, userId, verifyUser } = useUserVerification(telegram); // Получаем result, userId и verifyUser
   const navigate = useNavigate();
   const location = useLocation();
   const [showBackButton, setShowBackButton] = useState(true);
@@ -25,9 +24,9 @@ function App() {
   // Инициализация и отслеживание темы Telegram
   useEffect(() => {
     if (telegram) {
-      telegram.ready();
+      telegram.ready(); // Сообщаем Telegram, что приложение готово
 
-      // Функция для применения темы
+      // Функция для применения темы Telegram
       const applyTheme = (params) => {
         const theme = params || {
           bg_color: '#f5f5f5',
@@ -51,11 +50,12 @@ function App() {
 
       // Событие: изменение темы в Telegram
       telegram.onEvent('themeChanged', () => {
-        console.log('Theme changed event:', telegram.themeParams);
+        console.log('Событие изменения темы:', telegram.themeParams);
         applyTheme(telegram.themeParams);
       });
     } else {
-      // Значения по умолчанию для браузера
+      // Устанавливаем тему по умолчанию для браузера
+      console.log('Приложение открыто в браузере, применяем тему по умолчанию');
       document.documentElement.style.setProperty('--background-color', '#f5f5f5');
       document.documentElement.style.setProperty('--text-color', '#333333');
       document.documentElement.style.setProperty('--card-background', '#ffffff');
@@ -63,24 +63,42 @@ function App() {
       document.documentElement.style.setProperty('--button-text-color', '#ffffff');
     }
   }, [telegram]);
-  
+
+  // Управление видимостью кнопки "Назад"
   useEffect(() => {
-    // Проверяем, если это главная страница или история пуста
     if (location.pathname === '/' || window.history.length === 1) {
-      setShowBackButton(false); // Скрыть кнопку назад
+      setShowBackButton(false); // Скрываем кнопку на главной странице
     } else {
-      setShowBackButton(true); // Показать кнопку назад
+      setShowBackButton(true); // Показываем кнопку на других страницах
     }
   }, [location]);
 
+  // Обработка верификации пользователя
   useEffect(() => {
-    verifyUser(telegram.initData); // Автоматическая верификация при монтировании компонента
-  }, [verifyUser, telegram.initData]);
-  
+    if (initData && verifyUser) {
+      verifyUser(initData); // Запускаем верификацию, если есть initData и verifyUser
+    } else if (!telegram) {
+      console.log('Пожалуйста, войдите через Telegram Mini App');
+    }
+  }, [initData, verifyUser, telegram]);
+
+  // Если пользователь не в Telegram, показываем сообщение
+  if (!telegram) {
+    return (
+      <div className="App">
+        <h1>Доступ ограничен</h1>
+        <p>Пожалуйста, откройте приложение через Telegram Mini App</p>
+      </div>
+    );
+  }
+
+  // Основной рендер приложения
   return (
     <div className={`App ${telegram?.colorScheme || 'light'}`}>
-      {/* Выводим результат верификации */}
-      {/* <p>{result}</p>  */}
+      {/* Отображаем статус верификации и userId */}
+       <p>Статус: {result || 'Ожидание верификации...'}</p> 
+       {userId && <p>Ваш Telegram ID: {userId}</p>} 
+
       <Routes>
         <Route index element={<Top100 />} />
         <Route path="/search" element={<Search />} />
