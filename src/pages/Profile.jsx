@@ -5,9 +5,7 @@ import ReviewCard from "../components/ReviewCard";
 import "./Profile.css";
 
 // Компонент страницы профиля пользователя
-const Profile = () => {
-  // ID пользователя (тест - 1)
-  const user_id = 2;
+const Profile = ({ userId, token }) => {
   // Состояние для данных профиля
   const [profile, setProfile] = useState(null);
   // Состояние для списка отзывов
@@ -18,31 +16,67 @@ const Profile = () => {
   const [error, setError] = useState(null);
   // Состояние для загрузки
   const [loading, setLoading] = useState(true);
+  // Состояние для режима редактирования
+  const [isEditing, setIsEditing] = useState(false); 
+  // Состояние для нового имени пользователя
+  const [newUsername, setNewUsername] = useState(""); 
 
   // Загружаем данные профиля и отзывы
   useEffect(() => {
+    if (!userId || !token) {
+      setLoading(false); // Если нет userId или token, не загружаем данные
+      return;
+    }
     setError(null); // Сбрасываем ошибки
     setLoading(true); // Устанавливаем загрузку
 
     const fetchData = async () => {
       try {
         const [profileRes, reviewsRes, criteriaRes] = await Promise.all([
-          api.get(`/users/${user_id}/profile`),
-          api.get(`/users/${user_id}/reviews`),
+          api.get(`/users/${userId}/profile`),
+          api.get(`/users/${userId}/reviews`),
           api.get(`/criteria/`),
         ]);
 
         setProfile(profileRes.data); // Сохраняем данные профиля
         setReviews(reviewsRes.data.reviews); // Сохраняем отзывы
-        setCriteria(criteriaRes.data);  // Сохраняем критерии оценки
+        setCriteria(criteriaRes.data); // Сохраняем критерии оценки
+        setNewUsername(profileRes.data.user.username); // Устанавливаем начальное имя
       } catch (err) {
-        setError(err.message); // Сохраняем ошибку
+        setError(err.response?.data?.detail || err.message);
       } finally {
-        setLoading(false); // Сбрасываем загрузку
+        setLoading(false);
       }
     };
     fetchData();
-  }, [user_id]);
+  }, [userId, token]);
+
+  // Обработчик отправки формы редактирования
+  const handleUpdateUsername = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await api.put(`/users/${userId}/profile`, {
+        username: newUsername,
+      });
+      setProfile({ ...profile, user: response.data }); // Обновляем профиль
+      setIsEditing(false); // Выключаем режим редактирования
+    } catch (err) {
+      setError(err.response?.data?.detail || "Ошибка при обновлении имени");
+    }
+  };
+
+  // Если пользователь не авторизован
+  if (!userId || !token) {
+    return (
+      <div className="profile-container container">
+        <h1>Доступ ограничен</h1>
+        <p>
+          Пожалуйста, зайдите через тг бот{" "}
+          <a href="https://t.me/energy_charts_styula_bot">@energy_charts_styula_bot</a>
+        </p>
+      </div>
+    );
+  }
 
   if (loading) return <div className="loading">Загрузка...</div>;
   if (error) return <div className="error">Ошибка: {error}</div>;
@@ -58,7 +92,34 @@ const Profile = () => {
             alt="Avatar"
           />
         </div>
-        <h1>{profile.user.username}</h1>
+        {isEditing ? (
+          <form onSubmit={handleUpdateUsername} className="edit-username-form">
+            <input
+              type="text"
+              value={newUsername}
+              onChange={(e) => setNewUsername(e.target.value)}
+              placeholder="Новое имя пользователя"
+              maxLength={100}
+              required
+            />
+            <div className="edit-buttons">
+              <button type="submit">Сохранить</button>
+              <button type="button" onClick={() => setIsEditing(false)}>
+                Отмена
+              </button>
+            </div>
+          </form>
+        ) : (
+          <>
+            <h1>{profile.user.username}</h1>
+            <button
+              className="edit-profile-button"
+              onClick={() => setIsEditing(true)}
+            >
+              Редактировать имя
+            </button>
+          </>
+        )}
       </div>
 
       {/* Оценки и средний балл */}

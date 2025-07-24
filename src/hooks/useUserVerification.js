@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import api from "./api"; // Импортируем настроенный api клиент
 
 const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const useUserVerification = (telegram) => {
   const [result, setResult] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [token, setToken] = useState(null); // Состояние для хранения JWT-токена
 
   // Функция для верификации пользователя
   const verifyUser = async (initData) => {
@@ -26,6 +28,9 @@ export const useUserVerification = (telegram) => {
       if (data.success) {
         setResult("Верификация успешна!");
         setUserId(data.user_id);
+        setToken(data.access_token); // Сохраняем токен
+        // Устанавливаем токен в api клиент
+        api.defaults.headers.common["Authorization"] = `Bearer ${data.access_token}`;
         console.log("Verified Telegram User ID:", data.user_id);
       } else {
         setResult(`Верификация не удалась: ${data.message}`);
@@ -43,5 +48,5 @@ export const useUserVerification = (telegram) => {
     }
   }, [telegram]);
 
-  return { result, userId, verifyUser };
+  return { result, userId, token, verifyUser };
 };
