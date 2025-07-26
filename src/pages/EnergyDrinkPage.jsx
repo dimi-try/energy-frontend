@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "./EnergyDrinkPage.css";
 
 // Компонент страницы энергетика
-const EnergyDrinkPage = () => {
+const EnergyDrinkPage = ({ userId, token }) => {
   // Получаем ID энергетика из URL
   const { id } = useParams();
   // Состояние для данных об энергетике
@@ -21,7 +21,6 @@ const EnergyDrinkPage = () => {
   const [hoveredStars, setHoveredStars] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 5;
-  const user_id = 2;
 
   // Загружаем данные об энергетике, отзывах и критериях
   useEffect(() => {
@@ -38,7 +37,7 @@ const EnergyDrinkPage = () => {
         setCriteria(criteriaRes.data); // Сохраняем критерии
         // Инициализируем состояние для нового отзыва
         setNewReview({
-          ...newReview,
+          review_text: "",
           ratings: criteriaRes.data.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}),
         });
       } catch (err) {
@@ -73,16 +72,19 @@ const EnergyDrinkPage = () => {
   // Функция для отправки отзыва
   const handleSubmit = async (e) => {
     e.preventDefault(); // Предотвращаем перезагрузку страницы
+    if (!userId || !token) return; // Проверяем авторизацию
     try {
       // Формируем массив оценок
-      const ratings = Object.entries(newReview.ratings).map(([criteriaId, value]) => ({
-        criteria_id: parseInt(criteriaId),
-        rating_value: parseFloat(value),
-        created_at: new Date().toISOString(),
-      }));
+      const ratings = Object.entries(newReview.ratings)
+        .filter(([_, value]) => value !== "")
+        .map(([criteriaId, value]) => ({
+          criteria_id: parseInt(criteriaId),
+          rating_value: parseFloat(value),
+          created_at: new Date().toISOString(),
+        }));
       // Отправляем отзыв на сервер
       await api.post(`/reviews/`, {
-        user_id: user_id,
+        user_id: userId,
         review_text: newReview.review_text,
         energy_id: parseInt(id),
         created_at: new Date().toISOString(),
@@ -193,7 +195,14 @@ const EnergyDrinkPage = () => {
         <div className="list-container">
           {currentReviews.length > 0 ? (
             currentReviews.map((review) => (
-              <ReviewCard key={review.id} review={review} criteria={criteria} isProfile={false} />
+              <ReviewCard
+                key={review.id}
+                review={review}
+                criteria={criteria}
+                isProfile={false}
+                userId={userId}
+                onReviewUpdated={() => api.get(`/energies/${id}/reviews`).then((res) => setReviews(res.data))}
+              />
             ))
           ) : (
             <p>Отзывов пока нет.</p>
@@ -216,43 +225,52 @@ const EnergyDrinkPage = () => {
 
       <UnifiedCard className="review-form">
         <h2>Оставить отзыв</h2>
-        <form onSubmit={handleSubmit}>
-          <textarea
-            name="review_text"
-            placeholder="Текст отзыва"
-            value={newReview.review_text}
-            onChange={(e) => setNewReview({ ...newReview, review_text: e.target.value })}
-            required
-          />
-          {criteria.map((criterion) => (
-            <div key={criterion.id} className="star-criteria">
-              <label>{criterion.name}</label>
-              <div
-                className="stars-rating"
-                onMouseLeave={() => handleStarLeave(criterion.id)}
-              >
-                {[...Array(10)].map((_, index) => {
-                  const ratingValue = index + 1;
-                  return (
-                    <span
-                      key={index}
-                      className={`star-rating ${
-                        ratingValue <= (hoveredStars[criterion.id] || newReview.ratings[criterion.id] || 0)
-                          ? "filled"
-                          : ""
-                      }`}
-                      onClick={() => handleStarClick(criterion.id, ratingValue)}
-                      onMouseEnter={() => handleStarHover(criterion.id, ratingValue)}
-                    >
-                      ★
-                    </span>
-                  );
-                })}
+        {!userId || !token ? (
+          <div className="auth-required">
+            <p>
+              Доступ ограничен. Пожалуйста, зайдите через тг бот{" "}
+              <a href="https://t.me/energy_charts_styula_bot">@energy_charts_styula_bot</a>
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <textarea
+              name="review_text"
+              placeholder="Текст отзыва"
+              value={newReview.review_text}
+              onChange={(e) => setNewReview({ ...newReview, review_text: e.target.value })}
+              required
+            />
+            {criteria.map((criterion) => (
+              <div key={criterion.id} className="star-criteria">
+                <label>{criterion.name}</label>
+                <div
+                  className="stars-rating"
+                  onMouseLeave={() => handleStarLeave(criterion.id)}
+                >
+                  {[...Array(10)].map((_, index) => {
+                    const ratingValue = index + 1;
+                    return (
+                      <span
+                        key={index}
+                        className={`star-rating ${
+                          ratingValue <= (hoveredStars[criterion.id] || newReview.ratings[criterion.id] || 0)
+                            ? "filled"
+                            : ""
+                        }`}
+                        onClick={() => handleStarClick(criterion.id, ratingValue)}
+                        onMouseEnter={() => handleStarHover(criterion.id, ratingValue)}
+                      >
+                        ★
+                      </span>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
-          <button type="submit">Отправить</button>
-        </form>
+            ))}
+            <button type="submit">Отправить</button>
+          </form>
+        )}
       </UnifiedCard>
     </div>
   );

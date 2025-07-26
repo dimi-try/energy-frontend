@@ -89,7 +89,7 @@ function App() {
         <Route index element={<Top100 />} />
         <Route path="/search" element={<Search />} />
         <Route path="/profile" element={<Profile userId={userId} token={token} />} />
-        <Route path="/energies/:id" element={<EnergyDrinkPage />} />
+        <Route path="/energies/:id" element={<EnergyDrinkPage userId={userId} token={token} />} />
         <Route path="/brands/:id" element={<BrandPage />} />
       </Routes>
       <BottomNav />
