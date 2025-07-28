@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import api from "../hooks/api";
 import ReviewCard from "../components/ReviewCard";
 import "./Profile.css";
+import { toast } from "react-toastify";
 
 // Компонент страницы профиля пользователя
 const Profile = ({ userId, token }) => {
@@ -17,9 +18,9 @@ const Profile = ({ userId, token }) => {
   // Состояние для загрузки
   const [loading, setLoading] = useState(true);
   // Состояние для режима редактирования
-  const [isEditing, setIsEditing] = useState(false); 
+  const [isEditing, setIsEditing] = useState(false);
   // Состояние для нового имени пользователя
-  const [newUsername, setNewUsername] = useState(""); 
+  const [newUsername, setNewUsername] = useState("");
 
   // Загружаем данные профиля и отзывы
   useEffect(() => {
@@ -51,7 +52,36 @@ const Profile = ({ userId, token }) => {
     fetchData();
   }, [userId, token]);
 
-  // Обработчик отправки формы редактирования
+  // Обработчик отправки формы редактирования отзыва
+  const handleReviewUpdated = async () => {
+    try {
+      const reviewsRes = await api.get(`/users/${userId}/reviews`);
+      console.log("Updated reviews:", reviewsRes.data); // Логирование для отладки
+      setReviews(reviewsRes.data.reviews);
+      toast.success("Список отзывов обновлен!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } catch (err) {
+      toast.error(
+        err.response?.data?.detail || "Ошибка при обновлении списка отзывов.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
+    }
+  };
+
+  // Обработчик отправки формы редактирования юзернейма
   const handleUpdateUsername = async (e) => {
     e.preventDefault();
     try {
@@ -60,8 +90,24 @@ const Profile = ({ userId, token }) => {
       });
       setProfile({ ...profile, user: response.data }); // Обновляем профиль
       setIsEditing(false); // Выключаем режим редактирования
+      toast.success("Имя успешно обновлено!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } catch (err) {
       setError(err.response?.data?.detail || "Ошибка при обновлении имени");
+      toast.error(err.response?.data?.detail || "Ошибка при обновлении имени", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -183,6 +229,8 @@ const Profile = ({ userId, token }) => {
                 review={review}
                 criteria={criteria}
                 isProfile={true}
+                userId={userId}
+                onReviewUpdated={handleReviewUpdated}
               />
             ))}
           </div>

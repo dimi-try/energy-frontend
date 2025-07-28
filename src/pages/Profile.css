@@ -131,6 +131,120 @@
   font-size: 1.1rem; /* Размер шрифта */
 }
 
+/* Стили для формы редактирования отзыва */
+.edit-review-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-review-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* Стили для рейтинга со звездами */
+.star-criteria {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.star-criteria label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.stars-rating {
+  display: flex;
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+
+.star-rating {
+  font-size: 20px;
+  color: #ccc;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+  display: inline-block;
+}
+
+.star-rating.filled {
+  color: #f39c12;
+  animation: starFill 0.3s ease forwards;
+}
+
+.star-rating:hover {
+  transform: scale(1.2);
+  animation: starPulse 0.3s ease infinite;
+}
+
+/* Анимация заполнения звезды */
+@keyframes starFill {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Пульсирующая анимация при наведении */
+@keyframes starPulse {
+  0% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+/* Стили для кнопок редактирования и удаления */
+.review-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.review-actions .edit-button,
+.review-actions .delete-button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.review-actions .edit-button {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+}
+
+.review-actions .delete-button {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+.review-actions .edit-button:hover,
+.review-actions .delete-button:hover {
+  opacity: 0.9;
+}
+
 /* Улучшение стиля ссылок */
 .details-link:hover {
   text-decoration: underline; /* Подчёркивание при наведении */
@@ -172,10 +286,29 @@
   .edit-username-form input {
     width: 100%;
   }
+
+  .stars-rating {
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 480px) {
   .stat-card {
-    padding: 15px; /* Уменьшенные отступы */
+    padding: 15px;
+  }
+
+  .stars-rating {
+    font-size: 16px;
+  }
+
+  .review-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .review-actions .edit-button,
+  .review-actions .delete-button {
+    width: 100%;
+    text-align: center;
   }
 }
