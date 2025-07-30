@@ -1,36 +1,371 @@
 /* Стили для контейнера страницы энергетика */
 .energy-container {
-  text-align: center; /* Центрируем текст */
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 20px 100px 20px; /* Нижний отступ для навбара */
 }
 
-/* Стили для заголовка с изображением */
+/* Стили для сообщения об авторизации */
+.auth-required {
+  text-align: center;
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.auth-required a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.auth-required a:hover {
+  text-decoration: underline;
+}
+
+/* Стили для заголовка с изображением и деталями */
 .energy-header {
-  display: flex; /* Flexbox для выравнивания */
-  align-items: center; /* Выравнивание по центру */
-  gap: 15px; /* Отступ между элементами */
-  margin-bottom: 20px; /* Отступ снизу */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
-/* Стили для блока с информацией об энергетике */
-.energy-info {
+/* Стили для изображения энергетика */
+.energy-image {
+  flex: 0 0 300px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.energy-image img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.energy-image .no-image {
+  width: 100%;
+  max-width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Стили для деталей энергетика */
+.energy-details {
+  flex: 1;
+  text-align: left;
+  min-width: 200px;
+}
+
+.energy-details h1 {
+  font-size: 2rem;
+  margin: 0 0 10px 0;
+  word-wrap: break-word;
+}
+
+.rating {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+/* Стили для пагинации */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.pagination button.active {
+  background-color: #f39c12;
+  color: white;
+  border-color: #f39c12;
+}
+
+.pagination button:hover {
+  background-color: #f1c40f;
+  color: white;
+}
+
+/* Стили для формы отзыва (внутренние элементы) */
+.review-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* Стили для формы редактирования отзыва */
+.edit-review-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-review-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.edit-buttons button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit-buttons button[type="submit"] {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+}
+
+.edit-buttons button[type="button"] {
+  background-color: #888;
+  color: #fff;
+}
+
+.edit-buttons button:hover {
+  opacity: 0.9;
+}
+
+/* Стили для кнопок редактирования и удаления */
+.review-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.review-actions .edit-button,
+.review-actions .delete-button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.review-actions .edit-button {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+}
+
+.review-actions .delete-button {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+.review-actions .edit-button:hover,
+.review-actions .delete-button:hover {
+  opacity: 0.9;
+}
+
+/* Стили для рейтинга со звездами */
+.star-criteria {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.star-criteria label {
   display: block;
-  margin: 0 0 10px 0; /* Отступ между строками */
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
-/* Стили для полей ввода формы */
-.review-form input, .review-form textarea {
-  width: 100%; /* Полная ширина */
-  padding: 10px; /* Внутренние отступы */
-  margin-bottom: 10px; /* Отступ снизу */
-  border: 1px solid #ddd; /* Граница */
-  border-radius: 8px; /* Скругленные углы */
-  box-sizing: border-box; /* Учитываем padding в ширине */
+.stars-rating {
+  display: flex;
+  gap: 5px;
+  flex-wrap: nowrap; /* Предотвращаем перенос звезд */
 }
 
-/* Стили для заголовка отзыва */
-.review-header {
-  display: flex; /* Flexbox для выравнивания */
-  justify-content: space-between; /* Распределяем элементы */
-  font-size: 12px; /* Размер шрифта */
-  color: var(--text-color); /* Цвет текста */
+.star-rating {
+  font-size: 20px; /* Уменьшен размер звезд для маленьких экранов */
+  color: #ccc; /* Серый для неактивных звезд в форме */
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease; /* Плавный переход для цвета и масштаба */
+  display: inline-block;
+}
+
+.star-rating.filled {
+  color: #f39c12; /* Желтый для активных звезд */
+  animation: starFill 0.3s ease forwards; /* Анимация заполнения */
+}
+
+.star-rating:hover {
+  transform: scale(1.2); /* Увеличение при наведении */
+  animation: starPulse 0.3s ease infinite; /* Пульсирующая анимация при наведении */
+}
+
+/* Анимация заполнения звезды */
+@keyframes starFill {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Пульсирующая анимация при наведении */
+@keyframes starPulse {
+  0% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+/* Кастомизация стилей react-toastify */
+.Toastify__toast--error {
+  background: #d32f2f;
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.Toastify__toast--success {
+  background: #28a745;
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.Toastify__toast-body {
+  padding: 10px;
+}
+
+.Toastify__close-button {
+  color: white;
+  opacity: 0.8;
+}
+
+.Toastify__close-button:hover {
+  opacity: 1;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .energy-header {
+    flex-direction: row;
+    gap: 15px;
+  }
+
+  .energy-image {
+    flex: 0 0 40%;
+    max-width: 200px;
+  }
+
+  .energy-image img,
+  .energy-image .no-image {
+    max-width: 100%;
+    height: auto;
+    min-height: 150px;
+  }
+
+  .energy-details {
+    flex: 1;
+    text-align: left;
+  }
+
+  .energy-details h1 {
+    font-size: 1.5rem;
+  }
+
+  .rating {
+    text-align: right;
+  }
+
+  .stars-rating {
+    font-size: 18px; /* Еще меньший размер звезд для средних экранов */
+  }
+}
+
+@media (max-width: 480px) {
+  .energy-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .energy-image {
+    flex: 0 0 100%;
+    max-width: 150px;
+  }
+
+  .energy-image img,
+  .energy-image .no-image {
+    max-width: 100%;
+    height: auto;
+    min-height: 120px;
+  }
+
+  .energy-details {
+    text-align: center;
+  }
+
+  .rating {
+    text-align: center;
+  }
+
+  .stars-rating {
+    font-size: 16px; /* Минимальный размер звезд для маленьких экранов */
+  }
+
+  .review-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .review-actions .edit-button,
+  .review-actions .delete-button {
+    width: 100%;
+    text-align: center;
+  }
 }

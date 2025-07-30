@@ -13,10 +13,6 @@ const BottomNav = () => (
     <NavLink to="/search" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
       <span>🔍</span> Поиск
     </NavLink>
-    {/* Ссылка на страницу избранного */}
-    <NavLink to="/favorites" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
-      <span>⭐</span> Избранное
-    </NavLink>
     {/* Ссылка на страницу профиля */}
     <NavLink to="/profile" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
       <span>👤</span> Профиль

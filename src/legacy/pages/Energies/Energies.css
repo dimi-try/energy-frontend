@@ -1,9 +1,0 @@
-.product-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-width: 968px;
-  margin-top: 0.5rem;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-}
