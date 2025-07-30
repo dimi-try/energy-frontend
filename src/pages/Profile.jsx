@@ -22,7 +22,7 @@ const Profile = ({ userId, token }) => {
   // Состояние для нового имени пользователя
   const [newUsername, setNewUsername] = useState("");
 
-  // Загружаем данные профиля и отзывы
+  // Загружаем данные профиля, отзывы и критерии
   useEffect(() => {
     if (!userId || !token) {
       setLoading(false); // Если нет userId или token, не загружаем данные
@@ -45,6 +45,14 @@ const Profile = ({ userId, token }) => {
         setNewUsername(profileRes.data.user.username); // Устанавливаем начальное имя
       } catch (err) {
         setError(err.response?.data?.detail || err.message);
+        toast.error(err.response?.data?.detail || "Ошибка при загрузке данных", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       } finally {
         setLoading(false);
       }
@@ -52,13 +60,17 @@ const Profile = ({ userId, token }) => {
     fetchData();
   }, [userId, token]);
 
-  // Обработчик отправки формы редактирования отзыва
+  // Обновление профиля и отзывов после редактирования/удаления
   const handleReviewUpdated = async () => {
     try {
-      const reviewsRes = await api.get(`/users/${userId}/reviews`);
-      console.log("Updated reviews:", reviewsRes.data); // Логирование для отладки
+      const [profileRes, reviewsRes] = await Promise.all([
+        api.get(`/users/${userId}/profile`),
+        api.get(`/users/${userId}/reviews`),
+      ]);
+      setProfile(profileRes.data);
       setReviews(reviewsRes.data.reviews);
-      toast.success("Список отзывов обновлен!", {
+      setNewUsername(profileRes.data.user.username); // Обновляем имя на случай изменения
+      toast.success("Данные профиля и отзывы обновлены!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -68,7 +80,7 @@ const Profile = ({ userId, token }) => {
       });
     } catch (err) {
       toast.error(
-        err.response?.data?.detail || "Ошибка при обновлении списка отзывов.",
+        err.response?.data?.detail || "Ошибка при обновлении данных профиля.",
         {
           position: "top-right",
           autoClose: 5000,

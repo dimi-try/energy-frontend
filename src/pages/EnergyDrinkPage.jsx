@@ -90,8 +90,12 @@ const EnergyDrinkPage = ({ userId, token }) => {
         created_at: new Date().toISOString(),
         ratings,
       });
-      // Загружаем обновленный список отзывов
-      const reviewsRes = await api.get(`/energies/${id}/reviews`);
+      // Обновляем данные энергетика и отзывы
+      const [energyRes, reviewsRes] = await Promise.all([
+        api.get(`/energies/${id}`),
+        api.get(`/energies/${id}/reviews`),
+      ]);
+      setEnergy(energyRes.data);
       setReviews(reviewsRes.data);
       // Сбрасываем форму
       setNewReview({
@@ -111,6 +115,37 @@ const EnergyDrinkPage = ({ userId, token }) => {
     } catch (err) {
       toast.error(
         err.response?.data?.detail || "Ошибка при отправке отзыва. Попробуйте позже.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
+    }
+  };
+
+  const handleReviewUpdated = async () => {
+    try {
+      const [energyRes, reviewsRes] = await Promise.all([
+        api.get(`/energies/${id}`),
+        api.get(`/energies/${id}/reviews`),
+      ]);
+      setEnergy(energyRes.data);
+      setReviews(reviewsRes.data);
+      toast.success("Данные энергетика и отзывы обновлены!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } catch (err) {
+      toast.error(
+        err.response?.data?.detail || "Ошибка при обновлении данных.",
         {
           position: "top-right",
           autoClose: 5000,
@@ -163,7 +198,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
           <h1>{energy.brand?.name} {energy.name}</h1>
           <p className="rating">
             <span className="star">★</span>
-            {energy.average_rating}/10 ({energy.review_count} отзывов)
+            {energy.average_rating ? `${energy.average_rating}/10` : "-"} ({energy.review_count} отзывов)
           </p>
           {/* Информация об энергетике */}
           <UnifiedCard className="energy-info">
@@ -201,7 +236,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
                 criteria={criteria}
                 isProfile={false}
                 userId={userId}
-                onReviewUpdated={() => api.get(`/energies/${id}/reviews`).then((res) => setReviews(res.data))}
+                onReviewUpdated={handleReviewUpdated}
               />
             ))
           ) : (
