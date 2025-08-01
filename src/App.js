@@ -16,7 +16,7 @@ import BottomNav from "./components/BottomNav";
 
 function App() {
   const { telegram, initData } = useTelegram(); // Получаем telegram и initData
-  const { userId, token, verifyUser } = useUserVerification(telegram); // Получаем userId, token и verifyUser
+  const { userId, token, role, verifyUser } = useUserVerification(telegram); // Получаем userId, token, role и verifyUser
   const navigate = useNavigate();
   const location = useLocation();
   const [showBackButton, setShowBackButton] = useState(true);
@@ -92,7 +92,7 @@ function App() {
         <Route path="/energies/:id" element={<EnergyDrinkPage userId={userId} token={token} />} />
         <Route path="/brands/:id" element={<BrandPage />} />
       </Routes>
-      <BottomNav />
+      <BottomNav role={role} />
       {showBackButton && <BackButton onClick={() => navigate(-1)} />}
     </div>
   );
