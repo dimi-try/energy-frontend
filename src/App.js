@@ -12,6 +12,8 @@ import Search from "./pages/Search";
 import Profile from "./pages/Profile";
 import EnergyDrinkPage from "./pages/EnergyDrinkPage";
 import BrandPage from "./pages/BrandPage";
+import AdminPanel from "./pages/AdminPanel";
+import BrandAdminPage from "./pages/admin/BrandAdminPage";
 import BottomNav from "./components/BottomNav";
 
 function App() {
@@ -82,6 +84,13 @@ function App() {
     }
   }, [initData, verifyUser, telegram]);
 
+  // Защита админских маршрутов
+  useEffect(() => {
+    if (role && role !== "admin" && location.pathname.startsWith("/admin")) {
+      navigate("/"); // Перенаправляем неадминов на главную
+    }
+  }, [role, location, navigate]);
+
   // Основной рендер приложения
   return (
     <div className={`App ${telegram?.colorScheme || "light"}`}>
@@ -91,6 +100,12 @@ function App() {
         <Route path="/profile" element={<Profile userId={userId} token={token} />} />
         <Route path="/energies/:id" element={<EnergyDrinkPage userId={userId} token={token} />} />
         <Route path="/brands/:id" element={<BrandPage />} />
+        {role === "admin" && (
+          <>
+            <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/admin/brands" element={<BrandAdminPage token={token} />} />
+          </>
+        )}
       </Routes>
       <BottomNav role={role} />
       {showBackButton && <BackButton onClick={() => navigate(-1)} />}
