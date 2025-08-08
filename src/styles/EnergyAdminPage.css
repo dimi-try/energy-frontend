@@ -1,0 +1,84 @@
+.energy-admin-page {
+    padding: 20px;
+    background: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.energy-admin-page h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.energy-admin-page form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.energy-admin-page input,
+.energy-admin-page select,
+.energy-admin-page textarea {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid var(--text-color);
+    border-radius: 5px;
+    background: var(--card-background);
+    color: var(--text-color);
+}
+
+.energy-admin-page textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.energy-admin-page button {
+    padding: 10px;
+    background: var(--primary-color);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.energy-admin-page button:hover {
+    opacity: 0.9;
+}
+
+.energy-admin-page .error {
+    color: red;
+    font-size: 14px;
+}
+
+.energy-admin-page .success {
+    color: green;
+    font-size: 14px;
+}
+
+.energy-admin-page .energy-list {
+    list-style: none;
+    padding: 0;
+}
+
+.energy-admin-page .energy-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: var(--card-background);
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.energy-admin-page .energy-list li div {
+    display: flex;
+    gap: 10px;
+}
+
+.energy-admin-page .energy-list li button {
+    padding: 5px 10px;
+    font-size: 14px;
+}
