@@ -13,6 +13,9 @@ const AdminPanel = () => {
         <Link to="/admin/energies" className="admin-button">
           Энергетики
         </Link>
+        <Link to="/admin/criteria" className="admin-button">
+          Критерии
+        </Link>
       </div>
     </div>
   );
