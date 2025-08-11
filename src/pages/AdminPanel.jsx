@@ -19,6 +19,9 @@ const AdminPanel = () => {
         <Link to="/admin/categories" className="admin-button">
           Категории
         </Link>
+        <Link to="/admin/users" className="admin-button">
+          Пользователи
+        </Link>
       </div>
     </div>
   );

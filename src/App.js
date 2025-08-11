@@ -17,6 +17,7 @@ import BrandAdminPage from "./pages/admin/BrandAdminPage";
 import EnergyAdminPage from "./pages/admin/EnergyAdminPage";
 import CriteriaAdminPage from "./pages/admin/CriteriaAdminPage";
 import CategoryAdminPage from "./pages/admin/CategoryAdminPage";
+import UserAdminPage from "./pages/admin/UserAdminPage";
 import BottomNav from "./components/BottomNav";
 
 function App() {
@@ -110,6 +111,7 @@ function App() {
             <Route path="/admin/energies" element={<EnergyAdminPage token={token} />} />
             <Route path="/admin/criteria" element={<CriteriaAdminPage token={token} />} />
             <Route path="/admin/categories" element={<CategoryAdminPage token={token} />} />
+            <Route path="/admin/users" element={<UserAdminPage token={token} />} />
           </>
         )}
       </Routes>
