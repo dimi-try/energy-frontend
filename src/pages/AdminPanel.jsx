@@ -22,6 +22,9 @@ const AdminPanel = () => {
         <Link to="/admin/users" className="admin-button">
           Пользователи
         </Link>
+        <Link to="/admin/reviews" className="admin-button">
+          Отзывы
+        </Link>
       </div>
     </div>
   );

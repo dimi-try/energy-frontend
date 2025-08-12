@@ -1,0 +1,57 @@
+.review-admin-page {
+    padding: 20px;
+    background: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.review-admin-page h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.review-admin-page .error {
+    color: red;
+    font-size: 14px;
+}
+
+.review-admin-page .success {
+    color: green;
+    font-size: 14px;
+}
+
+.review-admin-page .review-list {
+    list-style: none;
+    padding: 0;
+}
+
+.review-admin-page .review-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px;
+    background: var(--card-background);
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.review-admin-page .review-list li div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.review-admin-page .review-list li button {
+    padding: 5px 10px;
+    background: var(--primary-color);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.review-admin-page .review-list li button:hover {
+    opacity: 0.9;
+}
