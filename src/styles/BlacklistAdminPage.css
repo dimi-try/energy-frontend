@@ -1,0 +1,90 @@
+.blacklist-admin-page {
+    padding: 20px;
+    background: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.blacklist-admin-page h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.blacklist-admin-page .error {
+    color: red;
+    font-size: 14px;
+}
+
+.blacklist-admin-page .success {
+    color: green;
+    font-size: 14px;
+}
+
+.blacklist-admin-page .warning {
+    color: orange;
+    font-size: 14px;
+}
+
+.blacklist-admin-page .add-blacklist-form {
+    display: flex;
+    flex-direction: column; /* элементы формы должны располагаться вертикально */
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.blacklist-admin-page .add-blacklist-form input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.blacklist-admin-page .add-blacklist-form button {
+    padding: 8px 16px;
+    background: var(--primary-color);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.blacklist-admin-page .add-blacklist-form button:hover {
+    opacity: 0.9;
+}
+
+.blacklist-admin-page .blacklist {
+    list-style: none;
+    padding: 0;
+}
+
+.blacklist-admin-page .blacklist li {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px;
+    background: var(--card-background);
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.blacklist-admin-page .blacklist li div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.blacklist-admin-page .blacklist li button {
+    padding: 5px 10px;
+    background: var(--primary-color);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.blacklist-admin-page .blacklist li button:hover {
+    opacity: 0.9;
+}
