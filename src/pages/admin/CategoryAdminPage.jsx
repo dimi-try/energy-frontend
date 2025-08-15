@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../hooks/api";
-import "../../styles/CategoryAdminPage.css";
+import "./CategoryAdminPage.css";
 
 const CategoryAdminPage = ({ token }) => {
   const [categories, setCategories] = useState([]);
@@ -12,7 +12,7 @@ const CategoryAdminPage = ({ token }) => {
   // Загрузка списка категорий
   const fetchCategories = async () => {
     try {
-      const response = await api.get("/categories/");
+      const response = await api.get("/categories/admin/");
       setCategories(response.data);
     } catch (err) {
       setError("Ошибка при загрузке категорий: " + (err.response?.data?.detail || err.message));

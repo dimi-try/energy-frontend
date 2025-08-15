@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../hooks/api";
-import "../../styles/BrandAdminPage.css";
+import "./BrandAdminPage.css";
 
 const BrandAdminPage = ({ token }) => {
   const [brands, setBrands] = useState([]);
@@ -12,7 +12,7 @@ const BrandAdminPage = ({ token }) => {
   // Загрузка списка брендов
   const fetchBrands = async () => {
     try {
-      const response = await api.get("/brands/");
+      const response = await api.get("/brands/admin/");
       setBrands(response.data);
     } catch (err) {
       setError("Ошибка при загрузке брендов: " + (err.response?.data?.detail || err.message));

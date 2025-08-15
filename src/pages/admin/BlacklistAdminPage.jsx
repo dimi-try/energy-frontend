@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../hooks/api";
-import "../../styles/BlacklistAdminPage.css";
+import "./BlacklistAdminPage.css";
 
 const BlacklistAdminPage = ({ token }) => {
   const [blacklist, setBlacklist] = useState([]);

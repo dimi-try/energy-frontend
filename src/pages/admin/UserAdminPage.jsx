@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../hooks/api";
-import "../../styles/UserAdminPage.css";
+import "./UserAdminPage.css";
 
 const UserAdminPage = ({ token }) => {
   const [users, setUsers] = useState([]);

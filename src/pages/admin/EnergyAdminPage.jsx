@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../hooks/api";
-import "../../styles/EnergyAdminPage.css";
+import "./EnergyAdminPage.css";
 
 const EnergyAdminPage = ({ token }) => {
   const [energies, setEnergies] = useState([]);
@@ -21,7 +21,7 @@ const EnergyAdminPage = ({ token }) => {
   // Загрузка списка энергетиков, брендов и категорий
   const fetchEnergies = async () => {
     try {
-      const response = await api.get("/energies/");
+      const response = await api.get("/energies/admin/");
       setEnergies(response.data);
     } catch (err) {
       setError("Ошибка при загрузке энергетиков: " + (err.response?.data?.detail || err.message));
@@ -30,7 +30,7 @@ const EnergyAdminPage = ({ token }) => {
 
   const fetchBrands = async () => {
     try {
-      const response = await api.get("/energies/brands-for-select", {
+      const response = await api.get("/brands/admin/", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBrands(response.data);
@@ -41,7 +41,7 @@ const EnergyAdminPage = ({ token }) => {
 
   const fetchCategories = async () => {
     try {
-      const response = await api.get("/energies/categories-for-select", {
+      const response = await api.get("/categories/admin/", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCategories(response.data);

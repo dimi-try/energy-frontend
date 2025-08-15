@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../hooks/api";
-import "../../styles/ReviewAdminPage.css";
+import "./ReviewAdminPage.css";
 
 const ReviewAdminPage = ({ token }) => {
   const [reviews, setReviews] = useState([]);

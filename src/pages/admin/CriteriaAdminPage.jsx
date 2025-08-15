@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../hooks/api";
-import "../../styles/CriteriaAdminPage.css";
+import "./CriteriaAdminPage.css";
 
 const CriteriaAdminPage = ({ token }) => {
   const [criteria, setCriteria] = useState([]);
