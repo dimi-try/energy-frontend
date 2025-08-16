@@ -12,11 +12,19 @@ import Search from "./pages/Search";
 import Profile from "./pages/Profile";
 import EnergyDrinkPage from "./pages/EnergyDrinkPage";
 import BrandPage from "./pages/BrandPage";
+import AdminPanel from "./pages/AdminPanel";
+import BrandAdminPage from "./pages/admin/BrandAdminPage";
+import EnergyAdminPage from "./pages/admin/EnergyAdminPage";
+import CriteriaAdminPage from "./pages/admin/CriteriaAdminPage";
+import CategoryAdminPage from "./pages/admin/CategoryAdminPage";
+import UserAdminPage from "./pages/admin/UserAdminPage";
+import ReviewAdminPage from "./pages/admin/ReviewAdminPage";
+import BlacklistAdminPage from "./pages/admin/BlacklistAdminPage";
 import BottomNav from "./components/BottomNav";
 
 function App() {
   const { telegram, initData } = useTelegram(); // Получаем telegram и initData
-  const { userId, token, verifyUser } = useUserVerification(telegram); // Получаем userId, token и verifyUser
+  const { userId, token, role, verifyUser } = useUserVerification(telegram); // Получаем userId, token, role и verifyUser
   const navigate = useNavigate();
   const location = useLocation();
   const [showBackButton, setShowBackButton] = useState(true);
@@ -82,6 +90,13 @@ function App() {
     }
   }, [initData, verifyUser, telegram]);
 
+  // Защита админских маршрутов
+  useEffect(() => {
+    if (role && role !== "admin" && location.pathname.startsWith("/admin")) {
+      navigate("/"); // Перенаправляем неадминов на главную
+    }
+  }, [role, location, navigate]);
+
   // Основной рендер приложения
   return (
     <div className={`App ${telegram?.colorScheme || "light"}`}>
@@ -91,8 +106,20 @@ function App() {
         <Route path="/profile" element={<Profile userId={userId} token={token} />} />
         <Route path="/energies/:id" element={<EnergyDrinkPage userId={userId} token={token} />} />
         <Route path="/brands/:id" element={<BrandPage />} />
+        {role === "admin" && (
+          <>
+            <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/admin/brands" element={<BrandAdminPage token={token} />} />
+            <Route path="/admin/energies" element={<EnergyAdminPage token={token} />} />
+            <Route path="/admin/criteria" element={<CriteriaAdminPage token={token} />} />
+            <Route path="/admin/categories" element={<CategoryAdminPage token={token} />} />
+            <Route path="/admin/users" element={<UserAdminPage token={token} />} />
+            <Route path="/admin/reviews" element={<ReviewAdminPage token={token} />} />
+            <Route path="/admin/blacklist" element={<BlacklistAdminPage token={token} />} />
+          </>
+        )}
       </Routes>
-      <BottomNav />
+      <BottomNav role={role} />
       {showBackButton && <BackButton onClick={() => navigate(-1)} />}
     </div>
   );
