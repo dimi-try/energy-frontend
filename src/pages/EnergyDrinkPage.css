@@ -80,34 +80,6 @@
   margin-bottom: 20px;
 }
 
-/* Стили для пагинации */
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.pagination button {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #fff;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.pagination button.active {
-  background-color: #f39c12;
-  color: white;
-  border-color: #f39c12;
-}
-
-.pagination button:hover {
-  background-color: #f1c40f;
-  color: white;
-}
-
 /* Стили для формы отзыва (внутренние элементы) */
 .review-form textarea {
   width: 100%;

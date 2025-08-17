@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../hooks/api";
 import Card from "../components/Card";
+import Pagination from "../components/Pagination";
 import "./Top100.css";
 
 // Компонент страницы Топ 100
@@ -20,12 +21,33 @@ const Top100 = () => {
   const navigate = useNavigate();
   // Ссылка на контейнер списка для сохранения позиции прокрутки
   const listRef = useRef(null);
+  // Состояние для текущей страницы
+  const [page, setPage] = useState(() => {
+    const savedPage = sessionStorage.getItem(`page-${topType}`);
+    return savedPage ? parseInt(savedPage, 10) : 1;
+  });
+  // Состояние для общего количества страниц
+  const [totalPages, setTotalPages] = useState(1);
+  // Количество элементов на странице
+  const itemsPerPage = 10;
 
-  // Загружаем данные при изменении типа топа
+  // Загружаем общее количество записей
+  useEffect(() => {
+    api.get(`/top/${topType}/count/`)
+      .then((res) => {
+        const totalItems = res.data.total || 0;
+        setTotalPages(Math.ceil(totalItems / itemsPerPage));
+      })
+      .catch((err) => {
+        console.error("API Count Error:", err);
+      });
+  }, [topType]);
+
+  // Загружаем данные при изменении типа топа или страницы
   useEffect(() => {
     setLoading(true); // Устанавливаем состояние загрузки
     setError(null); // Сбрасываем ошибку перед новым запросом
-    const url = `/top/${topType}/`;
+    const url = `/top/${topType}/?limit=${itemsPerPage}&offset=${(page - 1) * itemsPerPage}`;
     api.get(url) // Запрашиваем данные с API
       .then((res) => {
         const data = Array.isArray(res.data) ? res.data : []; // Убеждаемся, что данные — массив
@@ -37,11 +59,16 @@ const Top100 = () => {
         setError("Не удалось загрузить данные. Попробуйте позже."); // Устанавливаем сообщение об ошибке
       })
       .finally(() => setLoading(false)); // Снимаем состояние загрузки
-  }, [topType]);
+  }, [topType, page]);
 
-  // Функция для перехода на страницу с сохранением позиции прокрутки
+  // Сохранение текущей страницы при изменении page или topType
+  useEffect(() => {
+    sessionStorage.setItem(`page-${topType}`, page);
+  }, [page, topType]);
+
+  // Функция для перехода на страницу с сохранением текущей страницы
   const handleNavigate = (path) => {
-    sessionStorage.setItem(`scrollPosition-${topType}`, listRef.current.scrollTop); // Сохраняем позицию прокрутки
+    sessionStorage.setItem(`page-${topType}`, page); // Сохраняем текущую страницу
     navigate(path); // Переходим по указанному пути
   };
 
@@ -51,13 +78,25 @@ const Top100 = () => {
       <div className="toggle-buttons">
         <button
           className={topType === "energies" ? "active" : ""}
-          onClick={() => setTopType("energies")}
+          onClick={() => {
+            setTopType("energies");
+            setPage(() => {
+              const savedPage = sessionStorage.getItem(`page-energies`);
+              return savedPage ? parseInt(savedPage, 10) : 1;
+            });
+          }}
         >
           Топ Энергетиков
         </button>
         <button
           className={topType === "brands" ? "active" : ""}
-          onClick={() => setTopType("brands")}
+          onClick={() => {
+            setTopType("brands");
+            setPage(() => {
+              const savedPage = sessionStorage.getItem(`page-brands`);
+              return savedPage ? parseInt(savedPage, 10) : 1;
+            });
+          }}
         >
           Топ Производителей
         </button>
@@ -84,7 +123,7 @@ const Top100 = () => {
                     // Карточка энергетика
                     <Card
                       key={item.id}
-                      rank={index + 1}
+                      rank={(page - 1) * itemsPerPage + index + 1}
                       onClick={() => handleNavigate(`/energies/${item.id}/`)}
                     >
                       <img
@@ -113,7 +152,7 @@ const Top100 = () => {
                   // Карточка бренда
                   <Card
                     key={item.id}
-                    rank={index + 1}
+                    rank={(page - 1) * itemsPerPage + index + 1}
                     onClick={() => handleNavigate(`/brands/${item.id}/`)}
                   >
                     <div>
@@ -123,7 +162,6 @@ const Top100 = () => {
                         {item.review_count} отзывов, {item.energy_count} энергетиков)
                       </p>
                     </div>
-                    
                   </Card>
                 ))
               : // Сообщение, если данных нет
@@ -131,6 +169,13 @@ const Top100 = () => {
           </div>
         )}
       </div>
+
+      {/* Компонент пагинации */}
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
     </div>
   );
 };
