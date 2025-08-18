@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../hooks/api";
 import ReviewCard from "../components/ReviewCard";
+import Pagination from "../components/Pagination";
 import "./Profile.css";
 import { toast } from "react-toastify";
 
@@ -21,8 +22,17 @@ const Profile = ({ userId, token }) => {
   const [isEditing, setIsEditing] = useState(false);
   // Состояние для нового имени пользователя
   const [newUsername, setNewUsername] = useState("");
+  // Состояние для текущей страницы
+  const [page, setPage] = useState(() => {
+    const savedPage = sessionStorage.getItem(`profile-page`);
+    return savedPage ? parseInt(savedPage, 10) : 1;
+  });
+  // Состояние для общего количества страниц
+  const [totalPages, setTotalPages] = useState(1);
+  // Количество отзывов на странице
+  const reviewsPerPage = 10;
 
-  // Загружаем данные профиля, отзывы и критерии
+  // Загружаем данные профиля, отзывы, критерии и общее количество отзывов
   useEffect(() => {
     if (!userId || !token) {
       setLoading(false); // Если нет userId или token, не загружаем данные
@@ -33,16 +43,18 @@ const Profile = ({ userId, token }) => {
 
     const fetchData = async () => {
       try {
-        const [profileRes, reviewsRes, criteriaRes] = await Promise.all([
+        const [profileRes, reviewsRes, criteriaRes, countRes] = await Promise.all([
           api.get(`/users/${userId}/profile`),
-          api.get(`/users/${userId}/reviews`),
+          api.get(`/users/${userId}/reviews?limit=${reviewsPerPage}&offset=${(page - 1) * reviewsPerPage}`),
           api.get(`/criteria/`),
+          api.get(`/users/${userId}/reviews/count/`),
         ]);
 
         setProfile(profileRes.data); // Сохраняем данные профиля
         setReviews(reviewsRes.data.reviews); // Сохраняем отзывы
         setCriteria(criteriaRes.data); // Сохраняем критерии оценки
         setNewUsername(profileRes.data.user.username); // Устанавливаем начальное имя
+        setTotalPages(Math.ceil(countRes.data.total / reviewsPerPage)); // Устанавливаем общее количество страниц
       } catch (err) {
         setError(err.response?.data?.detail || err.message);
         toast.error(err.response?.data?.detail || "Ошибка при загрузке данных", {
@@ -58,18 +70,25 @@ const Profile = ({ userId, token }) => {
       }
     };
     fetchData();
-  }, [userId, token]);
+  }, [userId, token, page]);
+
+  // Сохранение текущей страницы
+  useEffect(() => {
+    sessionStorage.setItem(`profile-page`, page);
+  }, [page]);
 
   // Обновление профиля и отзывов после редактирования/удаления
   const handleReviewUpdated = async () => {
     try {
-      const [profileRes, reviewsRes] = await Promise.all([
+      const [profileRes, reviewsRes, countRes] = await Promise.all([
         api.get(`/users/${userId}/profile`),
-        api.get(`/users/${userId}/reviews`),
+        api.get(`/users/${userId}/reviews?limit=${reviewsPerPage}&offset=${(page - 1) * reviewsPerPage}`),
+        api.get(`/users/${userId}/reviews/count/`),
       ]);
       setProfile(profileRes.data);
       setReviews(reviewsRes.data.reviews);
       setNewUsername(profileRes.data.user.username); // Обновляем имя на случай изменения
+      setTotalPages(Math.ceil(countRes.data.total / reviewsPerPage)); // Обновляем количество страниц
       toast.success("Данные профиля и отзывы обновлены!", {
         position: "top-right",
         autoClose: 5000,
@@ -230,22 +249,29 @@ const Profile = ({ userId, token }) => {
 
       {/* История отзывов */}
       <div className="reviews-section">
-        <h2>История отзывов ({reviews.length})</h2>
+        <h2>История отзывов ({profile.total_ratings})</h2>
         {reviews.length === 0 ? (
           <p className="no-reviews">Отзывов пока нет</p>
         ) : (
-          <div className="list-container">
-            {reviews.map((review) => (
-              <ReviewCard
-                key={review.id}
-                review={review}
-                criteria={criteria}
-                isProfile={true}
-                userId={userId}
-                onReviewUpdated={handleReviewUpdated}
-              />
-            ))}
-          </div>
+          <>
+            <div className="list-container">
+              {reviews.map((review) => (
+                <ReviewCard
+                  key={review.id}
+                  review={review}
+                  criteria={criteria}
+                  isProfile={true}
+                  userId={userId}
+                  onReviewUpdated={handleReviewUpdated}
+                />
+              ))}
+            </div>
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          </>
         )}
       </div>
     </div>
