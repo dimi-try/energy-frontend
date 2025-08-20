@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../hooks/api"; // Импортируем настроенный axios
 import Card from "../components/Card";
+import Pagination from "../components/Pagination";
 import "./BrandPage.css";
 
 // Компонент страницы бренда
@@ -18,23 +19,32 @@ const BrandPage = () => {
   const [error, setError] = useState(null);
   // Хук для навигации
   const navigate = useNavigate();
-  // Ссылка на контейнер списка для сохранения позиции прокрутки
-  const listRef = useRef(null);
+  // Состояние для текущей страницы
+  const [page, setPage] = useState(() => {
+    const savedPage = sessionStorage.getItem(`brand-page-${id}`);
+    return savedPage ? parseInt(savedPage, 10) : 1;
+  });
+  // Состояние для общего количества страниц
+  const [totalPages, setTotalPages] = useState(1);
+  // Количество энергетиков на странице
+  const energiesPerPage = 10;
 
-  // Загружаем данные о бренде и энергетиках
+  // Загружаем данные о бренде, энергетиках и общем количестве энергетиков
   useEffect(() => {
     setLoading(true); // Устанавливаем состояние загрузки
     setError(null); // Сбрасываем ошибки
 
     const fetchData = async () => {
       try {
-        const [brandRes, energiesRes] = await Promise.all([
+        const [brandRes, energiesRes, countRes] = await Promise.all([
           api.get(`/brands/${id}`),
-          api.get(`/brands/${id}/energies`)
+          api.get(`/brands/${id}/energies?limit=${energiesPerPage}&offset=${(page - 1) * energiesPerPage}`),
+          api.get(`/brands/${id}/energies/count/`)
         ]);
 
         setBrand(brandRes.data); // Сохраняем данные о бренде
         setEnergies(energiesRes.data); // Сохраняем энергетики
+        setTotalPages(Math.ceil(countRes.data.total / energiesPerPage)); // Устанавливаем общее количество страниц
       } catch (err) {
         setError(err.message); // Сохраняем ошибку
       } finally {
@@ -43,28 +53,24 @@ const BrandPage = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, page]);
 
-  // Восстанавливаем позицию прокрутки при загрузке
+  // Сохранение текущей страницы
   useEffect(() => {
-    const scrollPos = sessionStorage.getItem(`scrollPosition-brand-${id}`);
-    if (listRef.current && scrollPos) {
-      listRef.current.scrollTo(0, parseInt(scrollPos, 10));
-    }
-  }, [id]);
+    sessionStorage.setItem(`brand-page-${id}`, page);
+  }, [page, id]);
 
-  // Функция для сохранения позиции прокрутки при клике
+  // Функция для перехода на страницу
   const handleNavigate = (path) => {
-    sessionStorage.setItem(`scrollPosition-brand-${id}`, listRef.current.scrollTop);
     navigate(path); // Переходим по указанному пути
   };
 
   // Показываем индикатор загрузки
-  if (loading) return <p>Загрузка...</p>;
+  if (loading) return <p className="loading">Загрузка...</p>;
   // Показываем сообщение об ошибке
-  if (error) return <p>Ошибка: {error}</p>;
+  if (error) return <p className="error">Ошибка: {error}</p>;
   // Показываем сообщение, если бренд не найден
-  if (!brand) return <p>Бренд не найден</p>;
+  if (!brand) return <p className="error">Бренд не найден</p>;
 
   return (
     <div className="brand-container container">
@@ -85,28 +91,35 @@ const BrandPage = () => {
       </div>
 
       {/* Список энергетиков */}
-      <h2>Энергетики</h2>
-      <div className="list-container" ref={listRef}>
+      <h2>Энергетики ({brand.energy_count})</h2>
+      <div className="list-container">
         {energies.length > 0 ? (
-          <div className="cards-grid">
-            {energies.map((energy, index) => (
-              // Карточка энергетика
-              <Card
-                key={energy.id}
-                rank={index + 1}
-                onClick={() => handleNavigate(`/energies/${energy.id}/`)}
-              >
-                <img src={energy.image_url} alt={energy.name} style={{ width: "50px", borderRadius: "8px" }} />
-                <div>
-                  <h2>{energy.name}</h2>
-                  <p><span className="star">★</span> {energy.average_rating || "0.0"}/10 ({energy.review_count || 0} отзывов)</p>
-                  <p>
-                    {energy.category.name}
-                  </p>
-                </div>
-              </Card>
-            ))}
-          </div>
+          <>
+            <div className="cards-grid">
+              {energies.map((energy, index) => (
+                // Карточка энергетика
+                <Card
+                  key={energy.id}
+                  rank={(page - 1) * energiesPerPage + index + 1}
+                  onClick={() => handleNavigate(`/energies/${energy.id}/`)}
+                >
+                  <img src={energy.image_url} alt={energy.name} style={{ width: "50px", borderRadius: "8px" }} />
+                  <div>
+                    <h2>{energy.name}</h2>
+                    <p><span className="star">★</span> {energy.average_rating || "0.0"}/10 ({energy.review_count || 0} отзывов)</p>
+                    <p>
+                      {energy.category.name}
+                    </p>
+                  </div>
+                </Card>
+              ))}
+            </div>
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          </>
         ) : (
           <p className="no-energy">Пока нет энергетиков</p>
         )}

@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import api from "../hooks/api";
 import ReviewCard from "../components/ReviewCard";
 import UnifiedCard from "../components/UnifiedCard";
+import Pagination from "../components/Pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "./EnergyDrinkPage.css";
 
@@ -19,22 +20,31 @@ const EnergyDrinkPage = ({ userId, token }) => {
   // Состояние для нового отзыва
   const [newReview, setNewReview] = useState({ review_text: "", ratings: {} });
   const [hoveredStars, setHoveredStars] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const reviewsPerPage = 5;
+  // Состояние для текущей страницы
+  const [page, setPage] = useState(() => {
+    const savedPage = sessionStorage.getItem(`energy-page-${id}`);
+    return savedPage ? parseInt(savedPage, 10) : 1;
+  });
+  // Состояние для общего количества страниц
+  const [totalPages, setTotalPages] = useState(1);
+  // Количество отзывов на странице
+  const reviewsPerPage = 10;
 
-  // Загружаем данные об энергетике, отзывах и критериях
+  // Загружаем данные об энергетике, отзывах, критериях и общем количестве отзывов
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [energyRes, reviewsRes, criteriaRes] = await Promise.all([
+        const [energyRes, reviewsRes, criteriaRes, countRes] = await Promise.all([
           api.get(`/energies/${id}`),
-          api.get(`/energies/${id}/reviews`),
+          api.get(`/energies/${id}/reviews?limit=${reviewsPerPage}&offset=${(page - 1) * reviewsPerPage}`),
           api.get(`/criteria/`),
+          api.get(`/energies/${id}/reviews/count/`)
         ]);
 
         setEnergy(energyRes.data); // Сохраняем данные об энергетике
         setReviews(reviewsRes.data); // Сохраняем отзывы
         setCriteria(criteriaRes.data); // Сохраняем критерии
+        setTotalPages(Math.ceil(countRes.data.total / reviewsPerPage)); // Устанавливаем общее количество страниц
         // Инициализируем состояние для нового отзыва
         setNewReview({
           review_text: "",
@@ -52,7 +62,12 @@ const EnergyDrinkPage = ({ userId, token }) => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, page]);
+
+  // Сохранение текущей страницы
+  useEffect(() => {
+    sessionStorage.setItem(`energy-page-${id}`, page);
+  }, [page, id]);
 
   const handleStarClick = (criterionId, rating) => {
     setNewReview({
@@ -91,19 +106,20 @@ const EnergyDrinkPage = ({ userId, token }) => {
         ratings,
       });
       // Обновляем данные энергетика и отзывы
-      const [energyRes, reviewsRes] = await Promise.all([
+      const [energyRes, reviewsRes, countRes] = await Promise.all([
         api.get(`/energies/${id}`),
-        api.get(`/energies/${id}/reviews`),
+        api.get(`/energies/${id}/reviews?limit=${reviewsPerPage}&offset=${(page - 1) * reviewsPerPage}`),
+        api.get(`/energies/${id}/reviews/count/`)
       ]);
       setEnergy(energyRes.data);
       setReviews(reviewsRes.data);
+      setTotalPages(Math.ceil(countRes.data.total / reviewsPerPage)); // Обновляем количество страниц
       // Сбрасываем форму
       setNewReview({
         review_text: "",
         ratings: criteria.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}),
       });
       setHoveredStars({});
-      setCurrentPage(1);
       toast.success("Отзыв успешно отправлен!", {
         position: "top-right",
         autoClose: 5000,
@@ -127,14 +143,17 @@ const EnergyDrinkPage = ({ userId, token }) => {
     }
   };
 
+  // Обновление данных после редактирования/удаления отзыва
   const handleReviewUpdated = async () => {
     try {
-      const [energyRes, reviewsRes] = await Promise.all([
+      const [energyRes, reviewsRes, countRes] = await Promise.all([
         api.get(`/energies/${id}`),
-        api.get(`/energies/${id}/reviews`),
+        api.get(`/energies/${id}/reviews?limit=${reviewsPerPage}&offset=${(page - 1) * reviewsPerPage}`),
+        api.get(`/energies/${id}/reviews/count/`)
       ]);
       setEnergy(energyRes.data);
       setReviews(reviewsRes.data);
+      setTotalPages(Math.ceil(countRes.data.total / reviewsPerPage)); // Обновляем количество страниц
       toast.success("Данные энергетика и отзывы обновлены!", {
         position: "top-right",
         autoClose: 5000,
@@ -156,15 +175,6 @@ const EnergyDrinkPage = ({ userId, token }) => {
         }
       );
     }
-  };
-
-  const indexOfLastReview = currentPage * reviewsPerPage;
-  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
-  const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
-  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
   };
 
   // Показываем индикатор загрузки, если данные еще не загружены
@@ -226,36 +236,30 @@ const EnergyDrinkPage = ({ userId, token }) => {
 
       {/* Список отзывов */}
       <UnifiedCard className="reviews-section">
-        <h2>Отзывы</h2>
+        <h2>Отзывы ({energy.review_count})</h2>
         <div className="list-container">
-          {currentReviews.length > 0 ? (
-            currentReviews.map((review) => (
-              <ReviewCard
-                key={review.id}
-                review={review}
-                criteria={criteria}
-                isProfile={false}
-                userId={userId}
-                onReviewUpdated={handleReviewUpdated}
+          {reviews.length > 0 ? (
+            <>
+              {reviews.map((review) => (
+                <ReviewCard
+                  key={review.id}
+                  review={review}
+                  criteria={criteria}
+                  isProfile={false}
+                  userId={userId}
+                  onReviewUpdated={handleReviewUpdated}
+                />
+              ))}
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
               />
-            ))
+            </>
           ) : (
             <p>Отзывов пока нет.</p>
           )}
         </div>
-        {totalPages > 1 && (
-          <div className="pagination">
-            {[...Array(totalPages)].map((_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={currentPage === index + 1 ? "active" : ""}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </div>
-        )}
       </UnifiedCard>
 
       <UnifiedCard className="review-form">

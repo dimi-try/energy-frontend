@@ -1,0 +1,14 @@
+/* Стили для кнопок переключения (неактивная кнопка)*/
+.pagination button {
+    background-color: var(--card-background); /* Фон кнопки */
+    color: var(--primary-color); /* Цвет текста */
+    border: none; /* Убираем границу */
+    padding: 8px 16px; /* Внутренние отступы */
+    border-radius: 8px; /* Скругленные углы */
+}
+
+/* Стили для активной кнопки */
+.pagination button.active {
+    background-color: var(--primary-color); /* Фон активной кнопки */
+    color: var(--button-text-color); /* Цвет текста */
+}
