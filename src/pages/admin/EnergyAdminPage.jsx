@@ -12,6 +12,7 @@ const EnergyAdminPage = ({ token }) => {
     category_id: "",
     description: "",
     ingredients: "",
+    image: null,
     image_url: "",
   });
   const [editingEnergy, setEditingEnergy] = useState(null);
@@ -67,6 +68,23 @@ const EnergyAdminPage = ({ token }) => {
     }
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setError("Файл слишком большой. Максимальный размер: 5 МБ");
+        return;
+      }
+      const allowedTypes = ["image/jpeg", "image/png", "image/heic"];
+      if (!allowedTypes.includes(file.type)) {
+        setError("Недопустимый формат. Разрешены: JPG, JPEG, PNG, HEIC");
+        return;
+      }
+      setNewEnergy({ ...newEnergy, image: file, image_url: "" });
+      setError(null);
+    }
+  };
+
   // Добавление нового энергетика
   const handleAddEnergy = async (e) => {
     e.preventDefault();
@@ -75,12 +93,23 @@ const EnergyAdminPage = ({ token }) => {
       return;
     }
     try {
+      let imageUrl = null;
+      if (newEnergy.image) {
+        const formData = new FormData();
+        formData.append("file", newEnergy.image);
+        const uploadRes = await api.post("/energies/upload-image/", formData, {
+          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` }
+        });
+        imageUrl = uploadRes.data.image_url;
+      }
+
       const response = await api.post(
         "/energies/",
         {
           ...newEnergy,
           brand_id: parseInt(newEnergy.brand_id),
           category_id: newEnergy.category_id ? parseInt(newEnergy.category_id) : null,
+          image_url: imageUrl,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -91,6 +120,7 @@ const EnergyAdminPage = ({ token }) => {
         category_id: "",
         description: "",
         ingredients: "",
+        image: null,
         image_url: "",
       });
       setSuccess("Энергетик успешно добавлен");
@@ -110,6 +140,7 @@ const EnergyAdminPage = ({ token }) => {
       category_id: energy.category_id || "",
       description: energy.description || "",
       ingredients: energy.ingredients || "",
+      image: null,
       image_url: energy.image_url || "",
     });
   };
@@ -122,12 +153,23 @@ const EnergyAdminPage = ({ token }) => {
       return;
     }
     try {
+      let imageUrl = newEnergy.image_url;
+      if (newEnergy.image) {
+        const formData = new FormData();
+        formData.append("file", newEnergy.image);
+        const uploadRes = await api.post("/energies/upload-image/", formData, {
+          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` }
+        });
+        imageUrl = uploadRes.data.image_url;
+      }
+
       const response = await api.put(
         `/energies/${editingEnergy.id}`,
         {
           ...newEnergy,
           brand_id: parseInt(newEnergy.brand_id),
           category_id: newEnergy.category_id ? parseInt(newEnergy.category_id) : null,
+          image_url: imageUrl,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -139,6 +181,7 @@ const EnergyAdminPage = ({ token }) => {
         category_id: "",
         description: "",
         ingredients: "",
+        image: null,
         image_url: "",
       });
       setSuccess("Энергетик успешно обновлен");
@@ -158,6 +201,7 @@ const EnergyAdminPage = ({ token }) => {
       category_id: "",
       description: "",
       ingredients: "",
+      image: null,
       image_url: "",
     });
     setError(null);
@@ -231,14 +275,20 @@ const EnergyAdminPage = ({ token }) => {
           onChange={handleInputChange}
           placeholder="Ингредиенты"
         />
-        <input
-          type="text"
-          name="image_url"
-          value={newEnergy.image_url}
-          onChange={handleInputChange}
-          placeholder="URL изображения"
-          maxLength={255}
-        />
+        <div className="image-upload">
+          <label>Фото (необязательно, макс. 5 МБ, JPG/JPEG/PNG/HEIC):</label>
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/heic"
+            onChange={handleImageChange}
+          />
+          {newEnergy.image_url && !newEnergy.image && (
+            <div className="current-image">
+              <p>Текущее изображение:</p>
+              <img src={newEnergy.image_url} alt="Текущее" />
+            </div>
+          )}
+        </div>
         <button type="submit">{editingEnergy ? "Сохранить" : "Добавить"}</button>
         {editingEnergy && (
           <button type="button" onClick={handleCancelEdit}>

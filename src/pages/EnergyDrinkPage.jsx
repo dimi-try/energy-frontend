@@ -18,7 +18,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
   // Состояние для критериев оценки
   const [criteria, setCriteria] = useState([]);
   // Состояние для нового отзыва
-  const [newReview, setNewReview] = useState({ review_text: "", ratings: {} });
+  const [newReview, setNewReview] = useState({ review_text: "", ratings: {}, image: null });
   const [hoveredStars, setHoveredStars] = useState({});
   // Состояние для текущей страницы
   const [page, setPage] = useState(() => {
@@ -49,6 +49,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
         setNewReview({
           review_text: "",
           ratings: criteriaRes.data.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}),
+          image: null
         });
       } catch (err) {
         toast.error("Ошибка при загрузке данных. Попробуйте позже.", {
@@ -84,11 +85,51 @@ const EnergyDrinkPage = ({ userId, token }) => {
     setHoveredStars({ ...hoveredStars, [criterionId]: 0 });
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Файл слишком большой. Максимальный размер: 5 МБ", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        return;
+      }
+      const allowedTypes = ["image/jpeg", "image/png", "image/heic"];
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Недопустимый формат. Разрешены: JPG, JPEG, PNG, HEIC", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        return;
+      }
+      setNewReview({ ...newReview, image: file });
+    }
+  };
+
   // Функция для отправки отзыва
   const handleSubmit = async (e) => {
     e.preventDefault(); // Предотвращаем перезагрузку страницы
     if (!userId || !token) return; // Проверяем авторизацию
     try {
+      let imageUrl = null;
+      if (newReview.image) {
+        const formData = new FormData();
+        formData.append("file", newReview.image);
+        const uploadRes = await api.post("/reviews/upload-review-image/", formData, {
+          headers: { "Content-Type": "multipart/form-data" }
+        });
+        imageUrl = uploadRes.data.image_url;
+      }
+
       // Формируем массив оценок
       const ratings = Object.entries(newReview.ratings)
         .filter(([_, value]) => value !== "")
@@ -97,13 +138,26 @@ const EnergyDrinkPage = ({ userId, token }) => {
           rating_value: parseFloat(value),
           created_at: new Date().toISOString(),
         }));
-      // Отправляем отзыв на сервер
+
+      if (ratings.length === 0) {
+        toast.error("Оценки обязательны!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        return;
+      }
+
       await api.post(`/reviews/`, {
         user_id: userId,
-        review_text: newReview.review_text,
+        review_text: newReview.review_text || null,
         energy_id: parseInt(id),
         created_at: new Date().toISOString(),
         ratings,
+        image_url: imageUrl,
       });
       // Обновляем данные энергетика и отзывы
       const [energyRes, reviewsRes, countRes] = await Promise.all([
@@ -118,6 +172,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
       setNewReview({
         review_text: "",
         ratings: criteria.reduce((acc, curr) => ({ ...acc, [curr.id]: "" }), {}),
+        image: null
       });
       setHoveredStars({});
       toast.success("Отзыв успешно отправлен!", {
@@ -275,11 +330,18 @@ const EnergyDrinkPage = ({ userId, token }) => {
           <form onSubmit={handleSubmit}>
             <textarea
               name="review_text"
-              placeholder="Текст отзыва"
+              placeholder="Текст отзыва (необязательно)"
               value={newReview.review_text}
               onChange={(e) => setNewReview({ ...newReview, review_text: e.target.value })}
-              required
             />
+            <div className="image-upload">
+              <label>Фото (необязательно, макс. 5 МБ, JPG/JPEG/PNG/HEIC):</label>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/heic"
+                onChange={handleImageChange}
+              />
+            </div>
             {criteria.map((criterion) => (
               <div key={criterion.id} className="star-criteria">
                 <label>{criterion.name}</label>

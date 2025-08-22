@@ -7,8 +7,10 @@ import "./ReviewCard.css"; // Подключение стилей
 const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdated }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editReview, setEditReview] = useState({
-    review_text: review.review_text,
+    review_text: review.review_text || "",
     ratings: review.ratings.reduce((acc, curr) => ({ ...acc, [curr.criteria_id]: curr.rating_value }), {}),
+    image: null,
+    image_url: review.image_url || "",
   });
   const [hoveredStars, setHoveredStars] = useState({});
 
@@ -30,19 +32,73 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
     setHoveredStars({ ...hoveredStars, [criterionId]: 0 });
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Файл слишком большой. Максимальный размер: 5 МБ", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        return;
+      }
+      const allowedTypes = ["image/jpeg", "image/png", "image/heic"];
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Недопустимый формат. Разрешены: JPG, JPEG, PNG, HEIC", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        return;
+      }
+      setEditReview({ ...editReview, image: file, image_url: "" });
+    }
+  };
+
   // Обработчик отправки отредактированного отзыва
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
+      let imageUrl = editReview.image_url;
+      if (editReview.image) {
+        const formData = new FormData();
+        formData.append("file", editReview.image);
+        const uploadRes = await api.post("/reviews/upload-review-image/", formData, {
+          headers: { "Content-Type": "multipart/form-data" }
+        });
+        imageUrl = uploadRes.data.image_url;
+      }
+
       const ratings = Object.entries(editReview.ratings)
         .filter(([_, value]) => value !== "")
         .map(([criteriaId, value]) => ({
           criteria_id: parseInt(criteriaId),
           rating_value: parseFloat(value),
         }));
+
+      if (ratings.length === 0) {
+        toast.error("Оценки обязательны!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        return;
+      }
+
       await api.put(`/reviews/${review.id}`, {
-        review_text: editReview.review_text,
+        review_text: editReview.review_text || null,
         ratings,
+        image_url: imageUrl,
       });
       setIsEditing(false);
       onReviewUpdated(); // Обновляем список отзывов
@@ -123,16 +179,36 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
         </p>
       )}
 
+      {/* Изображение отзыва */}
+      {review.image_url && (
+        <div className="review-image">
+          <img src={review.image_url} alt="Отзыв" />
+        </div>
+      )}
+
       {/* Форма редактирования или текст отзыва */}
       {isEditing ? (
         <form onSubmit={handleUpdate} className="edit-review-form">
           <textarea
             name="review_text"
-            placeholder="Текст отзыва"
+            placeholder="Текст отзыва (необязательно)"
             value={editReview.review_text}
             onChange={(e) => setEditReview({ ...editReview, review_text: e.target.value })}
-            required
           />
+          <div className="image-upload">
+            <label>Фото (необязательно, макс. 5 МБ, JPG/JPEG/PNG/HEIC):</label>
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/heic"
+              onChange={handleImageChange}
+            />
+            {editReview.image_url && !editReview.image && (
+              <div className="current-image">
+                <p>Текущее изображение:</p>
+                <img src={editReview.image_url} alt="Текущее" />
+              </div>
+            )}
+          </div>
           {criteria.map((criterion) => (
             <div key={criterion.id} className="star-criteria">
               <label>{criterion.name}</label>
