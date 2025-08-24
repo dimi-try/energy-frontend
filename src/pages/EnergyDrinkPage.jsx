@@ -254,7 +254,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
       <div className="energy-header">
         <div className="energy-image">
           {energy.image_url ? (
-            <img src={energy.image_url} alt={energy.name} />
+            <img src={`${process.env.REACT_APP_BACKEND_URL}${energy.image_url}`} alt={energy.name} />
           ) : (
             <div className="no-image">Нет фото</div>
           )}
