@@ -36,17 +36,14 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 .energy-image img {
-  width: 100%;
-  max-width: 300px;
+  max-width: 100%;
+  max-height: 300px;
   height: auto;
+  object-fit: contain;
   border-radius: 8px;
-  object-fit: cover;
 }
 
 .energy-image .no-image {
@@ -233,6 +230,36 @@
   }
 }
 
+/* Стили для загрузки изображения */
+.image-upload {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.image-upload label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.image-upload input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* Стили для изображения в отзыве */
+.review-image img {
+  max-width: 100%;
+  max-height: 300px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
 /* Кастомизация стилей react-toastify */
 .Toastify__toast--error {
   background: #d32f2f;
@@ -278,8 +305,8 @@
   .energy-image img,
   .energy-image .no-image {
     max-width: 100%;
+    max-height: 200px;
     height: auto;
-    min-height: 150px;
   }
 
   .energy-details {
@@ -298,6 +325,10 @@
   .stars-rating {
     font-size: 18px; /* Еще меньший размер звезд для средних экранов */
   }
+
+  .review-image img {
+    max-height: 200px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -314,8 +345,8 @@
   .energy-image img,
   .energy-image .no-image {
     max-width: 100%;
+    max-height: 150px;
     height: auto;
-    min-height: 120px;
   }
 
   .energy-details {
@@ -328,6 +359,10 @@
 
   .stars-rating {
     font-size: 16px; /* Минимальный размер звезд для маленьких экранов */
+  }
+
+  .review-image img {
+    max-height: 150px;
   }
 
   .review-actions {
