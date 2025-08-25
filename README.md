@@ -33,12 +33,14 @@ energy-frontend/
 │   │   ├── useTelegram.js            # Telegram WebApp API
 │   │   └── useUserVerification.js    # Верификация пользователя
 │   ├── pages/                        # Страницы (роуты)
-│   │   ├── ... .jsx
+│   │   ├── admin/        
+│   │   │   ├── ... .jsx              # Страницы админ-панели
+│   │   │   └── ... .css          
+│   │   ├── ... .jsx                  # Обычные страницы
 │   │   └── ... .css
 │   ├── styles/                       # Общие стили
 │   │   └── App.css
 │   ├── App.js                        # Главный компонент приложения
-│   ├── App.css                       # Основные стили (если отдельно от layout)
 │   ├── config.js                     # Конфигурации: URL, ключи и т.д.
 │   └── index.js                      # Точка входа, рендер React-приложения
 │
