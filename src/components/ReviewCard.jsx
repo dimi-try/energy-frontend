@@ -182,7 +182,7 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
       {/* Изображение отзыва */}
       {review.image_url && (
         <div className="review-image">
-          <img src={`${process.env.REACT_APP_BACKEND_URL}${review.image_url}`} alt="Отзыв" />
+          <img src={`${process.env.REACT_APP_BACKEND_URL}/${review.image_url}`} alt="Отзыв" />
         </div>
       )}
 
@@ -205,7 +205,7 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
             {editReview.image_url && !editReview.image && (
               <div className="current-image">
                 <p>Текущее изображение:</p>
-                <img src={`${process.env.REACT_APP_BACKEND_URL}${editReview.image_url}`} alt="Текущее" />
+                <img src={`${process.env.REACT_APP_BACKEND_URL}/${editReview.image_url}`} alt="Текущее" />
               </div>
             )}
           </div>

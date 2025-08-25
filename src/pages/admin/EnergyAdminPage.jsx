@@ -285,7 +285,7 @@ const EnergyAdminPage = ({ token }) => {
           {newEnergy.image_url && !newEnergy.image && (
             <div className="current-image">
               <p>Текущее изображение:</p>
-              <img src={`${process.env.REACT_APP_BACKEND_URL}${newEnergy.image_url}`} alt="Текущее" />
+              <img src={`${process.env.REACT_APP_BACKEND_URL}/${newEnergy.image_url}`} alt="Текущее" />
             </div>
           )}
         </div>
