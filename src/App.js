@@ -33,6 +33,9 @@ function App() {
   useEffect(() => {
     if (telegram) {
       telegram.ready(); // Сообщаем Telegram, что приложение готово
+      // telegram.requestFullscreen(); // Запрашиваем полноэкранный режим
+      telegram.expand(); // Разворачиваем веб-приложение на весь экран (не путать с полноэкранным режимом)
+      telegram.disableVerticalSwipes(); // Отключаем вертикальные свайпы для предотвращения случайного закрытия
 
       // Функция для применения темы Telegram
       const applyTheme = (params) => {
