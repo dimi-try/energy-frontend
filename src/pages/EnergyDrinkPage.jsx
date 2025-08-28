@@ -289,34 +289,6 @@ const EnergyDrinkPage = ({ userId, token }) => {
         </div>
       </div>
 
-      {/* Список отзывов */}
-      <UnifiedCard className="reviews-section">
-        <h2>Отзывы ({energy.review_count})</h2>
-        <div className="list-container">
-          {reviews.length > 0 ? (
-            <>
-              {reviews.map((review) => (
-                <ReviewCard
-                  key={review.id}
-                  review={review}
-                  criteria={criteria}
-                  isProfile={false}
-                  userId={userId}
-                  onReviewUpdated={handleReviewUpdated}
-                />
-              ))}
-              <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={setPage}
-              />
-            </>
-          ) : (
-            <p>Отзывов пока нет.</p>
-          )}
-        </div>
-      </UnifiedCard>
-
       <UnifiedCard className="review-form">
         <h2>Оставить отзыв</h2>
         {!userId || !token ? (
@@ -372,6 +344,34 @@ const EnergyDrinkPage = ({ userId, token }) => {
             <button type="submit">Отправить</button>
           </form>
         )}
+      </UnifiedCard>
+
+      {/* Список отзывов */}
+      <UnifiedCard className="reviews-section">
+        <h2>Отзывы ({energy.review_count})</h2>
+        <div className="list-container">
+          {reviews.length > 0 ? (
+            <>
+              {reviews.map((review) => (
+                <ReviewCard
+                  key={review.id}
+                  review={review}
+                  criteria={criteria}
+                  isProfile={false}
+                  userId={userId}
+                  onReviewUpdated={handleReviewUpdated}
+                />
+              ))}
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+              />
+            </>
+          ) : (
+            <p>Отзывов пока нет.</p>
+          )}
+        </div>
       </UnifiedCard>
     </div>
   );
