@@ -124,7 +124,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
       if (newReview.image) {
         const formData = new FormData();
         formData.append("file", newReview.image);
-        const uploadRes = await api.post("/reviews/upload-review-image/", formData, {
+        const uploadRes = await api.post("/reviews/upload-image/", formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         imageUrl = uploadRes.data.image_url;

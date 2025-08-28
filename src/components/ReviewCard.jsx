@@ -70,7 +70,7 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
       if (editReview.image) {
         const formData = new FormData();
         formData.append("file", editReview.image);
-        const uploadRes = await api.post("/reviews/upload-review-image/", formData, {
+        const uploadRes = await api.post("/reviews/upload-image/", formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         imageUrl = uploadRes.data.image_url;
