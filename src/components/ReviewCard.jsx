@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../hooks/api";
 import { toast } from "react-toastify";
-import "./ReviewCard.css"; // Подключение стилей
+
+import api from "../hooks/api";
+
+import ImageUpload from './ImageUpload';
+
+import "./ReviewCard.css";
 
 const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdated }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -32,36 +36,6 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
     setHoveredStars({ ...hoveredStars, [criterionId]: 0 });
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Файл слишком большой. Максимальный размер: 5 МБ", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        return;
-      }
-      const allowedTypes = ["image/jpeg", "image/png", "image/heic"];
-      if (!allowedTypes.includes(file.type)) {
-        toast.error("Недопустимый формат. Разрешены: JPG, JPEG, PNG, HEIC", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        return;
-      }
-      setEditReview({ ...editReview, image: file, image_url: "" });
-    }
-  };
-
   // Обработчик отправки отредактированного отзыва
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -70,7 +44,7 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
       if (editReview.image) {
         const formData = new FormData();
         formData.append("file", editReview.image);
-        const uploadRes = await api.post("/reviews/upload-review-image/", formData, {
+        const uploadRes = await api.post("/reviews/upload-image/", formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         imageUrl = uploadRes.data.image_url;
@@ -195,20 +169,13 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
             value={editReview.review_text}
             onChange={(e) => setEditReview({ ...editReview, review_text: e.target.value })}
           />
-          <div className="image-upload">
-            <label>Фото (необязательно, макс. 5 МБ, JPG/JPEG/PNG/HEIC):</label>
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/heic"
-              onChange={handleImageChange}
-            />
-            {editReview.image_url && !editReview.image && (
-              <div className="current-image">
-                <p>Текущее изображение:</p>
-                <img src={`${process.env.REACT_APP_BACKEND_URL}/${editReview.image_url}`} alt="Текущее" />
-              </div>
-            )}
-          </div>
+          {/* Поле для загрузки изображения */}
+          <ImageUpload
+            image={editReview.image}
+            imageUrl={editReview.image_url}
+            onImageChange={(file) => setEditReview({ ...editReview, image: file, image_url: '' })}
+            backendUrl={process.env.REACT_APP_BACKEND_URL}
+          />
           {criteria.map((criterion) => (
             <div key={criterion.id} className="star-criteria">
               <label>{criterion.name}</label>

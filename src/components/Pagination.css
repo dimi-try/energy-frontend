@@ -1,3 +1,6 @@
+.pagination {
+    text-align: center; /*Выравнивание пагинации по центру*/
+}
 /* Стили для кнопок переключения (неактивная кнопка)*/
 .pagination button {
     background-color: var(--card-background); /* Фон кнопки */

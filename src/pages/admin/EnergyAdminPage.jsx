@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
+
 import api from "../../hooks/api";
+
+import ImageUpload from '../../components/ImageUpload';
+
 import "./EnergyAdminPage.css";
 
 const EnergyAdminPage = ({ token }) => {
@@ -65,23 +69,6 @@ const EnergyAdminPage = ({ token }) => {
       setNewEnergy({ ...newEnergy, [name]: value });
     } else {
       setNewEnergy({ ...newEnergy, [name]: value });
-    }
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        setError("Файл слишком большой. Максимальный размер: 5 МБ");
-        return;
-      }
-      const allowedTypes = ["image/jpeg", "image/png", "image/heic"];
-      if (!allowedTypes.includes(file.type)) {
-        setError("Недопустимый формат. Разрешены: JPG, JPEG, PNG, HEIC");
-        return;
-      }
-      setNewEnergy({ ...newEnergy, image: file, image_url: "" });
-      setError(null);
     }
   };
 
@@ -275,20 +262,14 @@ const EnergyAdminPage = ({ token }) => {
           onChange={handleInputChange}
           placeholder="Ингредиенты"
         />
-        <div className="image-upload">
-          <label>Фото (необязательно, макс. 5 МБ, JPG/JPEG/PNG/HEIC):</label>
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/heic"
-            onChange={handleImageChange}
-          />
-          {newEnergy.image_url && !newEnergy.image && (
-            <div className="current-image">
-              <p>Текущее изображение:</p>
-              <img src={`${process.env.REACT_APP_BACKEND_URL}/${newEnergy.image_url}`} alt="Текущее" />
-            </div>
-          )}
-        </div>
+        <ImageUpload
+          image={newEnergy.image}
+          imageUrl={newEnergy.image_url}
+          onImageChange={(file) => setNewEnergy({ ...newEnergy, image: file, image_url: '' })}
+          backendUrl={process.env.REACT_APP_BACKEND_URL}
+          error={error}
+          setError={setError}
+        />
         <button type="submit">{editingEnergy ? "Сохранить" : "Добавить"}</button>
         {editingEnergy && (
           <button type="button" onClick={handleCancelEdit}>
