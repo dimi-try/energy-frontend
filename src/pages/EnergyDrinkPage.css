@@ -230,26 +230,6 @@
   }
 }
 
-/* Стили для загрузки изображения */
-.image-upload {
-  margin-bottom: 15px;
-  text-align: left;
-}
-
-.image-upload label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.image-upload input[type="file"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-sizing: border-box;
-}
-
 /* Стили для изображения в отзыве */
 .review-image img {
   max-width: 100%;

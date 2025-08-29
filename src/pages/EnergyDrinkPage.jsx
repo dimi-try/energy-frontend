@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+
 import api from "../hooks/api";
+
 import ReviewCard from "../components/ReviewCard";
 import UnifiedCard from "../components/UnifiedCard";
+import ImageUpload from '../components/ImageUpload';
 import Pagination from "../components/Pagination";
-import { ToastContainer, toast } from "react-toastify";
+
 import "./EnergyDrinkPage.css";
 
 // Компонент страницы энергетика
 const EnergyDrinkPage = ({ userId, token }) => {
   // Получаем ID энергетика из URL
   const { id } = useParams();
-  // Состояние для данных об энергетике
+  //Состояния энергетиков, отзывов и критерий
   const [energy, setEnergy] = useState(null);
-  // Состояние для списка отзывов
   const [reviews, setReviews] = useState([]);
-  // Состояние для критериев оценки
   const [criteria, setCriteria] = useState([]);
   // Состояние для нового отзыва
   const [newReview, setNewReview] = useState({ review_text: "", ratings: {}, image: null });
+  // Состояние для звезд
   const [hoveredStars, setHoveredStars] = useState({});
   // Состояние для текущей страницы
   const [page, setPage] = useState(() => {
@@ -83,36 +86,6 @@ const EnergyDrinkPage = ({ userId, token }) => {
 
   const handleStarLeave = (criterionId) => {
     setHoveredStars({ ...hoveredStars, [criterionId]: 0 });
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Файл слишком большой. Максимальный размер: 5 МБ", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        return;
-      }
-      const allowedTypes = ["image/jpeg", "image/png", "image/heic"];
-      if (!allowedTypes.includes(file.type)) {
-        toast.error("Недопустимый формат. Разрешены: JPG, JPEG, PNG, HEIC", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        return;
-      }
-      setNewReview({ ...newReview, image: file });
-    }
   };
 
   // Функция для отправки отзыва
@@ -306,14 +279,12 @@ const EnergyDrinkPage = ({ userId, token }) => {
               value={newReview.review_text}
               onChange={(e) => setNewReview({ ...newReview, review_text: e.target.value })}
             />
-            <div className="image-upload">
-              <label>Фото (необязательно, макс. 5 МБ, JPG/JPEG/PNG/HEIC):</label>
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/heic"
-                onChange={handleImageChange}
-              />
-            </div>
+            <ImageUpload
+              image={newReview.image}
+              imageUrl={null} // В EnergyDrinkPage нет текущего изображения
+              onImageChange={(file) => setNewReview({ ...newReview, image: file })}
+              backendUrl={process.env.REACT_APP_BACKEND_URL}
+            />
             {criteria.map((criterion) => (
               <div key={criterion.id} className="star-criteria">
                 <label>{criterion.name}</label>
