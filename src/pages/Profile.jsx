@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+
 import api from "../hooks/api";
+
 import ReviewCard from "../components/ReviewCard";
 import Pagination from "../components/Pagination";
+import AvatarUpload from "../components/AvatarUpload";
+
 import "./Profile.css";
-import { toast } from "react-toastify";
 
 // Компонент страницы профиля пользователя
 const Profile = ({ userId, token }) => {
   // Состояние для данных профиля
   const [profile, setProfile] = useState(null);
+  // Состояние для аватарки
+  const [avatar, setAvatar] = useState(null);
   // Состояние для списка отзывов
   const [reviews, setReviews] = useState([]);
   // Состояние для критериев оценки
@@ -76,6 +82,12 @@ const Profile = ({ userId, token }) => {
   useEffect(() => {
     sessionStorage.setItem(`profile-page`, page);
   }, [page]);
+
+  // Обновление профиля после изменения аватарки
+  const handleAvatarUpdated = (updatedUser) => {
+    console.log('Обновленный профиль:', updatedUser); // Логирование для отладки
+    setProfile({ ...profile, user: updatedUser });
+  };
 
   // Обновление профиля и отзывов после редактирования/удаления
   const handleReviewUpdated = async () => {
@@ -161,14 +173,29 @@ const Profile = ({ userId, token }) => {
 
   return (
     <div className="profile-container container">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       {/* Аватарка и имя */}
       <div className="profile-header">
-        <div className="profile-avatar">
-          <img
-            src={`https://api.dicebear.com/9.x/identicon/svg?seed=${profile.user.username}`}
-            alt="Avatar"
-          />
-        </div>
+        <AvatarUpload
+          image={avatar}
+          imageUrl={profile.user.image_url}
+          onImageChange={(file) => setAvatar(file)}
+          backendUrl={process.env.REACT_APP_BACKEND_URL}
+          userId={userId}
+          token={token}
+          onAvatarUpdated={handleAvatarUpdated}
+        />
         {isEditing ? (
           <form onSubmit={handleUpdateUsername} className="edit-username-form">
             <input
