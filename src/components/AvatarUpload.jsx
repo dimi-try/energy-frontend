@@ -96,10 +96,6 @@ const AvatarUpload = ({ image, imageUrl, onImageChange, backendUrl, userId, toke
             src={image ? URL.createObjectURL(image) : displayImageUrl}
             alt="Аватар"
             className="avatar-image"
-            onError={(e) => {
-              console.error('Ошибка загрузки изображения:', displayImageUrl || 'Локальное изображение');
-              e.target.src = `https://api.dicebear.com/9.x/identicon/svg?seed=${userId}`; // Запасной аватар
-            }}
           />
         ) : (
           <div className="avatar-placeholder">
