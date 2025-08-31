@@ -1,0 +1,93 @@
+.avatar-upload {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.avatar-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--primary-color);
+    transition: var(--transition);
+}
+
+.avatar-container:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow);
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-upload-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid #fff;
+    transition: var(--transition);
+}
+
+.avatar-upload-button:hover {
+    background-color: #555;
+}
+
+.upload-icon {
+    color: var(--button-text-color);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .avatar-container {
+        width: 80px;
+        height: 80px;
+    }
+
+    .avatar-upload-button {
+        width: 24px;
+        height: 24px;
+    }
+
+    .upload-icon {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .avatar-container {
+        width: 60px;
+        height: 60px;
+    }
+
+    .avatar-upload-button {
+        width: 20px;
+        height: 20px;
+    }
+
+    .upload-icon {
+        font-size: 14px;
+    }
+}

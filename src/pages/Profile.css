@@ -9,20 +9,6 @@
   margin-bottom: 30px; /* Отступ снизу */
 }
 
-.profile-avatar img {
-  width: 100px; /* Размер аватарки */
-  height: 100px;
-  border-radius: 50%; /* Круглая форма */
-  border: 2px solid var(--primary-color); /* Граница с акцентом */
-  margin-bottom: 15px; /* Отступ снизу */
-  transition: var(--transition); /* Плавный переход */
-}
-
-.profile-avatar img:hover {
-  transform: scale(1.05); /* Лёгкое увеличение при наведении */
-  box-shadow: var(--shadow); /* Тень при наведении */
-}
-
 .profile-header h1 {
   font-size: 1.8rem; /* Размер шрифта имени */
 }
@@ -272,11 +258,6 @@
   .stats-row {
     flex-direction: column; /* Вертикальное расположение */
     gap: 15px; /* Уменьшенный отступ */
-  }
-
-  .profile-avatar img {
-    width: 80px; /* Меньший размер аватарки */
-    height: 80px;
   }
 
   .profile-header h1 {
