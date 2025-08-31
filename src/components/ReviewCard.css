@@ -14,7 +14,7 @@
   margin-bottom: 10px;
 }
 
-.review-username {
+.review-item {
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--primary-color);
@@ -60,7 +60,6 @@
 }
 
 .details-link {
-  color: #007bff;
   text-decoration: none;
 }
 
@@ -92,7 +91,7 @@
   .review-image img {
     max-height: 200px;
   }
-  .review-username {
+  .review-item {
     font-size: 1.1rem;
   }
 }
@@ -101,7 +100,7 @@
   .review-image img {
     max-height: 150px;
   }
-  .review-username {
+  .review-item {
     font-size: 1rem;
   }
 }

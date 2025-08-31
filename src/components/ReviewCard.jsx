@@ -98,13 +98,13 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
     <div className="card review-card">
       {/* Заголовок отзыва */}
       <div className="review-header">
-        <span className="review-username">
+        <span className="review-item">
           {isProfile && review.energy_id ? (
             <Link to={`/energies/${review.energy_id}`} className="details-link">
-              {review.brand} {review.energy}
+              🥤 {review.brand} {review.energy}
             </Link>
           ) : (
-            review.user?.username || `${review.brand} ${review.energy}`
+            `👤 ${review.user?.username || "Имя пустое"}`
           )}
         </span>
       </div>
@@ -192,7 +192,7 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
 
       {/* Дата внизу карточки */}
       <div className="review-footer">
-        <span className="review-date">{formattedDate}</span>
+        <span className="review-date"> 📅 {formattedDate}</span>
       </div>
 
       {/* Кнопки редактирования и удаления для владельца отзыва */}
