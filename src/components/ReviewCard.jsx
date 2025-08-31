@@ -58,14 +58,7 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
         }));
 
       if (ratings.length === 0) {
-        toast.error("Оценки обязательны!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        toast.error("Оценки обязательны!");
         return;
       }
 
@@ -76,64 +69,36 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
       });
       setIsEditing(false);
       onReviewUpdated(); // Обновляем список отзывов
-      toast.success("Отзыв успешно обновлен!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.success("Отзыв успешно обновлен!");
     } catch (err) {
-      toast.error(
-        err.response?.data?.detail || "Ошибка при обновлении отзыва. Попробуйте позже.",
-        {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        }
-      );
+      toast.error(err.response?.data?.detail || "Ошибка при обновлении отзыва.");
     }
   };
 
-  // Обработчик удаления отзыва
   const handleDelete = async () => {
     if (window.confirm("Вы уверены, что хотите удалить отзыв?")) {
       try {
         await api.delete(`/reviews/${review.id}`);
-        onReviewUpdated(); // Обновляем список отзывов
-        toast.success("Отзыв успешно удален!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        onReviewUpdated();
+        toast.success("Отзыв успешно удален!");
       } catch (err) {
-        toast.error(
-          err.response?.data?.detail || "Ошибка при удалении отзыва. Попробуйте позже.",
-          {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          }
-        );
+        toast.error(err.response?.data?.detail || "Ошибка при удалении отзыва.");
       }
     }
   };
+
+  // Форматирование даты в читаемый формат
+  const formattedDate = new Date(review.created_at).toLocaleDateString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
 
   return (
     <div className="card review-card">
       {/* Заголовок отзыва */}
       <div className="review-header">
-        <span>
+        <span className="review-username">
           {isProfile && review.energy_id ? (
             <Link to={`/energies/${review.energy_id}`} className="details-link">
               {review.brand} {review.energy}
@@ -142,7 +107,6 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
             review.user?.username || `${review.brand} ${review.energy}`
           )}
         </span>
-        <span>{new Date(review.created_at).toLocaleDateString()}</span>
       </div>
 
       {/* Средний балл отзыва */}
@@ -225,6 +189,11 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
           ))}
         </>
       )}
+
+      {/* Дата внизу карточки */}
+      <div className="review-footer">
+        <span className="review-date">{formattedDate}</span>
+      </div>
 
       {/* Кнопки редактирования и удаления для владельца отзыва */}
       {userId && review.user_id === userId && !isEditing && (

@@ -9,9 +9,19 @@
 /* Стили для заголовка отзыва */
 .review-header {
   display: flex; /* Flexbox для выравнивания */
-  justify-content: space-between; /* Распределяем элементы */
+  justify-content: flex-start;
   width: 100%;
-  color: var(--text-color); /* Цвет текста */
+  margin-bottom: 10px;
+}
+
+.review-username {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .review-average-rating {
@@ -57,7 +67,7 @@
 .details-link:hover {
   text-decoration: underline;
 }
-  
+
 .review-image img {
   max-width: 100%;
   max-height: 300px;
@@ -67,15 +77,31 @@
   margin-bottom: 15px;
 }
 
+/* Стили для футера с датой */
+.review-footer {
+  width: 100%;
+}
+
+.review-date {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
   .review-image img {
     max-height: 200px;
+  }
+  .review-username {
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 480px) {
   .review-image img {
     max-height: 150px;
+  }
+  .review-username {
+    font-size: 1rem;
   }
 }
