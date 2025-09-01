@@ -318,7 +318,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
       </UnifiedCard>
 
       {/* Список отзывов */}
-      <UnifiedCard className="reviews-section">
+      <UnifiedCard>
         <h2>Отзывы ({energy.review_count})</h2>
         <div className="list-container">
           {reviews.length > 0 ? (

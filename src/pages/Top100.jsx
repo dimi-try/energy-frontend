@@ -126,11 +126,13 @@ const Top100 = () => {
                       rank={(page - 1) * itemsPerPage + index + 1}
                       onClick={() => handleNavigate(`/energies/${item.id}/`)}
                     >
-                      <img
-                        src={item.image_url}
-                        alt={item.name}
-                        style={{ width: "50px", borderRadius: "8px" }}
-                      />
+                      <div className="energy-card-image">
+                        {item.image_url ? (
+                          <img src={`${process.env.REACT_APP_BACKEND_URL}/${item.image_url}`} alt={item.name} />
+                        ) : (
+                          <div className="no-image-card">Нет фото</div>
+                        )}
+                      </div>
                       <div>
                         <h2>
                           {item.brand?.name} {item.name}
