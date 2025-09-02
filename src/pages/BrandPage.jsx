@@ -103,7 +103,13 @@ const BrandPage = () => {
                   rank={(page - 1) * energiesPerPage + index + 1}
                   onClick={() => handleNavigate(`/energies/${energy.id}/`)}
                 >
-                  <img src={energy.image_url} alt={energy.name} style={{ width: "50px", borderRadius: "8px" }} />
+                  <div className="energy-card-image">
+                    {energy.image_url ? (
+                      <img src={`${process.env.REACT_APP_BACKEND_URL}/${energy.image_url}`} alt={energy.name} />
+                    ) : (
+                      <div className="no-image-card">Нет фото</div>
+                    )}
+                  </div>
                   <div>
                     <h2>{energy.name}</h2>
                     <p><span className="star">★</span> {energy.average_rating || "0.0"}/10 ({energy.review_count || 0} отзывов)</p>

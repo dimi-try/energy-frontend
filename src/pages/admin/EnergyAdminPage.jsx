@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import api from "../../hooks/api";
 
@@ -286,7 +287,11 @@ const EnergyAdminPage = ({ token }) => {
       <ul className="energy-list">
         {energies.map((energy) => (
           <li key={energy.id}>
-            <span>{energy.name} (Бренд: {energy.brand.name}, Категория: {energy.category?.name || "Без категории"})</span>
+            <span>
+              <Link to={`/energies/${energy.id}`} className="details-link">
+                {energy.brand.name} {energy.name} 
+              </Link>
+            </span>
             <div>
               <button onClick={() => handleEditEnergy(energy)}>Редактировать</button>
               <button onClick={() => handleDeleteEnergy(energy.id)}>Удалить</button>

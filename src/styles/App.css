@@ -54,18 +54,6 @@ button:hover {
   background-color: #005bb5; /* Темнее при наведении */
 }
 
-/* Стили для карточек */
-.card {
-  background-color: var(--card-background); /* Фон карточки */
-  padding: 15px; /* Внутренние отступы */
-  border-radius: var(--border-radius); /* Скругленные углы */
-  box-shadow: var(--shadow); /* Тень */
-  display: flex; /* Flexbox для выравнивания */
-  align-items: center; /* Выравнивание по центру */
-  gap: 10px; /* Отступ между элементами */
-  transition: var(--transition); /* Плавные переходы */
-}
-
 /* Контейнер для списков */
 .list-container {
   width: 100%; /* Полная ширина */

@@ -1,6 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 
+import "./Card.css";
+
 // Компонент карточки для отображения элементов списка
 const Card = ({ children, onClick, rank }) => {
   // Определяем класс для медали в зависимости от ранга

@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import api from "../hooks/api";
 
 import ReviewCard from "../components/ReviewCard";
+import UnifiedCard from "../components/UnifiedCard";
 import Pagination from "../components/Pagination";
 import AvatarUpload from "../components/AvatarUpload";
 
@@ -275,7 +276,7 @@ const Profile = ({ userId, token }) => {
       </div>
 
       {/* История отзывов */}
-      <div className="reviews-section">
+      <UnifiedCard>
         <h2>История отзывов ({profile.total_ratings})</h2>
         {reviews.length === 0 ? (
           <p className="no-reviews">Отзывов пока нет</p>
@@ -300,7 +301,7 @@ const Profile = ({ userId, token }) => {
             />
           </>
         )}
-      </div>
+      </UnifiedCard>
     </div>
   );
 };

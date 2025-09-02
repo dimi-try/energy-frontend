@@ -101,16 +101,6 @@
   color: var(--primary-color); /* Акцентный цвет */
 }
 
-/* Секция отзывов */
-.reviews-section {
-  margin-top: 40px; /* Отступ сверху */
-}
-
-.reviews-section h2 {
-  font-size: 1.6rem; /* Размер заголовка */
-  text-align: left; /* Выравнивание слева */
-}
-
 .no-reviews {
   text-align: center; /* Центрируем текст */
   color: #888; /* Серый цвет */
