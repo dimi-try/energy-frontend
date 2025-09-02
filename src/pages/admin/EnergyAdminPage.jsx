@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import debounce from "lodash/debounce";
 
 import api from "../../hooks/api";
 
-import ImageUpload from '../../components/ImageUpload';
+import ImageUpload from "../../components/ImageUpload";
+import Pagination from "../../components/Pagination";
 
 import "./EnergyAdminPage.css";
 
@@ -23,12 +25,30 @@ const EnergyAdminPage = ({ token }) => {
   const [editingEnergy, setEditingEnergy] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
-  // Загрузка списка энергетиков, брендов и категорий
-  const fetchEnergies = async () => {
+  // Загрузка списка энергетиков
+  const fetchEnergies = async (page = 1, search = "") => {
     try {
-      const response = await api.get("/energies/admin/");
-      setEnergies(response.data);
+      const [energiesResponse, countResponse] = await Promise.all([
+        api.get("/energies/admin/", {
+          params: {
+            skip: (page - 1) * itemsPerPage,
+            limit: itemsPerPage,
+            search_query: search || undefined,
+          },
+        }),
+        api.get("/energies/admin/count/", {
+          params: {
+            search_query: search || undefined,
+          },
+        }),
+      ]);
+      setEnergies(energiesResponse.data);
+      setTotalPages(Math.ceil(countResponse.data.total / itemsPerPage));
     } catch (err) {
       setError("Ошибка при загрузке энергетиков: " + (err.response?.data?.detail || err.message));
     }
@@ -56,12 +76,22 @@ const EnergyAdminPage = ({ token }) => {
     }
   };
 
+  // Дебаунсинг для поиска
+  const debouncedFetchEnergies = debounce((query) => {
+    setCurrentPage(1);
+    fetchEnergies(1, query);
+  }, 300);
+
   // Загрузка данных при монтировании компонента
   useEffect(() => {
-    fetchEnergies();
     fetchBrands();
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    debouncedFetchEnergies(searchQuery);
+    return () => debouncedFetchEnergies.cancel();
+  }, [searchQuery]);
 
   // Обработка изменений формы
   const handleInputChange = (e) => {
@@ -86,7 +116,7 @@ const EnergyAdminPage = ({ token }) => {
         const formData = new FormData();
         formData.append("file", newEnergy.image);
         const uploadRes = await api.post("/energies/upload-image/", formData, {
-          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` }
+          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
         });
         imageUrl = uploadRes.data.image_url;
       }
@@ -101,7 +131,6 @@ const EnergyAdminPage = ({ token }) => {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setEnergies([...energies, response.data]);
       setNewEnergy({
         name: "",
         brand_id: "",
@@ -113,6 +142,7 @@ const EnergyAdminPage = ({ token }) => {
       });
       setSuccess("Энергетик успешно добавлен");
       setError(null);
+      fetchEnergies(currentPage, searchQuery); // Обновляем список
     } catch (err) {
       setError("Ошибка при добавлении энергетика: " + (err.response?.data?.detail || err.message));
       setSuccess(null);
@@ -146,7 +176,7 @@ const EnergyAdminPage = ({ token }) => {
         const formData = new FormData();
         formData.append("file", newEnergy.image);
         const uploadRes = await api.post("/energies/upload-image/", formData, {
-          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` }
+          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
         });
         imageUrl = uploadRes.data.image_url;
       }
@@ -161,7 +191,6 @@ const EnergyAdminPage = ({ token }) => {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setEnergies(energies.map((e) => (e.id === editingEnergy.id ? response.data : e)));
       setEditingEnergy(null);
       setNewEnergy({
         name: "",
@@ -174,6 +203,7 @@ const EnergyAdminPage = ({ token }) => {
       });
       setSuccess("Энергетик успешно обновлен");
       setError(null);
+      fetchEnergies(currentPage, searchQuery); // Обновляем список
     } catch (err) {
       setError("Ошибка при обновлении энергетика: " + (err.response?.data?.detail || err.message));
       setSuccess(null);
@@ -202,14 +232,23 @@ const EnergyAdminPage = ({ token }) => {
         await api.delete(`/energies/${energyId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setEnergies(energies.filter((e) => e.id !== energyId));
         setSuccess("Энергетик успешно удален");
         setError(null);
+        fetchEnergies(currentPage, searchQuery); // Обновляем список
       } catch (err) {
         setError("Ошибка при удалении энергетика: " + (err.response?.data?.detail || err.message));
         setSuccess(null);
       }
     }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchEnergies(page, searchQuery);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   return (
@@ -266,7 +305,7 @@ const EnergyAdminPage = ({ token }) => {
         <ImageUpload
           image={newEnergy.image}
           imageUrl={newEnergy.image_url}
-          onImageChange={(file) => setNewEnergy({ ...newEnergy, image: file, image_url: '' })}
+          onImageChange={(file) => setNewEnergy({ ...newEnergy, image: file, image_url: "" })}
           backendUrl={process.env.REACT_APP_BACKEND_URL}
           error={error}
           setError={setError}
@@ -279,6 +318,15 @@ const EnergyAdminPage = ({ token }) => {
         )}
       </form>
 
+      {/* Поле поиска */}
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={handleSearchChange}
+        placeholder="Поиск по бренду или энергетику..."
+        className="search-input"
+      />
+
       {/* Сообщения об ошибках и успехе */}
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
@@ -289,7 +337,7 @@ const EnergyAdminPage = ({ token }) => {
           <li key={energy.id}>
             <span>
               <Link to={`/energies/${energy.id}`} className="details-link">
-                {energy.brand.name} {energy.name} 
+                {energy.brand.name} {energy.name}
               </Link>
             </span>
             <div>
@@ -299,6 +347,15 @@ const EnergyAdminPage = ({ token }) => {
           </li>
         ))}
       </ul>
+
+      {/* Пагинация */}
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };
