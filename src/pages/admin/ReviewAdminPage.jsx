@@ -7,9 +7,10 @@ import "./ReviewAdminPage.css";
 
 const ReviewAdminPage = ({ token }) => {
   const [reviews, setReviews] = useState([]);
-  const [energies, setEnergies] = useState([]); // Добавляем состояние для энергетиков
+  const [energyData, setEnergyData] = useState({}); // Храним данные энергетиков по ID
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Загрузка списка отзывов
   const fetchReviews = async () => {
@@ -17,28 +18,49 @@ const ReviewAdminPage = ({ token }) => {
       const response = await api.get("/reviews/", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setReviews(response.data);
+      return response.data;
     } catch (err) {
       setError("Ошибка при загрузке отзывов: " + (err.response?.data?.detail || err.message));
+      return [];
     }
   };
 
-  // Загрузка списка энергетиков
-  const fetchEnergies = async () => {
-    try {
-      const response = await api.get("/energies/admin/", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setEnergies(response.data);
-    } catch (err) {
-      setError("Ошибка при загрузке энергетиков: " + (err.response?.data?.detail || err.message));
-    }
+  // Загрузка данных энергетиков по их ID
+  const fetchEnergies = async (energyIds) => {
+    const promises = energyIds.map(async (energyId) => {
+      try {
+        const response = await api.get(`/energies/${energyId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setEnergyData((prev) => ({
+          ...prev,
+          [energyId]: {
+            name: response.data.name,
+            brand_name: response.data.brand?.name || "Без бренда",
+          },
+        }));
+      } catch (err) {
+        setEnergyData((prev) => ({
+          ...prev,
+          [energyId]: { name: null, brand_name: null },
+        }));
+        console.log(`Energy lookup: ${energyId} failed -`, err.message);
+      }
+    });
+    await Promise.all(promises);
   };
 
   // Загрузка данных при монтировании компонента
   useEffect(() => {
-    fetchReviews();
-    fetchEnergies(); // Загружаем энергетики
+    const loadData = async () => {
+      setIsLoading(true);
+      const reviewsData = await fetchReviews();
+      setReviews(reviewsData);
+      const energyIds = [...new Set(reviewsData.map((review) => review.energy_id))];
+      await fetchEnergies(energyIds);
+      setIsLoading(false);
+    };
+    loadData();
   }, []);
 
   // Удаление отзыва
@@ -58,11 +80,14 @@ const ReviewAdminPage = ({ token }) => {
     }
   };
 
-  // Функция для получения названия энергетика и бренда по energy_id
+  // Функция для получения названия энергетика и бренда
   const getEnergyName = (energyId) => {
-    const energy = energies.find((e) => e.id === energyId);
-    return `${energy.brand.name} ${energy.name}`;
+    return `${energyData[energyId].brand_name} ${energyData[energyId].name}`
   };
+
+  if (isLoading) {
+    return <div>Загрузка...</div>;
+  }
 
   return (
     <div className="review-admin-page">
@@ -78,7 +103,7 @@ const ReviewAdminPage = ({ token }) => {
           <li key={review.id}>
             <div>
               <p><strong>ID отзыва:</strong> {review.id}</p>
-              <p><strong>Пользователь:</strong> {review.user.username || "Не указано"}</p>
+              <p><strong>Пользователь:</strong> {review.user?.username || "Не указано"}</p>
               <p>
                 <strong>
                   Энергетик:
