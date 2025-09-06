@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
+import debounce from "lodash/debounce";
+
 import api from "../../hooks/api";
+
+import Pagination from "../../components/Pagination";
+
 import "./BrandAdminPage.css";
 
 const BrandAdminPage = ({ token }) => {
@@ -8,21 +13,45 @@ const BrandAdminPage = ({ token }) => {
   const [editingBrand, setEditingBrand] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
   // Загрузка списка брендов
-  const fetchBrands = async () => {
+  const fetchBrands = async (page = 1, search = "") => {
     try {
-      const response = await api.get("/brands/admin/");
-      setBrands(response.data);
+      const [brandsResponse, countResponse] = await Promise.all([
+        api.get("/brands/admin/", {
+          params: {
+            skip: (page - 1) * itemsPerPage,
+            limit: itemsPerPage,
+            search_query: search || undefined,
+          },
+        }),
+        api.get("/brands/admin/count/", {
+          params: {
+            search_query: search || undefined,
+          },
+        }),
+      ]);
+      setBrands(brandsResponse.data);
+      setTotalPages(Math.ceil(countResponse.data.total / itemsPerPage));
     } catch (err) {
       setError("Ошибка при загрузке брендов: " + (err.response?.data?.detail || err.message));
     }
   };
 
-  // Загрузка брендов при монтировании компонента
+  // Дебаунсинг для поиска
+  const debouncedFetchBrands = debounce((query) => {
+    setCurrentPage(1);
+    fetchBrands(1, query);
+  }, 300);
+
   useEffect(() => {
-    fetchBrands();
-  }, []);
+    debouncedFetchBrands(searchQuery);
+    return () => debouncedFetchBrands.cancel();
+  }, [searchQuery]);
 
   // Добавление нового бренда
   const handleAddBrand = async (e) => {
@@ -37,10 +66,10 @@ const BrandAdminPage = ({ token }) => {
         { name: newBrandName.trim() },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setBrands([...brands, response.data]);
       setNewBrandName("");
       setSuccess("Бренд успешно добавлен");
       setError(null);
+      fetchBrands(currentPage, searchQuery); // Обновляем список
     } catch (err) {
       setError("Ошибка при добавлении бренда: " + (err.response?.data?.detail || err.message));
       setSuccess(null);
@@ -66,11 +95,11 @@ const BrandAdminPage = ({ token }) => {
         { name: newBrandName.trim() },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setBrands(brands.map((b) => (b.id === editingBrand.id ? response.data : b)));
       setEditingBrand(null);
       setNewBrandName("");
       setSuccess("Бренд успешно обновлен");
       setError(null);
+      fetchBrands(currentPage, searchQuery); // Обновляем список
     } catch (err) {
       setError("Ошибка при обновлении бренда: " + (err.response?.data?.detail || err.message));
       setSuccess(null);
@@ -89,11 +118,11 @@ const BrandAdminPage = ({ token }) => {
     if (window.confirm("Вы уверены, что хотите удалить этот бренд?")) {
       try {
         await api.delete(`/brands/${brandId}`, {
-          headers: { Authorization: `Bearer ${token}` } }
-        );
-        setBrands(brands.filter((b) => b.id !== brandId));
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setSuccess("Бренд успешно удален");
         setError(null);
+        fetchBrands(currentPage, searchQuery); // Обновляем список
       } catch (err) {
         setError("Ошибка при удалении бренда: " + (err.response?.data?.detail || err.message));
         setSuccess(null);
@@ -101,10 +130,19 @@ const BrandAdminPage = ({ token }) => {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchBrands(page, searchQuery);
+  };
+
   return (
     <div className="brand-admin-page">
       <h1>Управление брендами</h1>
-
+      
       {/* Форма для добавления/редактирования бренда */}
       <form onSubmit={editingBrand ? handleSaveEdit : handleAddBrand}>
         <input
@@ -122,6 +160,15 @@ const BrandAdminPage = ({ token }) => {
         )}
       </form>
 
+      {/* Поле поиска */}
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={handleSearchChange}
+        placeholder="Поиск по названию бренда..."
+        className="search-input"
+      />
+
       {/* Сообщения об ошибках и успехе */}
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
@@ -138,6 +185,15 @@ const BrandAdminPage = ({ token }) => {
           </li>
         ))}
       </ul>
+
+      {/* Пагинация */}
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };

@@ -18,6 +18,16 @@
     margin-bottom: 20px;
 }
 
+.brand-admin-page .search-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid var(--text-color);
+    border-radius: 5px;
+    background: var(--card-background);
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+
 .brand-admin-page input {
     padding: 10px;
     font-size: 16px;
