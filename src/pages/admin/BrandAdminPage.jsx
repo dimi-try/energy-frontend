@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import debounce from "lodash/debounce";
 
 import api from "../../hooks/api";
@@ -177,7 +178,11 @@ const BrandAdminPage = ({ token }) => {
       <ul className="brand-list">
         {brands.map((brand) => (
           <li key={brand.id}>
-            <span>{brand.name}</span>
+            <span>
+              <Link to={`/brands/${brand.id}`} className="details-link">
+                {brand.name}
+              </Link>
+            </span>
             <div>
               <button onClick={() => handleEditBrand(brand)}>Редактировать</button>
               <button onClick={() => handleDeleteBrand(brand.id)}>Удалить</button>

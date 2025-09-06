@@ -3,6 +3,7 @@
     background: var(--background-color);
     color: var(--text-color);
     min-height: 100vh;
+    padding-bottom: 80px;
 }
 
 .brand-admin-page h1 {
