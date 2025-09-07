@@ -50,18 +50,33 @@ const UserAdminPage = ({ token }) => {
       {success && <p className="success">{success}</p>}
 
       {/* Список пользователей */}
-      <ul className="user-list">
+      <div className="user-list">
         {users.map((user) => (
-          <li key={user.id}>
-            <span>
-              ID: {user.id}, Имя: {user.username || "Не указано"}, Премиум: {user.is_premium ? "Да" : "Нет"}, Создан: {new Date(user.created_at).toLocaleString()}
-            </span>
-            <div>
+          <div key={user.id} className="user-card">
+            <div className="user-avatar-container">
+              {user.image_url ? (
+                <img
+                  src={`${process.env.REACT_APP_BACKEND_URL}/${user.image_url}`}
+                  alt={user.username || "Пользователь"}
+                  className="user-avatar"
+                  loading="lazy"
+                />
+              ) : (
+                <span className="user-placeholder">👤</span>
+              )}
+            </div>
+            <div className="user-info">
+              <p><strong>ID:</strong> {user.id}</p>
+              <p><strong>Имя:</strong> {user.username || "Не указано"}</p>
+              <p><strong>Премиум:</strong> {user.is_premium ? "Да" : "Нет"}</p>
+              <p><strong>Создан:</strong> {new Date(user.created_at).toLocaleString('ru-RU')}</p>
+            </div>
+            <div className="user-actions">
               <button onClick={() => handleDeleteUser(user.id)}>Удалить</button>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

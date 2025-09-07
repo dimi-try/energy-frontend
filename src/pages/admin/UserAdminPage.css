@@ -3,6 +3,7 @@
     background: var(--background-color);
     color: var(--text-color);
     min-height: 100vh;
+    padding-bottom: 80px;
 }
 
 .user-admin-page h1 {
@@ -14,35 +15,76 @@
 .user-admin-page .error {
     color: red;
     font-size: 14px;
+    text-align: center;
 }
 
 .user-admin-page .success {
     color: green;
     font-size: 14px;
+    text-align: center;
 }
 
 .user-admin-page .user-list {
-    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
     padding: 0;
 }
 
-.user-admin-page .user-list li {
+.user-admin-page .user-card {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    padding: 10px;
+    width: 250px;
+    padding: 15px;
     background: var(--card-background);
-    margin-bottom: 10px;
-    border-radius: 5px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.user-admin-page .user-list li div {
+.user-admin-page .user-avatar-container {
     display: flex;
-    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-.user-admin-page .user-list li button {
-    padding: 5px 10px;
+.user-admin-page .user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary-color);
+}
+
+.user-admin-page .user-placeholder {
+    font-size: 3rem;
+    color: var(--text-color);
+}
+
+.user-admin-page .user-info {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.user-admin-page .user-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.user-admin-page .user-info p strong {
+    color: var(--primary-color);
+}
+
+.user-admin-page .user-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.user-admin-page .user-actions button {
+    padding: 8px 16px;
     background: var(--primary-color);
     color: var(--button-text-color);
     border: none;
@@ -51,6 +93,6 @@
     font-size: 14px;
 }
 
-.user-admin-page .user-list li button:hover {
+.user-admin-page .user-actions button:hover {
     opacity: 0.9;
 }
