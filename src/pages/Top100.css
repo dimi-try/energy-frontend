@@ -32,3 +32,12 @@
   flex-direction: column; /* Вертикальное расположение */
   gap: 10px; /* Отступ между карточками */
 }
+
+/* Стили для переноса текста и обрезки длинных слов */
+.card-content h2,
+.card-content h3 {
+  word-wrap: break-word; /* Перенос слов */
+  overflow-wrap: break-word; /* Совместимость для переноса */
+  word-break: break-word; /* Обрезка очень длинных слов */
+  max-width: 100%; /* Ограничение по ширине */
+}
