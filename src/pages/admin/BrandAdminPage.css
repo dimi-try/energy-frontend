@@ -3,6 +3,7 @@
     background: var(--background-color);
     color: var(--text-color);
     min-height: 100vh;
+    padding-bottom: 80px;
 }
 
 .brand-admin-page h1 {
@@ -15,6 +16,16 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-bottom: 20px;
+}
+
+.brand-admin-page .search-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid var(--text-color);
+    border-radius: 5px;
+    background: var(--card-background);
+    color: var(--text-color);
     margin-bottom: 20px;
 }
 

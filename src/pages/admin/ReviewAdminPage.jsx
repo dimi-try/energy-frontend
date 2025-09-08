@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import api from "../../hooks/api";
+import Pagination from "../../components/Pagination"; // Импортируем компонент пагинации
 
 import "./ReviewAdminPage.css";
 
@@ -11,14 +12,27 @@ const ReviewAdminPage = ({ token }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(() => {
+    const savedPage = sessionStorage.getItem("review-admin-page");
+    return savedPage ? parseInt(savedPage, 10) : 1;
+  });
+  const [totalPages, setTotalPages] = useState(1);
+  const reviewsPerPage = 10; // Количество отзывов на странице
 
-  // Загрузка списка отзывов
+  // Загрузка списка отзывов и общего количества
   const fetchReviews = async () => {
     try {
-      const response = await api.get("/reviews/", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return response.data;
+      const [reviewsResponse, countResponse] = await Promise.all([
+        api.get(`/reviews/?limit=${reviewsPerPage}&offset=${(page - 1) * reviewsPerPage}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        api.get(`/reviews/count/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+      setReviews(reviewsResponse.data);
+      setTotalPages(Math.ceil(countResponse.data.total / reviewsPerPage));
+      return reviewsResponse.data;
     } catch (err) {
       setError("Ошибка при загрузке отзывов: " + (err.response?.data?.detail || err.message));
       return [];
@@ -50,18 +64,22 @@ const ReviewAdminPage = ({ token }) => {
     await Promise.all(promises);
   };
 
-  // Загрузка данных при монтировании компонента
+  // Загрузка данных при монтировании компонента или изменении страницы
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
       const reviewsData = await fetchReviews();
-      setReviews(reviewsData);
       const energyIds = [...new Set(reviewsData.map((review) => review.energy_id))];
       await fetchEnergies(energyIds);
       setIsLoading(false);
     };
     loadData();
-  }, []);
+  }, [page]); // Добавляем page в зависимости
+
+  // Сохранение текущей страницы
+  useEffect(() => {
+    sessionStorage.setItem("review-admin-page", page);
+  }, [page]);
 
   // Удаление отзыва
   const handleDeleteReview = async (reviewId) => {
@@ -73,6 +91,11 @@ const ReviewAdminPage = ({ token }) => {
         setReviews(reviews.filter((review) => review.id !== reviewId));
         setSuccess("Отзыв успешно удален");
         setError(null);
+        // Обновляем общее количество страниц
+        const countResponse = await api.get(`/reviews/count/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setTotalPages(Math.ceil(countResponse.data.total / reviewsPerPage));
       } catch (err) {
         setError("Ошибка при удалении отзыва: " + (err.response?.data?.detail || err.message));
         setSuccess(null);
@@ -82,7 +105,9 @@ const ReviewAdminPage = ({ token }) => {
 
   // Функция для получения названия энергетика и бренда
   const getEnergyName = (energyId) => {
-    return `${energyData[energyId].brand_name} ${energyData[energyId].name}`
+    return energyData[energyId]?.name
+      ? `${energyData[energyId].brand_name} ${energyData[energyId].name}`
+      : "Загрузка...";
   };
 
   if (isLoading) {
@@ -101,18 +126,24 @@ const ReviewAdminPage = ({ token }) => {
       <ul className="review-list">
         {reviews.map((review) => (
           <li key={review.id}>
-            <div>
+            <div className="review-content">
               <p><strong>ID отзыва:</strong> {review.id}</p>
               <p><strong>Пользователь:</strong> {review.user?.username || "Не указано"}</p>
               <p>
-                <strong>
-                  Энергетик:
-                </strong> 
+                <strong>Энергетик:</strong>
                 <Link to={`/energies/${review.energy_id}`} className="details-link">
                   {getEnergyName(review.energy_id)}
                 </Link>
               </p>
-              <p><strong>Текст:</strong> {review.review_text}</p>
+              <p><strong>Текст:</strong> {review.review_text || "Нет текста"}</p>
+              {review.image_url && (
+                <div className="review-image">
+                  <img
+                    src={`${process.env.REACT_APP_BACKEND_URL}/${review.image_url}`}
+                    alt={`Отзыв ${review.id}`}
+                  />
+                </div>
+              )}
               <p><strong>Средний рейтинг:</strong> {review.average_rating_review}</p>
               <p><strong>Создан:</strong> {new Date(review.created_at).toLocaleString()}</p>
             </div>
@@ -122,6 +153,15 @@ const ReviewAdminPage = ({ token }) => {
           </li>
         ))}
       </ul>
+
+      {/* Пагинация */}
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      )}
     </div>
   );
 };

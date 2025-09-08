@@ -3,6 +3,7 @@
     background: var(--background-color);
     color: var(--text-color);
     min-height: 100vh;
+    padding-bottom: 80px;
 }
 
 .review-admin-page h1 {
@@ -36,10 +37,11 @@
     border-radius: 5px;
 }
 
-.review-admin-page .review-list li div {
+.review-admin-page .review-list li .review-content {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    flex: 1;
 }
 
 .review-admin-page .review-list li button {
@@ -54,4 +56,37 @@
 
 .review-admin-page .review-list li button:hover {
     opacity: 0.9;
+}
+
+/* Стили для изображения в отзыве */
+.review-image img {
+    max-width: 100%;
+    max-height: 200px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .review-admin-page .review-list li {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .review-image img {
+        max-height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .review-image img {
+        max-height: 100px;
+    }
+
+    .review-admin-page .review-list li button {
+        width: 100%;
+        text-align: center;
+    }
 }

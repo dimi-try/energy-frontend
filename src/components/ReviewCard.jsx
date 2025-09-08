@@ -104,7 +104,18 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
               🥤 {review.brand} {review.energy}
             </Link>
           ) : (
-            `👤 ${review.user?.username || "Имя пустое"}`
+            <div className="review-user">
+              {review.user?.image_url ? (
+                <img
+                  src={`${process.env.REACT_APP_BACKEND_URL}/${review.user.image_url}`}
+                  alt={review.user?.username || "Пользователь"}
+                  className="user-avatar"
+                />
+              ) : (
+                <span className="user-placeholder">👤</span>
+              )}
+              <span className="username">{review.user?.username || "Имя пустое"}</span>
+            </div>
           )}
         </span>
       </div>

@@ -86,6 +86,33 @@
   color: var(--text-color);
 }
 
+/* Стили для блока с аватаркой и именем */
+.review-user {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Отступ между аватаркой и именем */
+}
+
+/* Стили для аватарки */
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; /* Круглая аватарка */
+  object-fit: cover;
+}
+
+/* Стили для эмодзи-заглушки */
+.user-placeholder {
+  font-size: 1.2rem;
+}
+
+/* Стили для имени пользователя */
+.username {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
   .review-image img {
