@@ -323,9 +323,9 @@ const EnergyAdminPage = ({ token }) => {
           error={error}
           setError={setError}
         />
-        <button type="submit">{editingEnergy ? "Сохранить" : "Добавить"}</button>
+        <button className="energy-admin-page-button" type="submit">{editingEnergy ? "Сохранить" : "Добавить"}</button>
         {editingEnergy && (
-          <button type="button" onClick={handleCancelEdit}>
+          <button className="energy-admin-page-button" type="button" onClick={handleCancelEdit}>
             Отмена
           </button>
         )}
@@ -354,8 +354,8 @@ const EnergyAdminPage = ({ token }) => {
               </Link>
             </span>
             <div>
-              <button onClick={() => handleEditEnergy(energy)}>Редактировать</button>
-              <button onClick={() => handleDeleteEnergy(energy.id)}>Удалить</button>
+              <button className="energy-admin-page-button" onClick={() => handleEditEnergy(energy)}>Редактировать</button>
+              <button className="energy-admin-page-button" onClick={() => handleDeleteEnergy(energy.id)}>Удалить</button>
             </div>
           </li>
         ))}
