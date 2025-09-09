@@ -1,7 +1,8 @@
 /* Контейнер профиля (использует .container из общих стилей) */
 .profile-container {
   text-align: center; /* Центрируем контент */
-  padding-top: 20px; /* Отступ сверху */
+  padding: 20px; /* Внешние отступы для контейнера */
+  box-sizing: border-box;
 }
 
 /* Заголовок профиля */
@@ -78,29 +79,80 @@
 /* Ряд статистики */
 .stats-row {
   display: flex; /* Flexbox для двух колонок */
-  gap: 20px; /* Отступ между карточками */
+  gap: 20px; /* Внешний отступ между карточками */
   margin-bottom: 30px; /* Отступ снизу */
-  flex-wrap: wrap; /* Перенос на маленьких экранах */
+  flex-wrap: nowrap; /* Запрещаем перенос на новую строку */
+  width: 100%; /* Полная ширина контейнера */
+  box-sizing: border-box;
+  justify-content: space-between; /* Равномерное распределение */
 }
 
+/* Карточка статистики */
 .stat-card {
-  flex: 1; /* Равная ширина */
-  min-width: 200px; /* Минимальная ширина */
+  flex: 0 0 calc(50% - 10px); /* 50% минус половина gap (20px / 2) */
   padding: 20px; /* Внутренние отступы */
-  text-align: center; /* Центрируем текст */
+  box-sizing: border-box; /* Учитываем padding в ширине */
+  max-width: calc(50% - 10px); /* Ограничиваем ширину */
 }
 
+.stat-content {
+  display: flex;
+  justify-content: space-between; /* Разделяем заголовок и значение */
+  align-items: flex-start; /* Выравнивание по верхнему краю */
+  width: 100%; /* Полная ширина внутри карточки */
+}
+
+.stat-card h3,
+.stat-card .stat-value {
+  flex: 0 0 calc(50% - 10px); /* 50% минус отступы */
+  text-align: left; /* Выравнивание по левому краю */
+  padding: 0 5px; /* Уменьшенные отступы для точного контроля */
+  box-sizing: border-box; /* Учитываем padding */
+  white-space: normal; /* Разрешаем перенос слов */
+  overflow-wrap: break-word; /* Перенос слов, если не помещаются */
+  word-break: normal; /* Перенос целых слов по умолчанию */
+  max-width: calc(50% - 10px); /* Ограничиваем ширину */
+}
+
+/* Заголовок */
 .stat-card h3 {
   font-size: 1.2rem; /* Размер заголовка */
-  margin-bottom: 10px; /* Отступ снизу */
+  margin: 0; /* Убираем отступы */
 }
 
-.stat-value {
+/* Значение */
+.stat-card .stat-value {
   font-size: 1.5rem; /* Размер значения */
   font-weight: 600; /* Полужирный шрифт */
   color: var(--primary-color); /* Акцентный цвет */
 }
 
+/* Для длинных слов */
+.stat-card h3.long-word,
+.stat-card .stat-value.long-word {
+  word-break: break-all; /* Перенос по буквам для длинных слов */
+  overflow-wrap: break-all; /* Совместимость */
+  hyphens: auto; /* Автоматический перенос */
+}
+
+/* Для ссылок в stat-value */
+.stat-value a {
+  color: var(--primary-color);
+  text-decoration: none;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal; /* Перенос целых слов */
+  display: inline-block; /* Для корректного переноса */
+  max-width: 100%; /* Ограничиваем ширину ссылки */
+}
+
+.stat-value a.long-word {
+  word-break: break-all;
+  overflow-wrap: break-all;
+  hyphens: auto;
+}
+
+/* Стили для отсутствия отзывов */
 .no-reviews {
   text-align: center; /* Центрируем текст */
   color: #888; /* Серый цвет */
@@ -248,6 +300,17 @@
   .stats-row {
     flex-direction: column; /* Вертикальное расположение */
     gap: 15px; /* Уменьшенный отступ */
+  }
+
+  .stat-card {
+    flex: 0 0 100%; /* Полная ширина на маленьких экранах */
+    max-width: 100%; /* Полная ширина */
+  }
+
+  .stat-card h3,
+  .stat-card .stat-value {
+    flex: 0 0 calc(50% - 10px); /* Сохраняем 50/50 даже на маленьких экранах */
+    max-width: calc(50% - 10px);
   }
 
   .profile-header h1 {
