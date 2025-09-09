@@ -236,10 +236,10 @@ const EnergyDrinkPage = ({ userId, token }) => {
           <h1>{energy.brand?.name} {energy.name}</h1>
           <p className="rating">
             <span className="star">★</span>
-            {energy.average_rating ? `${energy.average_rating}/10` : "-"} ({energy.review_count} отзывов)
+            {energy.average_rating || "0.0"}/10 ({energy.review_count} отзывов)
           </p>
           {/* Информация об энергетике */}
-          <UnifiedCard className="energy-info">
+          <UnifiedCard>
             <h2>Об энергетике</h2>
             <p>
               <strong>Производитель:</strong>
@@ -252,12 +252,16 @@ const EnergyDrinkPage = ({ userId, token }) => {
             <p>
               <strong>Категория:</strong> {energy.category.name}
             </p>
-            <p>
-              <strong>Описание:</strong> {energy.description}
-            </p>
-            <p>
-              <strong>Ингредиенты:</strong> {energy.ingredients}
-            </p>
+            {energy.description && (
+              <p>
+                <strong>Описание:</strong> {energy.description}
+              </p>
+            )}
+            {energy.ingredients && (
+              <p>
+                <strong>Ингредиенты:</strong> {energy.ingredients}
+              </p>
+            )}
           </UnifiedCard>
         </div>
       </div>
