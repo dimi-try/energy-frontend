@@ -45,7 +45,7 @@
     resize: vertical;
 }
 
-.energy-admin-page button {
+.energy-admin-page-button {
     padding: 10px;
     background: var(--primary-color);
     color: var(--button-text-color);
@@ -55,7 +55,7 @@
     font-size: 16px;
 }
 
-.energy-admin-page button:hover {
+.energy-admin-page-button:hover {
     opacity: 0.9;
 }
 

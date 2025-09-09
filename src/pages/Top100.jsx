@@ -8,7 +8,10 @@ import "./Top100.css";
 // Компонент страницы Топ 100
 const Top100 = () => {
   // Состояние для типа топа (энергетики или бренды)
-  const [topType, setTopType] = useState("energies");
+  const [topType, setTopType] = useState(() => {
+    // Загружаем сохраненный тип топа или по умолчанию "energies"
+    return sessionStorage.getItem("lastTopType") === "brands" ? "brands" : "energies";
+  });
   // Состояние для списка энергетиков
   const [energies, setEnergies] = useState([]);
   // Состояние для списка брендов
@@ -30,6 +33,11 @@ const Top100 = () => {
   const [totalPages, setTotalPages] = useState(1);
   // Количество элементов на странице
   const itemsPerPage = 10;
+
+  // Сохраняем выбранный тип топа
+  useEffect(() => {
+    sessionStorage.setItem("lastTopType", topType);
+  }, [topType]);
 
   // Загружаем общее количество записей
   useEffect(() => {
@@ -128,12 +136,18 @@ const Top100 = () => {
                     >
                       <div className="energy-card-image">
                         {item.image_url ? (
-                          <img src={`${process.env.REACT_APP_BACKEND_URL}/${item.image_url}`} alt={item.name} />
-                        ) : (
-                          <div className="no-image-card">Нет фото</div>
-                        )}
+                          <img
+                            src={`${process.env.REACT_APP_BACKEND_URL}/${item.image_url}`}
+                            alt={item.name}
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div className="no-image-card"> </div>
                       </div>
-                      <div>
+                      <div className="card-content">
                         <h2>
                           {item.brand?.name} {item.name}
                         </h2>
@@ -141,9 +155,7 @@ const Top100 = () => {
                           <span className="star">★</span> {item.average_rating}/10 (
                           {item.review_count} отзывов)
                         </p>
-                        <p>
-                          {item.category.name}
-                        </p>
+                        <p>{item.category.name}</p>
                       </div>
                     </Card>
                   ))
@@ -157,7 +169,7 @@ const Top100 = () => {
                     rank={(page - 1) * itemsPerPage + index + 1}
                     onClick={() => handleNavigate(`/brands/${item.id}/`)}
                   >
-                    <div>
+                    <div className="card-content">
                       <h3>{item.name}</h3>
                       <p>
                         <span className="star">★</span> {item.average_rating}/10 (

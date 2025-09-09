@@ -105,17 +105,21 @@ const BrandPage = () => {
                 >
                   <div className="energy-card-image">
                     {energy.image_url ? (
-                      <img src={`${process.env.REACT_APP_BACKEND_URL}/${energy.image_url}`} alt={energy.name} />
-                    ) : (
-                      <div className="no-image-card">Нет фото</div>
-                    )}
+                      <img
+                        src={`${process.env.REACT_APP_BACKEND_URL}/${energy.image_url}`}
+                        alt={energy.name}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div className="no-image-card"> </div>
                   </div>
-                  <div>
+                  <div className="card-content">
                     <h2>{energy.name}</h2>
                     <p><span className="star">★</span> {energy.average_rating || "0.0"}/10 ({energy.review_count || 0} отзывов)</p>
-                    <p>
-                      {energy.category.name}
-                    </p>
+                    <p>{energy.category.name}</p>
                   </div>
                 </Card>
               ))}

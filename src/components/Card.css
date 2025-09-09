@@ -8,63 +8,55 @@
   align-items: center; /* Выравнивание по центру */
   gap: 10px; /* Отступ между элементами */
   transition: var(--transition); /* Плавные переходы */
+  position: relative; /* Позиционирование для корректного отображения */
 }
 
 /* Стили для изображения энергетика */
 .energy-card-image {
-  flex: 0 0 120px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex: 0 0 120px; /* Фиксированная ширина */
+  display: flex; /* Flexbox для центрирования */
+  justify-content: center; /* Центрируем по горизонтали */
+  align-items: center; /* Центрируем по вертикали */
+  height: 100%; /* Занимает всю высоту карточки */
 }
 
+/* Стили для изображения */
 .energy-card-image img {
-  max-width: 100%;
-  max-height: 80px;
-  height: auto;
-  object-fit: contain;
-  border-radius: 8px;
+  width: 100%; /* Полная ширина */
+  height: 100%; /* Полная высота */
+  object-fit: cover; /* Заполнение с сохранением пропорций */
+  border-radius: 8px; /* Скругленные углы */
+  display: block; /* Блочное отображение */
 }
 
+/* Стили для замещающего квадрата при отсутствии изображения */
 .energy-card-image .no-image-card {
-  width: 100%;
-  max-width: 80px;
-  height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  font-size: 1.2rem;
-  color: #666;
+  width: 100%; /* Полная ширина */
+  height: 100%; /* Полная высота */
+  display: flex; /* Flexbox для центрирования */
+  justify-content: center; /* Центрируем по горизонтали */
+  align-items: center; /* Центрируем по вертикали */
+  border-radius: 8px; /* Скругленные углы */
+  background-color: #ffffff; /* Белый фон */
+  display: none; /* Скрыт по умолчанию */
 }
 
+/* Стили для контента карточки */
+.card-content {
+  flex: 1; /* Занимает оставшееся пространство */
+  overflow: hidden; /* Скрываем переполнение */
+}
 
-/* Адаптивность */
+/* Адаптивность для планшетов */
 @media (max-width: 768px) {
   .energy-card-image {
-    flex: 0 0 40%;
-    max-width: 50px;
-  }
-
-  .energy-card-image img,
-  .energy-card-image .no-image-card {
-    max-width: 100%;
-    max-height: 50px;
-    height: auto;
+    flex: 0 0 80px; /* Уменьшенная ширина */
   }
 }
 
+/* Адаптивность для мобильных */
 @media (max-width: 480px) {
   .energy-card-image {
-    flex: 0 0 100%;
-    max-width: 40px;
-  }
-
-  .energy-card-image img,
-  .energy-card-image .no-image-card {
-    max-width: 100%;
-    max-height: 40px;
-    height: auto;
+    flex: 0 0 60px; /* Еще меньшая ширина */
   }
 }

@@ -251,7 +251,7 @@ const Profile = ({ userId, token }) => {
                 to={`/energies/${profile.favorite_energy.id}`}
                 className="details-link"
               >
-                {profile.favorite_energy.name}
+                {profile.favorite_energy.brand.name} {profile.favorite_energy.name}
               </Link>
             ) : (
               "-"

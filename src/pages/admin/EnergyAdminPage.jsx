@@ -12,6 +12,7 @@ import "./EnergyAdminPage.css";
 const EnergyAdminPage = ({ token }) => {
   const [energies, setEnergies] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [brandsSelect, setBrandsSelect] = useState([]);
   const [categories, setCategories] = useState([]);
   const [newEnergy, setNewEnergy] = useState({
     name: "",
@@ -65,6 +66,17 @@ const EnergyAdminPage = ({ token }) => {
     }
   };
 
+  const fetchBrandsSelect = async () => {
+    try {
+      const response = await api.get("/brands/admin/select", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setBrandsSelect(response.data);
+    } catch (err) {
+      setError("Ошибка при загрузке брендов: " + (err.response?.data?.detail || err.message));
+    }
+  };
+
   const fetchCategories = async () => {
     try {
       const response = await api.get("/categories/admin/", {
@@ -86,6 +98,7 @@ const EnergyAdminPage = ({ token }) => {
   useEffect(() => {
     fetchBrands();
     fetchCategories();
+    fetchBrandsSelect();
   }, []);
 
   useEffect(() => {
@@ -272,7 +285,7 @@ const EnergyAdminPage = ({ token }) => {
           required
         >
           <option value="">Выберите бренд</option>
-          {brands.map((brand) => (
+          {brandsSelect.map((brand) => (
             <option key={brand.id} value={brand.id}>
               {brand.name}
             </option>
@@ -310,9 +323,9 @@ const EnergyAdminPage = ({ token }) => {
           error={error}
           setError={setError}
         />
-        <button type="submit">{editingEnergy ? "Сохранить" : "Добавить"}</button>
+        <button className="energy-admin-page-button" type="submit">{editingEnergy ? "Сохранить" : "Добавить"}</button>
         {editingEnergy && (
-          <button type="button" onClick={handleCancelEdit}>
+          <button className="energy-admin-page-button" type="button" onClick={handleCancelEdit}>
             Отмена
           </button>
         )}
@@ -341,8 +354,8 @@ const EnergyAdminPage = ({ token }) => {
               </Link>
             </span>
             <div>
-              <button onClick={() => handleEditEnergy(energy)}>Редактировать</button>
-              <button onClick={() => handleDeleteEnergy(energy.id)}>Удалить</button>
+              <button className="energy-admin-page-button" onClick={() => handleEditEnergy(energy)}>Редактировать</button>
+              <button className="energy-admin-page-button" onClick={() => handleDeleteEnergy(energy.id)}>Удалить</button>
             </div>
           </li>
         ))}

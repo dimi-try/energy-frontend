@@ -153,9 +153,9 @@ const BrandAdminPage = ({ token }) => {
           placeholder="Название бренда"
           maxLength={255}
         />
-        <button type="submit">{editingBrand ? "Сохранить" : "Добавить"}</button>
+        <button className="brand-admin-page-button" type="submit">{editingBrand ? "Сохранить" : "Добавить"}</button>
         {editingBrand && (
-          <button type="button" onClick={handleCancelEdit}>
+          <button className="brand-admin-page-button" type="button" onClick={handleCancelEdit}>
             Отмена
           </button>
         )}
@@ -184,8 +184,8 @@ const BrandAdminPage = ({ token }) => {
               </Link>
             </span>
             <div>
-              <button onClick={() => handleEditBrand(brand)}>Редактировать</button>
-              <button onClick={() => handleDeleteBrand(brand.id)}>Удалить</button>
+              <button className="brand-admin-page-button" onClick={() => handleEditBrand(brand)}>Редактировать</button>
+              <button className="brand-admin-page-button" onClick={() => handleDeleteBrand(brand.id)}>Удалить</button>
             </div>
           </li>
         ))}
