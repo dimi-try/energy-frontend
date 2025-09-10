@@ -15,10 +15,6 @@ const BottomNav = ({ role }) => (
         <span>🛠️</span> Админ-панель
       </NavLink>
     )}
-    {/* Ссылка на страницу поиска */}
-    <NavLink to="/search" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
-      <span>🔍</span> Поиск
-    </NavLink>
     {/* Ссылка на страницу профиля */}
     <NavLink to="/profile" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
       <span>👤</span> Профиль
