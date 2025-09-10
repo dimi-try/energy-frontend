@@ -8,7 +8,6 @@ import { useUserVerification } from "./hooks/useUserVerification";
 import "./styles/App.css";
 
 import Top100 from "./pages/Top100";
-import Search from "./pages/Search";
 import Profile from "./pages/Profile";
 import EnergyDrinkPage from "./pages/EnergyDrinkPage";
 import BrandPage from "./pages/BrandPage";
@@ -105,7 +104,6 @@ function App() {
     <div className={`App ${telegram?.colorScheme || "light"}`}>
       <Routes>
         <Route index element={<Top100 />} />
-        <Route path="/search" element={<Search />} />
         <Route path="/profile" element={<Profile userId={userId} token={token} />} />
         <Route path="/energies/:id" element={<EnergyDrinkPage userId={userId} token={token} />} />
         <Route path="/brands/:id" element={<BrandPage />} />
