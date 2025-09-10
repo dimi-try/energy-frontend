@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../hooks/api";
+import { formatTimestamp } from "../../hooks/formatDate";
 import "./BlacklistAdminPage.css";
 
 const BlacklistAdminPage = ({ token }) => {
@@ -111,7 +112,7 @@ const BlacklistAdminPage = ({ token }) => {
                 <p><strong>ID пользователя:</strong> {entry.user_id}</p>
                 <p><strong>Пользователь:</strong> {entry.username || "Неизвестный пользователь"}</p>
                 <p><strong>Причина:</strong> {entry.reason || "Не указана"}</p>
-                <p><strong>Добавлен:</strong> {new Date(entry.created_at).toLocaleString()}</p>
+                <p><strong>Добавлен:</strong> {formatTimestamp(entry.created_at)}</p>
               </div>
               <div>
                 <button onClick={() => handleRemoveFromBlacklist(entry.user_id)}>Удалить</button>

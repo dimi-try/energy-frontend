@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../hooks/api";
+import { formatTimestamp } from "../../hooks/formatDate"; 
 import Pagination from "../../components/Pagination";
 import "./UserAdminPage.css";
 
@@ -100,7 +101,7 @@ const UserAdminPage = ({ token }) => {
               <p><strong>ID:</strong> {user.id}</p>
               <p><strong>Имя:</strong> {user.username || "Не указано"}</p>
               <p><strong>Премиум:</strong> {user.is_premium ? "Да" : "Нет"}</p>
-              <p><strong>Создан:</strong> {new Date(user.created_at).toLocaleString("ru-RU")}</p>
+              <p><strong>Создан:</strong> {formatTimestamp(user.created_at)}</p>
             </div>
             <div className="user-actions">
               <button onClick={() => handleDeleteUser(user.id)}>Удалить</button>
