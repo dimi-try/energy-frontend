@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import api from "../hooks/api";
-import { formatTimestamp } from "../../hooks/formatDate";
+import { formatTimestamp } from "../hooks/formatDate";
 
 import ImageUpload from './ImageUpload';
 
