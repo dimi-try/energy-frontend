@@ -108,8 +108,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
         .filter(([_, value]) => value !== "")
         .map(([criteriaId, value]) => ({
           criteria_id: parseInt(criteriaId),
-          rating_value: parseFloat(value),
-          created_at: new Date().toISOString(),
+          rating_value: parseFloat(value)
         }));
 
       if (ratings.length === 0) {
@@ -128,7 +127,6 @@ const EnergyDrinkPage = ({ userId, token }) => {
         user_id: userId,
         review_text: newReview.review_text || null,
         energy_id: parseInt(id),
-        created_at: new Date().toISOString(),
         ratings,
         image_url: imageUrl,
       });
@@ -334,6 +332,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
                   criteria={criteria}
                   isProfile={false}
                   userId={userId}
+                  token={token}
                   onReviewUpdated={handleReviewUpdated}
                 />
               ))}

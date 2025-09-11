@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import api from "../../hooks/api";
+
+import { formatTimestamp } from "../../hooks/formatDate";
+
 import "./BlacklistAdminPage.css";
 
 const BlacklistAdminPage = ({ token }) => {
@@ -33,7 +38,7 @@ const BlacklistAdminPage = ({ token }) => {
     try {
       const response = await api.post(
         "/blacklist/",
-        { user_id: parseInt(newUserId), reason },
+        { user_id: newUserId, reason },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setBlacklist([...blacklist, response.data]);
@@ -108,10 +113,17 @@ const BlacklistAdminPage = ({ token }) => {
             <li key={entry.id}>
               <div>
                 <p><strong>ID записи:</strong> {entry.id}</p>
-                <p><strong>ID пользователя:</strong> {entry.user_id}</p>
-                <p><strong>Пользователь:</strong> {entry.username || "Неизвестный пользователь"}</p>
+                <p>
+                  <strong>
+                    ID пользователя:
+                  </strong> 
+                  <Link to={`/profile/${entry.user_id}`}>
+                    {entry.user_id}
+                  </Link>
+                </p>
+                <p><strong>Пользователь:</strong> {entry.username || "Имя не указано"}</p>
                 <p><strong>Причина:</strong> {entry.reason || "Не указана"}</p>
-                <p><strong>Добавлен:</strong> {new Date(entry.created_at).toLocaleString()}</p>
+                <p><strong>Добавлен:</strong> {formatTimestamp(entry.created_at)}</p>
               </div>
               <div>
                 <button onClick={() => handleRemoveFromBlacklist(entry.user_id)}>Удалить</button>

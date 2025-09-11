@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import api from "../hooks/api";
+import { formatTimestamp } from "../hooks/formatDate";
 
 import ImageUpload from './ImageUpload';
 
 import "./ReviewCard.css";
 
-const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdated }) => {
+const ReviewCard = ({ review, criteria, isProfile = false, userId, token, onReviewUpdated }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editReview, setEditReview] = useState({
     review_text: review.review_text || "",
@@ -87,13 +88,6 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
     }
   };
 
-  // Форматирование даты в читаемый формат
-  const formattedDate = new Date(review.created_at).toLocaleDateString('ru-RU', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-
   return (
     <div className="card review-card">
       {/* Заголовок отзыва */}
@@ -114,7 +108,14 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
               ) : (
                 <span className="user-placeholder">👤</span>
               )}
-              <span className="username">{review.user?.username || "Имя пустое"}</span>
+              {/* Делаем ник пользователя кликабельным для авторизованных пользователей */}
+              {userId && token ? (
+                <Link to={`/profile/${review.user_id}`} className="username">
+                  {review.user?.username || "Имя пустое"}
+                </Link>
+              ) : (
+                <span className="username">{review.user?.username || "Имя пустое"}</span>
+              )}
             </div>
           )}
         </span>
@@ -203,7 +204,7 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
 
       {/* Дата внизу карточки */}
       <div className="review-footer">
-        <span className="review-date"> 📅 {formattedDate}</span>
+        <span className="review-date"> 📅 {formatTimestamp(review.created_at)}</span>
       </div>
 
       {/* Кнопки редактирования и удаления для владельца отзыва */}

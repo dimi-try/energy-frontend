@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import api from "../../hooks/api";
-import Pagination from "../../components/Pagination"; // Импортируем компонент пагинации
+
+import { formatTimestamp } from "../../hooks/formatDate";
+import Pagination from "../../components/Pagination";
 
 import "./ReviewAdminPage.css";
 
@@ -128,7 +130,15 @@ const ReviewAdminPage = ({ token }) => {
           <li key={review.id}>
             <div className="review-content">
               <p><strong>ID отзыва:</strong> {review.id}</p>
-              <p><strong>Пользователь:</strong> {review.user?.username || "Не указано"}</p>
+              <p>
+                <strong>
+                  ID пользователя:
+                </strong> 
+                <Link to={`/profile/${review.user.id}`}>
+                  {review.user.id}
+                </Link>
+              </p>
+              <p><strong>Пользователь:</strong> {review.user?.username || "Имя не указано"}</p>
               <p>
                 <strong>Энергетик:</strong>
                 <Link to={`/energies/${review.energy_id}`} className="details-link">
@@ -145,7 +155,7 @@ const ReviewAdminPage = ({ token }) => {
                 </div>
               )}
               <p><strong>Средний рейтинг:</strong> {review.average_rating_review}</p>
-              <p><strong>Создан:</strong> {new Date(review.created_at).toLocaleString()}</p>
+              <p><strong>Создан:</strong> {formatTimestamp(review.created_at)}</p>
             </div>
             <div>
               <button onClick={() => handleDeleteReview(review.id)}>Удалить</button>

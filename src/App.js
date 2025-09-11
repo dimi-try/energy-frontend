@@ -8,7 +8,6 @@ import { useUserVerification } from "./hooks/useUserVerification";
 import "./styles/App.css";
 
 import Top100 from "./pages/Top100";
-import Search from "./pages/Search";
 import Profile from "./pages/Profile";
 import EnergyDrinkPage from "./pages/EnergyDrinkPage";
 import BrandPage from "./pages/BrandPage";
@@ -93,20 +92,21 @@ function App() {
     }
   }, [initData, verifyUser, telegram]);
 
-  // Защита админских маршрутов
+  // Защита админских маршрутов и профилей
   useEffect(() => {
+    // Проверяем доступ к админским маршрутам
     if (role && role !== "admin" && location.pathname.startsWith("/admin")) {
       navigate("/"); // Перенаправляем неадминов на главную
     }
-  }, [role, location, navigate]);
+  }, [role, userId, token, location, navigate]);
 
   // Основной рендер приложения
   return (
     <div className={`App ${telegram?.colorScheme || "light"}`}>
       <Routes>
         <Route index element={<Top100 />} />
-        <Route path="/search" element={<Search />} />
         <Route path="/profile" element={<Profile userId={userId} token={token} />} />
+        <Route path="/profile/:profileUserId" element={<Profile userId={userId} token={token} />} />
         <Route path="/energies/:id" element={<EnergyDrinkPage userId={userId} token={token} />} />
         <Route path="/brands/:id" element={<BrandPage />} />
         {role === "admin" && (

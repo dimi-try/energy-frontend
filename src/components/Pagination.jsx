@@ -38,7 +38,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         disabled={currentPage === 1}
         className="pagination"
       >
-        &lt;
+        &lt;&lt;
       </button>
       {getPageNumbers().map((pageNum) => (
         <button
@@ -54,7 +54,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         disabled={currentPage === totalPages}
         className="pagination"
       >
-        &gt;
+        &gt;&gt;
       </button>
     </div>
   );
