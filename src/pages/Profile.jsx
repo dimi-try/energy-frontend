@@ -16,7 +16,7 @@ const Profile = ({ userId: currentUserId, token }) => {
   // Получаем userId из URL
   const { profileUserId } = useParams();
   // Используем ID из URL или текущего пользователя
-  const targetUserId = profileUserId ? parseInt(profileUserId, 10) : currentUserId;
+  const targetUserId = profileUserId ? BigInt(profileUserId) : currentUserId;
 
   // Состояние для данных профиля
   const [profile, setProfile] = useState(null);

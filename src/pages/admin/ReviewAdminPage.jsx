@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import api from "../../hooks/api";
+
 import { formatTimestamp } from "../../hooks/formatDate";
-import Pagination from "../../components/Pagination"; // Импортируем компонент пагинации
+import Pagination from "../../components/Pagination";
 
 import "./ReviewAdminPage.css";
 
@@ -129,7 +130,15 @@ const ReviewAdminPage = ({ token }) => {
           <li key={review.id}>
             <div className="review-content">
               <p><strong>ID отзыва:</strong> {review.id}</p>
-              <p><strong>Пользователь:</strong> {review.user?.username || "Не указано"}</p>
+              <p>
+                <strong>
+                  ID пользователя:
+                </strong> 
+                <Link to={`/profile/${review.user.id}`}>
+                  {review.user.id}
+                </Link>
+              </p>
+              <p><strong>Пользователь:</strong> {review.user?.username || "Имя не указано"}</p>
               <p>
                 <strong>Энергетик:</strong>
                 <Link to={`/energies/${review.energy_id}`} className="details-link">

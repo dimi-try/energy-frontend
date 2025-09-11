@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import api from "../../hooks/api";
+
 import { formatTimestamp } from "../../hooks/formatDate"; 
 import Pagination from "../../components/Pagination";
+
 import "./UserAdminPage.css";
 
 const UserAdminPage = ({ token }) => {
@@ -98,8 +102,15 @@ const UserAdminPage = ({ token }) => {
               )}
             </div>
             <div className="user-info">
-              <p><strong>ID:</strong> {user.id}</p>
-              <p><strong>Имя:</strong> {user.username || "Не указано"}</p>
+              <p>
+                <strong>
+                  ID пользователя:
+                </strong> 
+                <Link to={`/profile/${user.id}`}>
+                  {user.id}
+                </Link>
+              </p>
+              <p><strong>Имя:</strong> {user.username || "Имя не указано"}</p>
               <p><strong>Премиум:</strong> {user.is_premium ? "Да" : "Нет"}</p>
               <p><strong>Создан:</strong> {formatTimestamp(user.created_at)}</p>
             </div>
