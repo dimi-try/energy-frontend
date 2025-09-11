@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import api from "../hooks/api";
@@ -12,7 +12,12 @@ import AvatarUpload from "../components/AvatarUpload";
 import "./Profile.css";
 
 // Компонент страницы профиля пользователя
-const Profile = ({ userId, token }) => {
+const Profile = ({ userId: currentUserId, token }) => {
+  // Получаем userId из URL
+  const { profileUserId } = useParams();
+  // Используем ID из URL или текущего пользователя
+  const targetUserId = profileUserId ? parseInt(profileUserId, 10) : currentUserId;
+
   // Состояние для данных профиля
   const [profile, setProfile] = useState(null);
   // Состояние для аватарки
@@ -31,7 +36,7 @@ const Profile = ({ userId, token }) => {
   const [newUsername, setNewUsername] = useState("");
   // Состояние для текущей страницы
   const [page, setPage] = useState(() => {
-    const savedPage = sessionStorage.getItem(`profile-page`);
+    const savedPage = sessionStorage.getItem(`profile-page-${targetUserId}`);
     return savedPage ? parseInt(savedPage, 10) : 1;
   });
   // Состояние для общего количества страниц
@@ -41,8 +46,8 @@ const Profile = ({ userId, token }) => {
 
   // Загружаем данные профиля, отзывы, критерии и общее количество отзывов
   useEffect(() => {
-    if (!userId || !token) {
-      setLoading(false); // Если нет userId или token, не загружаем данные
+    if (!currentUserId || !token) {
+      setLoading(false); // Если нет текущего пользователя или токена, не загружаем данные
       return;
     }
     setError(null); // Сбрасываем ошибки
@@ -51,10 +56,10 @@ const Profile = ({ userId, token }) => {
     const fetchData = async () => {
       try {
         const [profileRes, reviewsRes, criteriaRes, countRes] = await Promise.all([
-          api.get(`/users/${userId}/profile`),
-          api.get(`/users/${userId}/reviews?limit=${reviewsPerPage}&offset=${(page - 1) * reviewsPerPage}`),
+          api.get(`/users/${targetUserId}/profile`),
+          api.get(`/users/${targetUserId}/reviews?limit=${reviewsPerPage}&offset=${(page - 1) * reviewsPerPage}`),
           api.get(`/criteria/`),
-          api.get(`/users/${userId}/reviews/count/`),
+          api.get(`/users/${targetUserId}/reviews/count/`),
         ]);
 
         setProfile(profileRes.data); // Сохраняем данные профиля
@@ -77,12 +82,12 @@ const Profile = ({ userId, token }) => {
       }
     };
     fetchData();
-  }, [userId, token, page]);
+  }, [currentUserId, token, targetUserId, page]);
 
   // Сохранение текущей страницы
   useEffect(() => {
-    sessionStorage.setItem(`profile-page`, page);
-  }, [page]);
+    sessionStorage.setItem(`profile-page-${targetUserId}`, page);
+  }, [page, targetUserId]);
 
   // Обновление профиля после изменения аватарки
   const handleAvatarUpdated = (updatedUser) => {
@@ -94,9 +99,9 @@ const Profile = ({ userId, token }) => {
   const handleReviewUpdated = async () => {
     try {
       const [profileRes, reviewsRes, countRes] = await Promise.all([
-        api.get(`/users/${userId}/profile`),
-        api.get(`/users/${userId}/reviews?limit=${reviewsPerPage}&offset=${(page - 1) * reviewsPerPage}`),
-        api.get(`/users/${userId}/reviews/count/`),
+        api.get(`/users/${targetUserId}/profile`),
+        api.get(`/users/${targetUserId}/reviews?limit=${reviewsPerPage}&offset=${(page - 1) * reviewsPerPage}`),
+        api.get(`/users/${targetUserId}/reviews/count/`),
       ]);
       setProfile(profileRes.data);
       setReviews(reviewsRes.data.reviews);
@@ -129,7 +134,7 @@ const Profile = ({ userId, token }) => {
   const handleUpdateUsername = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.put(`/users/${userId}/profile`, {
+      const response = await api.put(`/users/${targetUserId}/profile`, {
         username: newUsername,
       });
       setProfile({ ...profile, user: response.data }); // Обновляем профиль
@@ -156,7 +161,7 @@ const Profile = ({ userId, token }) => {
   };
 
   // Если пользователь не авторизован
-  if (!userId || !token) {
+  if (!currentUserId || !token) {
     return (
       <div className="profile-container container">
         <h1>Доступ ограничен</h1>
@@ -193,11 +198,13 @@ const Profile = ({ userId, token }) => {
           imageUrl={profile.user.image_url}
           onImageChange={(file) => setAvatar(file)}
           backendUrl={process.env.REACT_APP_BACKEND_URL}
-          userId={userId}
+          userId={currentUserId}
           token={token}
           onAvatarUpdated={handleAvatarUpdated}
+          isEditable={targetUserId === currentUserId} //Разрешаем редактировать только свой профиль
         />
-        {isEditing ? (
+        {/* Редактирование только для своего профиля */}
+        {isEditing && targetUserId === currentUserId ? (
           <form onSubmit={handleUpdateUsername} className="edit-username-form">
             <input
               type="text"
@@ -217,12 +224,15 @@ const Profile = ({ userId, token }) => {
         ) : (
           <>
             <h1>{profile.user.username}</h1>
-            <button
-              className="edit-profile-button"
-              onClick={() => setIsEditing(true)}
-            >
-              Редактировать имя
-            </button>
+            {/* Кнопка редактирования только для своего профиля */}
+            {targetUserId === currentUserId && (
+              <button
+                className="edit-profile-button"
+                onClick={() => setIsEditing(true)}
+              >
+                Редактировать имя
+              </button>
+            )}
           </>
         )}
       </div>
@@ -230,7 +240,7 @@ const Profile = ({ userId, token }) => {
       {/* Оценки и средний балл */}
       <div className="stats-row">
         <div className="card stat-card">
-          <h3>Мои оценки</h3>
+          <h3>Всего оценок</h3>
           <p className="stat-value">{profile.total_ratings}</p>
         </div>
         <div className="card stat-card">
@@ -289,7 +299,8 @@ const Profile = ({ userId, token }) => {
                   review={review}
                   criteria={criteria}
                   isProfile={true}
-                  userId={userId}
+                  userId={currentUserId}
+                  token={token}
                   onReviewUpdated={handleReviewUpdated}
                 />
               ))}

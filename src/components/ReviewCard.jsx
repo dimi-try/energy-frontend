@@ -9,7 +9,7 @@ import ImageUpload from './ImageUpload';
 
 import "./ReviewCard.css";
 
-const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdated }) => {
+const ReviewCard = ({ review, criteria, isProfile = false, userId, token, onReviewUpdated }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editReview, setEditReview] = useState({
     review_text: review.review_text || "",
@@ -108,7 +108,14 @@ const ReviewCard = ({ review, criteria, isProfile = false, userId, onReviewUpdat
               ) : (
                 <span className="user-placeholder">👤</span>
               )}
-              <span className="username">{review.user?.username || "Имя пустое"}</span>
+              {/* Делаем ник пользователя кликабельным для авторизованных пользователей */}
+              {userId && token ? (
+                <Link to={`/profile/${review.user_id}`} className="username">
+                  {review.user?.username || "Имя пустое"}
+                </Link>
+              ) : (
+                <span className="username">{review.user?.username || "Имя пустое"}</span>
+              )}
             </div>
           )}
         </span>

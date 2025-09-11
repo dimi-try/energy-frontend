@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import api from '../hooks/api';
 import './AvatarUpload.css';
 
-const AvatarUpload = ({ image, imageUrl, onImageChange, backendUrl, userId, token, onAvatarUpdated }) => {
+const AvatarUpload = ({ image, imageUrl, onImageChange, backendUrl, userId, token, onAvatarUpdated, isEditable = false  }) => {
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -102,15 +102,17 @@ const AvatarUpload = ({ image, imageUrl, onImageChange, backendUrl, userId, toke
             
           </div>
         )}
-        <label className="avatar-upload-button">
-          <span className="upload-icon">+</span>
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/heic"
-            onChange={handleImageChange}
-            hidden
-          />
-        </label>
+        {isEditable && ( 
+          <label className="avatar-upload-button">
+            <span className="upload-icon">+</span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              hidden
+            />
+          </label>
+        )}
       </div>
     </div>
   );

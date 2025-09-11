@@ -332,6 +332,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
                   criteria={criteria}
                   isProfile={false}
                   userId={userId}
+                  token={token}
                   onReviewUpdated={handleReviewUpdated}
                 />
               ))}

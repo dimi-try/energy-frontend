@@ -3,6 +3,7 @@
   text-align: center; /* Центрируем контент */
   padding: 20px; /* Внешние отступы для контейнера */
   box-sizing: border-box;
+  padding-bottom: 80px;
 }
 
 /* Заголовок профиля */
