@@ -1,42 +1,30 @@
 import React from 'react';
 import { toast } from 'react-toastify';
+
+import { IMAGE_UPLOAD_CONFIG } from '../hooks/config';
+
 import './ImageUpload.css';
 
 const ImageUpload = ({ image, imageUrl, onImageChange, backendUrl, error, setError }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Проверка размера файла (5 МБ)
-      if (file.size > 5 * 1024 * 1024) {
+      // Проверка размера файла
+      if (file.size > IMAGE_UPLOAD_CONFIG.MAX_FILE_SIZE) {
         if (setError) {
-          setError('Файл слишком большой. Максимальный размер: 5 МБ');
+          setError(IMAGE_UPLOAD_CONFIG.ERROR_MESSAGES.FILE_TOO_LARGE);
         } else {
-          toast.error('Файл слишком большой. Максимальный размер: 5 МБ', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
+          toast.error(IMAGE_UPLOAD_CONFIG.ERROR_MESSAGES.FILE_TOO_LARGE, IMAGE_UPLOAD_CONFIG.TOAST_CONFIG);
         }
         return;
       }
 
-      // Проверка формата файла
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/heic'];
-      if (!allowedTypes.includes(file.type)) {
+      // Проверка, что файл является изображением
+      if (!file.type.startsWith('image/')) {
         if (setError) {
-          setError('Недопустимый формат. Разрешены: JPG, JPEG, PNG, HEIC');
+          setError(IMAGE_UPLOAD_CONFIG.ERROR_MESSAGES.INVALID_FORMAT);
         } else {
-          toast.error('Недопустимый формат. Разрешены: JPG, JPEG, PNG, HEIC', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
+          toast.error(IMAGE_UPLOAD_CONFIG.ERROR_MESSAGES.INVALID_FORMAT, IMAGE_UPLOAD_CONFIG.TOAST_CONFIG);
         }
         return;
       }
@@ -51,10 +39,10 @@ const ImageUpload = ({ image, imageUrl, onImageChange, backendUrl, error, setErr
 
   return (
     <div className="image-upload">
-      <label>Фото (необязательно, макс. 5 МБ, JPG/JPEG/PNG/HEIC):</label>
+      <label>{IMAGE_UPLOAD_CONFIG.ALLOWED_IMAGE_TEXT}</label>
       <input
         type="file"
-        accept="image/jpeg,image/png,image/heic"
+        accept={IMAGE_UPLOAD_CONFIG.ALLOWED_IMAGE_TYPES} // Используем 'image/*'
         onChange={handleImageChange}
       />
       {imageUrl && !image && (
