@@ -6,9 +6,14 @@
   --primary-color: #007aff; /* Синий для акцентов */
   --card-background: #ffffff; /* Белый фон для карточек */
   --button-text-color: #ffffff; /* Светлый текст для текста на кнопке */
-  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Легкая тень */
+  --shadow: 0 2px 8px rgba(var(--black-color-rgb), 0.1); /* Легкая тень */
   --transition: all 0.3s ease; /* Плавные переходы */
   --border-radius: 16px; /* Скругленные углы */
+
+  --primary-color-rgb: 0, 47, 100; /* */
+  --danger-color-rgb: 248, 113, 113; /*  */
+  --black-color-rgb: 0, 0, 0;
+  --white-color-rgb: 255, 255, 255;
 }
 
 /* Основные стили для тела страницы */
@@ -40,23 +45,6 @@ h1, h2, h3 {
   overflow-wrap: break-word; /* Совместимость для переноса */
   word-break: break-word; /* Обрезка очень длинных слов */
   max-width: 100%; /* Ограничение по ширине */
-}
-
-/* Стили для кнопок */
-button {
-  background-color: var(--primary-color); /* Цвет фона кнопки */
-  color: var(--button-text-color); /* Цвет текста */
-  border: none; /* Убираем границу */
-  padding: 10px 20px; /* Внутренние отступы */
-  border-radius: 12px; /* Скругленные углы */
-  font-size: 14px; /* Размер шрифта */
-  cursor: pointer; /* Курсор в виде указателя */
-  transition: var(--transition); /* Плавные переходы */
-}
-
-/* Эффект наведения на кнопку */
-button:hover {
-  background-color: #005bb5; /* Темнее при наведении */
 }
 
 /* Контейнер для списков */

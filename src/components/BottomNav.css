@@ -8,7 +8,7 @@
   display: flex; /* Flexbox для выравнивания */
   justify-content: space-around; /* Равномерное распределение элементов */
   padding: 10px 0; /* Внутренние отступы */
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1); /* Тень сверху */
+  box-shadow: 0 -2px 8px rgba(var(--black-color-rgb), 0.1); /* Тень сверху */
   z-index: 1000; /* Устанавливаем поверх других элементов */
 }
 

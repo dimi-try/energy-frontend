@@ -5,7 +5,7 @@ import { BackButton } from "@vkruglikov/react-telegram-web-app";
 import { useTelegram } from "./hooks/useTelegram";
 import { useUserVerification } from "./hooks/useUserVerification";
 
-import "./styles/App.css";
+import BottomNav from "./components/BottomNav";
 
 import Top100 from "./pages/Top100";
 import Profile from "./pages/Profile";
@@ -19,7 +19,8 @@ import CategoryAdminPage from "./pages/admin/CategoryAdminPage";
 import UserAdminPage from "./pages/admin/UserAdminPage";
 import ReviewAdminPage from "./pages/admin/ReviewAdminPage";
 import BlacklistAdminPage from "./pages/admin/BlacklistAdminPage";
-import BottomNav from "./components/BottomNav";
+
+import "./styles/App.css";
 
 function App() {
   const { telegram, initData } = useTelegram(); // Получаем telegram и initData
