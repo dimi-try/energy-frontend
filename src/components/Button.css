@@ -1,0 +1,51 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--button-text-color);
+  border: none;
+  border-radius: 12px;
+  background: rgba(var(--white-color-rgb), 0.1);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 4px 15px rgba(var(--black-color-rgb), 0.15), inset 0 0 8px rgba(var(--white-color-rgb), 0.2);
+  border: 1px solid rgba(var(--white-color-rgb), 0.25);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Эффект наведения */
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--black-color-rgb), 0.2);
+}
+
+/* Вариант primary */
+.button-primary {
+  background: radial-gradient(circle, rgba(var(--primary-color-rgb), 0.3) 50%, transparent 100%);
+}
+
+.button-primary:hover {
+  background: linear-gradient(135deg, rgba(var(--primary-color-rgb), 0.3) 0%, rgba(var(--primary-color-rgb), 0.5) 100%);
+}
+
+/* Вариант danger (красный оттенок) */
+.button-danger {
+  background: radial-gradient(circle, rgba(var(--danger-color-rgb), 0.3) 50%, transparent 100%);
+}
+
+.button-danger:hover {
+  background: linear-gradient(135deg, rgba(var(--danger-color-rgb), 0.4) 0%, rgba(var(--danger-color-rgb), 0.5) 100%);
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+  .button {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+}
