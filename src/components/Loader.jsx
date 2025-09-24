@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import Logo from "../styles/logo512.png";
+import Logo from "../images/LoadIcon.png";
 import Card from "./Card";
 import "./Loader.css";
 

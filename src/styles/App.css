@@ -26,15 +26,6 @@ body {
   overflow-x: hidden; /* Запрещаем горизонтальную прокрутку */
 }
 
-/* Контейнер для центрирования контента */
-.container {
-  max-width: 100%; /* Максимальная ширина контейнера */
-  padding: 15px; /* Внутренние отступы */
-  margin: 0 auto; /* Центрируем контейнер */
-  box-sizing: border-box; /* Учитываем padding в ширине */
-  padding-bottom: 80px; /* Отступ для навигационной панели */
-}
-
 /* Стили для заголовков */
 h1, h2, h3 {
   font-weight: 600; /* Полужирный шрифт */
@@ -45,6 +36,34 @@ h1, h2, h3 {
   overflow-wrap: break-word; /* Совместимость для переноса */
   word-break: break-word; /* Обрезка очень длинных слов */
   max-width: 100%; /* Ограничение по ширине */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input,
+select,
+textarea {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid var(--text-color);
+    border-radius: 5px;
+    background: var(--card-background);
+    color: var(--text-color);
+    resize: vertical;
+}
+
+/* Контейнер для центрирования контента */
+.container {
+  max-width: 100%; /* Максимальная ширина контейнера */
+  padding: 15px; /* Внутренние отступы */
+  margin: 0 auto; /* Центрируем контейнер */
+  box-sizing: border-box; /* Учитываем padding в ширине */
+  padding-bottom: 80px; /* Отступ для навигационной панели */
 }
 
 /* Контейнер для списков */
@@ -97,4 +116,15 @@ h1, h2, h3 {
 /* Остальные "места" */
 .medal-default {
   color: var(--text-color);
+}
+
+/* поле ввода для поиска энергетиков или брендов */
+.search-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid var(--text-color);
+  border-radius: 5px;
+  background: var(--card-background);
+  color: var(--text-color);
+  margin-bottom: 20px;
 }
