@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import api from "../hooks/api";
+import { formatTimestamp } from "../hooks/formatDate";
 
 import ImageUpload from "./ImageUpload";
-import { formatTimestamp } from "../hooks/formatDate";
+import Button from "./Button";
 
 import "./Card.css";
 
@@ -233,10 +234,12 @@ const Card = ({
               </div>
             ))}
             <div className="card-edit-buttons">
-              <button type="submit">Сохранить</button>
-              <button type="button" onClick={() => setIsEditing(false)}>
+              <Button type="submit" variant="primary">
+                Сохранить
+              </Button>
+              <Button variant="danger" onClick={() => setIsEditing(false)}>
                 Отмена
-              </button>
+              </Button>
             </div>
           </form>
         ) : (
@@ -263,12 +266,12 @@ const Card = ({
         {/* кнопки редактирования и удаления */}
         {userId && review.user_id === userId && !isEditing && (
           <div className="card-review-actions">
-            <button className="card-edit-button" onClick={() => setIsEditing(true)}>
+            <Button variant="primary" onClick={() => setIsEditing(true)}>
               Редактировать
-            </button>
-            <button className="card-delete-button" onClick={handleDelete}>
+            </Button>
+            <Button variant="danger" onClick={handleDelete}>
               Удалить
-            </button>
+            </Button>
           </div>
         )}
       </motion.div>
