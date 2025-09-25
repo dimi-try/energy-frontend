@@ -3,9 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import api from "../hooks/api";
 
-import Card from "../components/Card";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import Card from "../components/Card";
 import Pagination from "../components/Pagination";
 
 import "./BrandPage.css";
@@ -78,9 +78,9 @@ const BrandPage = () => {
   if (!brand) return <Error message="Бренд не найден" />;
   
   return (
-    <div className="brand-container container">
+    <div className="container">
       {/* Заголовок страницы */}
-      <h1>{brand.name}</h1>
+      <h1 className="brand-header">{brand.name}</h1>
       {/* Информация о бренде */}
       <Card type="container" className="brand-info">
         <p>

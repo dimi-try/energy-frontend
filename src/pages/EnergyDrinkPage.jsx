@@ -4,9 +4,10 @@ import { ToastContainer, toast } from "react-toastify";
 
 import api from "../hooks/api";
 
-import Card from "../components/Card";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import Card from "../components/Card";
+import Button from "../components/Button";
 import ImageUpload from "../components/ImageUpload";
 import Pagination from "../components/Pagination";
 
@@ -172,7 +173,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
   // Показываем сообщение, если энергетик не найден
   if (!energy) return <Error message="Энергетик не найден" />;
   return (
-    <div className="energy-container container">
+    <div className="container">
       {/* Контейнер для уведомлений */}
       <ToastContainer
         position="top-right"
@@ -279,7 +280,9 @@ const EnergyDrinkPage = ({ userId, token }) => {
                 </div>
               </div>
             ))}
-            <button type="submit">Отправить</button>
+            <Button type="submit" variant="primary">
+              Отправить
+            </Button>
           </form>
         )}
       </Card>
@@ -309,7 +312,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
               />
             </>
           ) : (
-            <p>Отзывов пока нет.</p>
+            <Error message="Пока нет отзывов" />
           )}
         </div>
       </Card>
