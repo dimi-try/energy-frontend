@@ -1,33 +1,10 @@
-.admin-panel {
-    padding: 20px;
-    background: var(--background-color);
-    color: var(--text-color);
-    min-height: 100vh;
-}
-
-.admin-panel h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
 .admin-links {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.admin-button {
-    display: block;
-    padding: 10px;
-    background: var(--primary-color);
-    color: var(--button-text-color);
-    text-align: center;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-.admin-button:hover {
-    opacity: 0.9;
+.admin-links a .button {
+    width: 100%; /* Делает кнопку внутри Link на всю ширину */
+    box-sizing: border-box; /* Учитывает padding и border в ширине */
 }

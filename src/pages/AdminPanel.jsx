@@ -1,32 +1,35 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
+import Button from "../components/Button";
+
 import "./AdminPanel.css";
 
 const AdminPanel = () => {
   return (
-    <div className="admin-panel">
+    <div className="container">
       <h1>Админ-панель</h1>
       <div className="admin-links">
-        <Link to="/admin/brands" className="admin-button">
-          Бренды
+        <Link to="/admin/brands">
+          <Button variant="primary">Бренды</Button>
         </Link>
-        <Link to="/admin/energies" className="admin-button">
-          Энергетики
+        <Link to="/admin/energies">
+          <Button variant="primary">Энергетики</Button>
         </Link>
-        <Link to="/admin/criteria" className="admin-button">
-          Критерии
+        <Link to="/admin/criteria">
+          <Button variant="primary">Критерии</Button>
         </Link>
-        <Link to="/admin/categories" className="admin-button">
-          Категории
+        <Link to="/admin/categories">
+          <Button variant="primary">Категории</Button>
         </Link>
-        <Link to="/admin/users" className="admin-button">
-          Пользователи
+        <Link to="/admin/users">
+          <Button variant="primary">Пользователи</Button>
         </Link>
-        <Link to="/admin/reviews" className="admin-button">
-          Отзывы
+        <Link to="/admin/reviews">
+          <Button variant="primary">Отзывы</Button>
         </Link>
-        <Link to="/admin/blacklist" className="admin-button">
-          Черный список
+        <Link to="/admin/blacklist">
+          <Button variant="primary">Черный список</Button>
         </Link>
       </div>
     </div>

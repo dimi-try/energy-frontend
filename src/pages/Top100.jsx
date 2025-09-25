@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../hooks/api";
-import Card from "../components/Card";
+
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import Card from "../components/Card";
 import Pagination from "../components/Pagination";
+
 import "./Top100.css";
 
 // Компонент страницы Топ 100
@@ -24,8 +26,6 @@ const Top100 = () => {
   const [error, setError] = useState(null);
   // Хук для навигации
   const navigate = useNavigate();
-  // Ссылка на контейнер списка для сохранения позиции прокрутки
-  const listRef = useRef(null);
   // Состояние для текущей страницы
   const [page, setPage] = useState(() => {
     const savedPage = sessionStorage.getItem(`page-${topType}`);
@@ -83,7 +83,7 @@ const Top100 = () => {
   };
 
   return (
-    <div className="top100-container container">
+    <div className="container">
       {/* Кнопки переключения между типами топа */}
       <div className="toggle-buttons">
         <button
@@ -114,7 +114,7 @@ const Top100 = () => {
 
       {/* Контейнер для списка */}
       <Card type="container">
-        <div className="list-container" ref={listRef}>
+        <div className="list-container">
           {loading ? (
             // Показываем индикатор загрузки
             <Loader />
@@ -157,7 +157,7 @@ const Top100 = () => {
                       </Card>
                     ))
                   ) : (
-                    <p className="no-data">Нет данных об энергетиках</p>
+                    <Error message={"Нет данных об энергетиках"} />
                   )
                 : brands.length > 0 ? (
                     brands.map((item, index) => (
@@ -178,7 +178,7 @@ const Top100 = () => {
                       </Card>
                     ))
                   ) : (
-                    <p className="no-data">Нет данных о брендах</p>
+                    <Error message={"Нет данных о брендах"} />
                   )}
             </div>
           )}
