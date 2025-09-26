@@ -4,11 +4,12 @@ import { ToastContainer, toast } from "react-toastify";
 
 import api from "../hooks/api";
 
-import Card from "../components/Card";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
-import Pagination from "../components/Pagination";
+import Card from "../components/Card";
+import Button from "../components/Button";
 import AvatarUpload from "../components/AvatarUpload";
+import Pagination from "../components/Pagination";
 
 import "./Profile.css";
 
@@ -139,7 +140,8 @@ const Profile = ({ userId: currentUserId, token }) => {
   if (!profile) return <Error message="Профиль не найден" />;
 
   return (
-    <div className="profile-container container">
+    <div className="container">
+      {/* Контейнер для уведомлений */}
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -176,10 +178,12 @@ const Profile = ({ userId: currentUserId, token }) => {
               required
             />
             <div className="edit-buttons">
-              <button type="submit">Сохранить</button>
-              <button type="button" onClick={() => setIsEditing(false)}>
+              <Button type="submit" variant="primary">
+                Сохранить
+              </Button>
+              <Button variant="danger" onClick={() => setIsEditing(false)}>
                 Отмена
-              </button>
+              </Button>
             </div>
           </form>
         ) : (
@@ -187,12 +191,11 @@ const Profile = ({ userId: currentUserId, token }) => {
             <h1>{profile.user.username}</h1>
             {/* Кнопка редактирования только для своего профиля */}
             {targetUserId === currentUserId && (
-              <button
-                className="edit-profile-button"
-                onClick={() => setIsEditing(true)}
-              >
+              <Button
+                variant="primary" 
+                onClick={() => setIsEditing(true)}>
                 Редактировать имя
-              </button>
+              </Button>
             )}
           </>
         )}

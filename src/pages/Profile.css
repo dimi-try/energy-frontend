@@ -1,12 +1,6 @@
-.profile-container {
-  text-align: center;
-  padding: 20px;
-  box-sizing: border-box;
-  padding-bottom: 80px;
-}
-
 /* Заголовок профиля */
 .profile-header {
+  text-align: center;
   margin-bottom: 30px;
 }
 
@@ -34,46 +28,6 @@
 .edit-buttons {
   display: flex;
   gap: 10px;
-}
-
-.edit-buttons button {
-  padding: 8px 16px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.edit-buttons button[type="submit"] {
-  background-color: var(--primary-color);
-  color: var(--button-text-color);
-}
-
-.edit-buttons button[type="button"] {
-  background-color: #888;
-  color: #fff;
-}
-
-.edit-buttons button:hover {
-  opacity: 0.9;
-}
-
-/* Кнопка редактирования профиля */
-.edit-profile-button {
-  margin-top: 10px;
-  padding: 8px 16px;
-  font-size: 1rem;
-  background-color: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.edit-profile-button:hover {
-  opacity: 0.9;
 }
 
 /* Ряд статистики */
