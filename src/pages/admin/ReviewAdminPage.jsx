@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 import api from "../../hooks/api";
-
 import { formatTimestamp } from "../../hooks/formatDate";
+
+import Loader from "../../components/Loader";
+import Error from "../../components/Error";
+import Card from "../../components/Card";
+import Button from "../../components/Button";
 import Pagination from "../../components/Pagination";
 
 import "./ReviewAdminPage.css";
 
 const ReviewAdminPage = ({ token }) => {
   const [reviews, setReviews] = useState([]);
-  const [energyData, setEnergyData] = useState({}); // Храним данные энергетиков по ID
+  const [energyData, setEnergyData] = useState({});
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(() => {
     const savedPage = sessionStorage.getItem("review-admin-page");
     return savedPage ? parseInt(savedPage, 10) : 1;
   });
   const [totalPages, setTotalPages] = useState(1);
-  const reviewsPerPage = 10; // Количество отзывов на странице
+  const reviewsPerPage = 10;
 
   // Загрузка списка отзывов и общего количества
   const fetchReviews = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const [reviewsResponse, countResponse] = await Promise.all([
         api.get(`/reviews/?limit=${reviewsPerPage}&offset=${(page - 1) * reviewsPerPage}`, {
@@ -38,6 +44,8 @@ const ReviewAdminPage = ({ token }) => {
     } catch (err) {
       setError("Ошибка при загрузке отзывов: " + (err.response?.data?.detail || err.message));
       return [];
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,9 +66,9 @@ const ReviewAdminPage = ({ token }) => {
       } catch (err) {
         setEnergyData((prev) => ({
           ...prev,
-          [energyId]: { name: null, brand_name: null },
+          [energyId]: { name: "Неизвестный энергетик", brand_name: "Неизвестный бренд" },
         }));
-        console.log(`Energy lookup: ${energyId} failed -`, err.message);
+        console.error(`Ошибка загрузки энергетика ${energyId}:`, err.message);
       }
     });
     await Promise.all(promises);
@@ -69,14 +77,12 @@ const ReviewAdminPage = ({ token }) => {
   // Загрузка данных при монтировании компонента или изменении страницы
   useEffect(() => {
     const loadData = async () => {
-      setIsLoading(true);
       const reviewsData = await fetchReviews();
       const energyIds = [...new Set(reviewsData.map((review) => review.energy_id))];
       await fetchEnergies(energyIds);
-      setIsLoading(false);
     };
     loadData();
-  }, [page]); // Добавляем page в зависимости
+  }, [page, token]);
 
   // Сохранение текущей страницы
   useEffect(() => {
@@ -90,19 +96,20 @@ const ReviewAdminPage = ({ token }) => {
         await api.delete(`/reviews/${reviewId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setReviews(reviews.filter((review) => review.id !== reviewId));
-        setSuccess("Отзыв успешно удален");
-        setError(null);
-        // Обновляем общее количество страниц
-        const countResponse = await api.get(`/reviews/count/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setTotalPages(Math.ceil(countResponse.data.total / reviewsPerPage));
+        await fetchReviews(); // Обновляем список отзывов
+        toast.success("Отзыв успешно удален!");
       } catch (err) {
-        setError("Ошибка при удалении отзыва: " + (err.response?.data?.detail || err.message));
-        setSuccess(null);
+        toast.error("Ошибка при удалении отзыва: " + (err.response?.data?.detail || err.message));
       }
     }
+  };
+
+  // Обработчик повторного запроса данных
+  const handleRetry = () => {
+    fetchReviews().then((reviewsData) => {
+      const energyIds = [...new Set(reviewsData.map((review) => review.energy_id))];
+      fetchEnergies(energyIds);
+    });
   };
 
   // Функция для получения названия энергетика и бренда
@@ -112,66 +119,105 @@ const ReviewAdminPage = ({ token }) => {
       : "Загрузка...";
   };
 
-  if (isLoading) {
-    return <div>Загрузка...</div>;
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return (
+      <Card type="container">
+        <Error message={error} />
+        <Button variant="primary" onClick={handleRetry}>
+          Попробовать снова
+        </Button>
+      </Card>
+    );
   }
 
   return (
-    <div className="review-admin-page">
+    <div className="container">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+
       <h1>Управление отзывами</h1>
 
-      {/* Сообщения об ошибках и успехе */}
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
-
-      {/* Список отзывов */}
-      <ul className="review-list">
-        {reviews.map((review) => (
-          <li key={review.id}>
-            <div className="review-content">
-              <p><strong>ID отзыва:</strong> {review.id}</p>
-              <p>
-                <strong>
-                  ID пользователя:
-                </strong> 
-                <Link to={`/profile/${review.user.id}`}>
-                  {review.user.id}
-                </Link>
-              </p>
-              <p><strong>Пользователь:</strong> {review.user?.username || "Имя не указано"}</p>
-              <p>
-                <strong>Энергетик:</strong>
-                <Link to={`/energies/${review.energy_id}`} className="details-link">
-                  {getEnergyName(review.energy_id)}
-                </Link>
-              </p>
-              <p><strong>Текст:</strong> {review.review_text || "Нет текста"}</p>
-              {review.image_url && (
-                <div className="review-image">
-                  <img
-                    src={`${process.env.REACT_APP_BACKEND_URL}/${review.image_url}`}
-                    alt={`Отзыв ${review.id}`}
-                  />
-                </div>
+      <Card type="container">
+        <div className="list-container">
+          {reviews.length > 0 ? (
+            <>
+              {reviews.map((review) => (
+                <Card key={review.id} type="container" className="review-card">
+                  <div>
+                    <p>
+                      <strong>ID отзыва: </strong>{review.id}
+                    </p>
+                    <p>
+                      <strong>ID пользователя: </strong>
+                      <Link to={`/profile/${review.user_id}`} className="details-link">
+                        {review.user_id}
+                      </Link>
+                    </p>
+                    <p>
+                      <strong>Пользователь: </strong>{review.user?.username || "Имя не указано"}
+                    </p>
+                    <p>
+                      <strong>Энергетик: </strong>
+                      <Link to={`/energies/${review.energy_id}`} className="details-link">
+                        {getEnergyName(review.energy_id)}
+                      </Link>
+                    </p>
+                    <p>
+                      <strong>Текст: </strong>{review.review_text || "Нет текста"}
+                    </p>
+                    {review.image_url && (
+                      <div className="review-image">
+                        <img
+                          src={`${process.env.REACT_APP_BACKEND_URL}/${review.image_url}`}
+                          alt={`Отзыв ${review.id}`}
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+                    <p>
+                      <strong>Средний рейтинг: </strong>
+                      {review.average_rating_review
+                        ? `${Number(review.average_rating_review).toFixed(1)}/10`
+                        : "Нет рейтинга"}
+                    </p>
+                    <p>
+                      <strong>Создан: </strong>{formatTimestamp(review.created_at)}
+                    </p>
+                  </div>
+                  <div>
+                    <Button variant="danger" onClick={() => handleDeleteReview(review.id)}>
+                      Удалить
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={page}
+                  totalPages={totalPages}
+                  onPageChange={setPage}
+                />
               )}
-              <p><strong>Средний рейтинг:</strong> {review.average_rating_review}</p>
-              <p><strong>Создан:</strong> {formatTimestamp(review.created_at)}</p>
-            </div>
-            <div>
-              <button onClick={() => handleDeleteReview(review.id)}>Удалить</button>
-            </div>
-          </li>
-        ))}
-      </ul>
-
-      {/* Пагинация */}
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-        />
-      )}
+            </>
+          ) : (
+            <Error message="Отзывы не найдены" />
+          )}
+        </div>
+      </Card>
     </div>
   );
 };
