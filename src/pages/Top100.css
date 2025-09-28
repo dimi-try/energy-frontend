@@ -1,34 +1,30 @@
-/* Стили для контейнера страницы Топ 100 */
-.top100-container {
-  text-align: left; /* Центрируем текст */
-}
 
-/* Стили для кнопок переключения */
+/* Мини контейнер для кнопок переключения */
 .toggle-buttons {
-  display: flex; /* Flexbox для выравнивания */
-  justify-content: center; /* Центрируем кнопки */
-  gap: 10px; /* Отступ между кнопками */
-  margin-bottom: 15px; /* Отступ снизу */
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
 /* Стили для кнопок переключения (неактивная кнопка)*/
 .toggle-buttons button {
-  background-color: var(--card-background); /* Фон кнопки */
-  color: var(--primary-color); /* Цвет текста */
-  border: none; /* Убираем границу */
-  padding: 8px 16px; /* Внутренние отступы */
-  border-radius: 8px; /* Скругленные углы */
+  background-color: var(--card-background);
+  color: var(--primary-color);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
 }
 
 /* Стили для активной кнопки */
 .toggle-buttons button.active {
-  background-color: var(--primary-color); /* Фон активной кнопки */
-  color: var(--button-text-color); /* Цвет текста */
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
 }
 
 /* Стили для сетки карточек */
 .cards-grid {
-  display: flex; /* Flexbox для выравнивания */
-  flex-direction: column; /* Вертикальное расположение */
-  gap: 10px; /* Отступ между карточками */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

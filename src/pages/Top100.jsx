@@ -1,8 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../hooks/api";
+
+import Loader from "../components/Loader";
+import Error from "../components/Error";
 import Card from "../components/Card";
 import Pagination from "../components/Pagination";
+
 import "./Top100.css";
 
 // Компонент страницы Топ 100
@@ -22,8 +26,6 @@ const Top100 = () => {
   const [error, setError] = useState(null);
   // Хук для навигации
   const navigate = useNavigate();
-  // Ссылка на контейнер списка для сохранения позиции прокрутки
-  const listRef = useRef(null);
   // Состояние для текущей страницы
   const [page, setPage] = useState(() => {
     const savedPage = sessionStorage.getItem(`page-${topType}`);
@@ -81,7 +83,7 @@ const Top100 = () => {
   };
 
   return (
-    <div className="top100-container container">
+    <div className="container">
       {/* Кнопки переключения между типами топа */}
       <div className="toggle-buttons">
         <button
@@ -111,85 +113,85 @@ const Top100 = () => {
       </div>
 
       {/* Контейнер для списка */}
-      <div className="list-container" ref={listRef}>
-        {loading ? (
-          // Показываем индикатор загрузки
-          <div className="loading-container">
-            <p className="loading">⏳ Загрузка...</p>
-          </div>
-        ) : error ? (
-          // Показываем сообщение об ошибке
-          <div className="error-container">
-            <p className="error">❌ {error}</p>
-          </div>
-        ) : (
-          // Отображаем список, если нет ошибок и загрузка завершена
-          <div className="cards-grid">
-            {topType === "energies"
-              ? energies.length > 0 // Проверяем, есть ли данные
-                ? energies.map((item, index) => (
-                    // Карточка энергетика
-                    <Card
-                      key={item.id}
-                      rank={(page - 1) * itemsPerPage + index + 1}
-                      onClick={() => handleNavigate(`/energies/${item.id}/`)}
-                    >
-                      <div className="energy-card-image">
-                        {item.image_url ? (
-                          <img
-                            src={`${process.env.REACT_APP_BACKEND_URL}/${item.image_url}`}
-                            alt={item.name}
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                              e.target.nextSibling.style.display = 'flex';
-                            }}
-                          />
-                        ) : null}
-                        <div className="no-image-card"> </div>
-                      </div>
-                      <div className="card-content">
-                        <h2>
-                          {item.brand?.name} {item.name}
-                        </h2>
-                        <p>
-                          <span className="star">★</span> {item.average_rating}/10 (
-                          {item.review_count} отзывов)
-                        </p>
-                        <p>{item.category.name}</p>
-                      </div>
-                    </Card>
-                  ))
-                : // Сообщение, если данных нет
-                  <p className="no-data">Нет данных об энергетиках</p>
-              : brands.length > 0 // Проверяем, есть ли данные
-              ? brands.map((item, index) => (
-                  // Карточка бренда
-                  <Card
-                    key={item.id}
-                    rank={(page - 1) * itemsPerPage + index + 1}
-                    onClick={() => handleNavigate(`/brands/${item.id}/`)}
-                  >
-                    <div className="card-content">
-                      <h3>{item.name}</h3>
-                      <p>
-                        <span className="star">★</span> {item.average_rating}/10 (
-                        {item.review_count} отзывов, {item.energy_count} энергетиков)
-                      </p>
-                    </div>
-                  </Card>
-                ))
-              : // Сообщение, если данных нет
-                <p className="no-data">Нет данных о брендах</p>}
-          </div>
-        )}
-      </div>
-
-      {/* Компонент пагинации */}
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-      />
+      <Card type="container">
+        <div className="list-container">
+          {loading ? (
+            // Показываем индикатор загрузки
+            <Loader />
+          ) : error ? (
+            // Показываем сообщение об ошибке
+            <Error message={error} />
+          ) : (
+            // Отображаем список, если нет ошибок и загрузка завершена
+            <div className="cards-grid">
+              {topType === "energies"
+                ? energies.length > 0 ? (
+                    energies.map((item, index) => (
+                      // Карточка энергетика
+                      <Card
+                        key={item.id}
+                        type="list"
+                        rank={(page - 1) * itemsPerPage + index + 1}
+                        onClick={() => handleNavigate(`/energies/${item.id}/`)}
+                      >
+                        <div className="card-image">
+                          {item.image_url ? (
+                            <img
+                              src={`${process.env.REACT_APP_BACKEND_URL}/${item.image_url}`}
+                              alt={item.name}
+                            />
+                          ) : (
+                            <div className="no-image-card">Нет фото</div>
+                          )}
+                        </div>
+                        <div className="card-content">
+                          <h2>
+                            {item.brand?.name} {item.name}
+                          </h2>
+                          <p>
+                            <span className="star">★</span> {item.average_rating}/10 (
+                            {item.review_count} отзывов)
+                          </p>
+                          <p>{item.category.name}</p>
+                        </div>
+                      </Card>
+                    ))
+                  ) : (
+                    <Error message={"Нет данных об энергетиках"} />
+                  )
+                : brands.length > 0 ? (
+                    brands.map((item, index) => (
+                      // Карточка бренда
+                      <Card
+                        key={item.id}
+                        type="list"
+                        rank={(page - 1) * itemsPerPage + index + 1}
+                        onClick={() => handleNavigate(`/brands/${item.id}/`)}
+                      >
+                        <div className="card-content">
+                          <h3>{item.name}</h3>
+                          <p>
+                            <span className="star">★</span> {item.average_rating}/10 (
+                            {item.review_count} отзывов, {item.energy_count} энергетиков)
+                          </p>
+                        </div>
+                      </Card>
+                    ))
+                  ) : (
+                    <Error message={"Нет данных о брендах"} />
+                  )}
+            </div>
+          )}
+          {/* Компонент пагинации */}
+          { !loading && !error &&
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          }
+        </div>
+      </Card>
     </div>
   );
 };

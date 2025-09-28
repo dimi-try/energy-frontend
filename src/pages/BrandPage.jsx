@@ -3,8 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import api from "../hooks/api";
 
+import Loader from "../components/Loader";
+import Error from "../components/Error";
 import Card from "../components/Card";
-import UnifiedCard from "../components/UnifiedCard";
 import Pagination from "../components/Pagination";
 
 import "./BrandPage.css";
@@ -70,20 +71,20 @@ const BrandPage = () => {
   };
 
   // Показываем индикатор загрузки
-  if (loading) return <p className="loading">Загрузка...</p>;
+  if (loading) return <Loader />;
   // Показываем сообщение об ошибке
-  if (error) return <p className="error">Ошибка: {error}</p>;
+  if (error) return <Error message={error} />;
   // Показываем сообщение, если бренд не найден
-  if (!brand) return <p className="error">Бренд не найден</p>;
-
+  if (!brand) return <Error message="Бренд не найден" />;
+  
   return (
-    <div className="brand-container container">
+    <div className="container">
       {/* Заголовок страницы */}
-      <h1>{brand.name}</h1>
+      <h1 className="brand-header">{brand.name}</h1>
       {/* Информация о бренде */}
-      <div className="brand-info card">
+      <Card type="container" className="brand-info">
         <p>
-          <strong>Оценка:</strong> 
+          <strong>Оценка:</strong>
           <span className="star">★</span> {brand.average_rating || "0.0"}/10 ({brand.review_count} отзывов)
         </p>
         <p>
@@ -92,10 +93,10 @@ const BrandPage = () => {
         <p>
           <strong>Энергетиков:</strong> {brand.energy_count || "0.0"}
         </p>
-      </div>
+      </Card>
 
       {/* Список энергетиков */}
-      <UnifiedCard> 
+      <Card type="container">
         <h2>Энергетики ({brand.energy_count})</h2>
         <div className="list-container">
           {energies.length > 0 ? (
@@ -105,25 +106,27 @@ const BrandPage = () => {
                   // Карточка энергетика
                   <Card
                     key={energy.id}
+                    type="list"
                     rank={(page - 1) * energiesPerPage + index + 1}
                     onClick={() => handleNavigate(`/energies/${energy.id}/`)}
                   >
-                    <div className="energy-card-image">
+                    <div className="card-image">
                       {energy.image_url ? (
                         <img
                           src={`${process.env.REACT_APP_BACKEND_URL}/${energy.image_url}`}
                           alt={energy.name}
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                            e.target.nextSibling.style.display = 'flex';
-                          }}
                         />
-                      ) : null}
-                      <div className="no-image-card"> </div>
+                      ) : (
+                        <div className="no-image-card">Нет фото</div>
+                      )}
                     </div>
                     <div className="card-content">
                       <h2>{energy.name}</h2>
-                      <p><span className="star">★</span> {energy.average_rating || "0.0"}/10 ({energy.review_count || 0} отзывов)</p>
+                      <p>
+                        <span className="star">★</span> 
+                        {energy.average_rating || "0.0"}/10 
+                        ({energy.review_count || 0} отзывов)
+                      </p>
                       <p>{energy.category.name}</p>
                     </div>
                   </Card>
@@ -136,10 +139,10 @@ const BrandPage = () => {
               />
             </>
           ) : (
-            <p className="no-energy">Пока нет энергетиков</p>
+            <Error message="Пока нет энергетиков" />
           )}
         </div>
-      </UnifiedCard>
+      </Card>
     </div>
   );
 };

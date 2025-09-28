@@ -1,29 +1,8 @@
-/* Стили для контейнера страницы бренда */
-.brand-container {
-  text-align: center; /* Центрируем текст */
-}
-
-/* Стили для информации о бренде */
-.brand-info {
-  display: block;
-  margin: 0 0 10px 0; /* Отступ между строками */
-}
-
-/* Стили для сетки карточек */
-.cards-grid {
-  display: flex; /* Flexbox для выравнивания */
-  flex-direction: column; /* Вертикальное расположение */
-  gap: 10px; /* Отступ между карточками */
+.brand-header {
+  text-align: center;
 }
 
 /* Эффект наведения на ссылку */
 .details-link:hover {
-  text-decoration: underline; /* Подчеркивание при наведении */
-}
-
-/* Стили для сообщения об отсутствии энергетиков */
-.no-energy {
-  text-align: center; /* Центрируем текст */
-  font-size: 18px; /* Размер шрифта */
-  color: var(--text-color); /* Цвет текста */
+  text-decoration: underline;
 }

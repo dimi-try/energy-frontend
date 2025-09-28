@@ -4,9 +4,11 @@ import { ToastContainer, toast } from "react-toastify";
 
 import api from "../hooks/api";
 
-import ReviewCard from "../components/ReviewCard";
-import UnifiedCard from "../components/UnifiedCard";
-import ImageUpload from '../components/ImageUpload';
+import Loader from "../components/Loader";
+import Error from "../components/Error";
+import Card from "../components/Card";
+import Button from "../components/Button";
+import ImageUpload from "../components/ImageUpload";
 import Pagination from "../components/Pagination";
 
 import "./EnergyDrinkPage.css";
@@ -19,6 +21,10 @@ const EnergyDrinkPage = ({ userId, token }) => {
   const [energy, setEnergy] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [criteria, setCriteria] = useState([]);
+  // Состояние для индикации загрузки
+  const [loading, setLoading] = useState(true);
+  // Состояние для ошибок
+  const [error, setError] = useState(null);
   // Состояние для нового отзыва
   const [newReview, setNewReview] = useState({ review_text: "", ratings: {}, image: null });
   // Состояние для звезд
@@ -35,6 +41,9 @@ const EnergyDrinkPage = ({ userId, token }) => {
 
   // Загружаем данные об энергетике, отзывах, критериях и общем количестве отзывов
   useEffect(() => {
+    setLoading(true); // Устанавливаем состояние загрузки
+    setError(null); // Сбрасываем ошибки
+    
     const fetchData = async () => {
       try {
         const [energyRes, reviewsRes, criteriaRes, countRes] = await Promise.all([
@@ -55,14 +64,9 @@ const EnergyDrinkPage = ({ userId, token }) => {
           image: null
         });
       } catch (err) {
-        toast.error("Ошибка при загрузке данных. Попробуйте позже.", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        setError("Ошибка при загрузке данных. Попробуйте позже." + err.message); // Сохраняем ошибку
+      } finally {
+        setLoading(false); // Снимаем состояние загрузки
       }
     };
     fetchData();
@@ -112,14 +116,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
         }));
 
       if (ratings.length === 0) {
-        toast.error("Оценки обязательны!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        toast.error("Оценки обязательны!");
         return;
       }
 
@@ -146,26 +143,9 @@ const EnergyDrinkPage = ({ userId, token }) => {
         image: null
       });
       setHoveredStars({});
-      toast.success("Отзыв успешно отправлен!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.success("Отзыв успешно отправлен!");
     } catch (err) {
-      toast.error(
-        err.response?.data?.detail || "Ошибка при отправке отзыва. Попробуйте позже.",
-        {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        }
-      );
+      toast.error(err.response?.data?.detail || "Ошибка при отправке отзыва.");
     }
   };
 
@@ -180,34 +160,20 @@ const EnergyDrinkPage = ({ userId, token }) => {
       setEnergy(energyRes.data);
       setReviews(reviewsRes.data);
       setTotalPages(Math.ceil(countRes.data.total / reviewsPerPage)); // Обновляем количество страниц
-      toast.success("Данные энергетика и отзывы обновлены!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.success("Данные энергетика и отзывы обновлены!");
     } catch (err) {
-      toast.error(
-        err.response?.data?.detail || "Ошибка при обновлении данных.",
-        {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        }
-      );
+      toast.error(err.response?.data?.detail || "Ошибка при обновлении данных.");
     }
   };
 
-  // Показываем индикатор загрузки, если данные еще не загружены
-  if (!energy) return <p className="loading">Загрузка...</p>;
-
+  // Показываем индикатор загрузки
+  if (loading) return <Loader />;
+  // Показываем сообщение об ошибке
+  if (error) return <Error message={error} />;
+  // Показываем сообщение, если энергетик не найден
+  if (!energy) return <Error message="Энергетик не найден" />;
   return (
-    <div className="energy-container container">
+    <div className="container">
       {/* Контейнер для уведомлений */}
       <ToastContainer
         position="top-right"
@@ -237,7 +203,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
             {energy.average_rating || "0.0"}/10 ({energy.review_count} отзывов)
           </p>
           {/* Информация об энергетике */}
-          <UnifiedCard>
+          <Card type="container">
             <h2>Об энергетике</h2>
             <p>
               <strong>Производитель:</strong>
@@ -260,11 +226,11 @@ const EnergyDrinkPage = ({ userId, token }) => {
                 <strong>Ингредиенты:</strong> {energy.ingredients}
               </p>
             )}
-          </UnifiedCard>
+          </Card>
         </div>
       </div>
 
-      <UnifiedCard className="review-form">
+      <Card type="container" className="review-form">
         <h2>Оставить отзыв</h2>
         {!userId || !token ? (
           <div className="auth-required">
@@ -288,10 +254,10 @@ const EnergyDrinkPage = ({ userId, token }) => {
               backendUrl={process.env.REACT_APP_BACKEND_URL}
             />
             {criteria.map((criterion) => (
-              <div key={criterion.id} className="star-criteria">
+              <div key={criterion.id} className="card-star-criteria">
                 <label>{criterion.name}</label>
                 <div
-                  className="stars-rating"
+                  className="card-stars-rating"
                   onMouseLeave={() => handleStarLeave(criterion.id)}
                 >
                   {[...Array(10)].map((_, index) => {
@@ -299,7 +265,7 @@ const EnergyDrinkPage = ({ userId, token }) => {
                     return (
                       <span
                         key={index}
-                        className={`star-rating ${
+                        className={`card-star-rating ${
                           ratingValue <= (hoveredStars[criterion.id] || newReview.ratings[criterion.id] || 0)
                             ? "filled"
                             : ""
@@ -314,20 +280,23 @@ const EnergyDrinkPage = ({ userId, token }) => {
                 </div>
               </div>
             ))}
-            <button type="submit">Отправить</button>
+            <Button type="submit" variant="primary">
+              Отправить
+            </Button>
           </form>
         )}
-      </UnifiedCard>
+      </Card>
 
       {/* Список отзывов */}
-      <UnifiedCard>
+      <Card type="container">
         <h2>Отзывы ({energy.review_count})</h2>
         <div className="list-container">
           {reviews.length > 0 ? (
             <>
               {reviews.map((review) => (
-                <ReviewCard
+                <Card
                   key={review.id}
+                  type="review"
                   review={review}
                   criteria={criteria}
                   isProfile={false}
@@ -343,10 +312,10 @@ const EnergyDrinkPage = ({ userId, token }) => {
               />
             </>
           ) : (
-            <p>Отзывов пока нет.</p>
+            <Error message="Пока нет отзывов" />
           )}
         </div>
-      </UnifiedCard>
+      </Card>
     </div>
   );
 };

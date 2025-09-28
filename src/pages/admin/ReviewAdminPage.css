@@ -1,63 +1,3 @@
-.review-admin-page {
-    padding: 20px;
-    background: var(--background-color);
-    color: var(--text-color);
-    min-height: 100vh;
-    padding-bottom: 80px;
-}
-
-.review-admin-page h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.review-admin-page .error {
-    color: red;
-    font-size: 14px;
-}
-
-.review-admin-page .success {
-    color: green;
-    font-size: 14px;
-}
-
-.review-admin-page .review-list {
-    list-style: none;
-    padding: 0;
-}
-
-.review-admin-page .review-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 10px;
-    background: var(--card-background);
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
-
-.review-admin-page .review-list li .review-content {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    flex: 1;
-}
-
-.review-admin-page .review-list li button {
-    padding: 5px 10px;
-    background: var(--primary-color);
-    color: var(--button-text-color);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.review-admin-page .review-list li button:hover {
-    opacity: 0.9;
-}
-
 /* Стили для изображения в отзыве */
 .review-image img {
     max-width: 100%;
@@ -68,13 +8,12 @@
     margin-top: 10px;
 }
 
+.review-card {
+    display: block;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
-    .review-admin-page .review-list li {
-        flex-direction: column;
-        gap: 10px;
-    }
-
     .review-image img {
         max-height: 150px;
     }
@@ -83,10 +22,5 @@
 @media (max-width: 480px) {
     .review-image img {
         max-height: 100px;
-    }
-
-    .review-admin-page .review-list li button {
-        width: 100%;
-        text-align: center;
     }
 }

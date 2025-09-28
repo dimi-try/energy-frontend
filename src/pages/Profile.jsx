@@ -4,10 +4,12 @@ import { ToastContainer, toast } from "react-toastify";
 
 import api from "../hooks/api";
 
-import ReviewCard from "../components/ReviewCard";
-import UnifiedCard from "../components/UnifiedCard";
-import Pagination from "../components/Pagination";
+import Loader from "../components/Loader";
+import Error from "../components/Error";
+import Card from "../components/Card";
+import Button from "../components/Button";
 import AvatarUpload from "../components/AvatarUpload";
+import Pagination from "../components/Pagination";
 
 import "./Profile.css";
 
@@ -68,15 +70,7 @@ const Profile = ({ userId: currentUserId, token }) => {
         setNewUsername(profileRes.data.user.username); // Устанавливаем начальное имя
         setTotalPages(Math.ceil(countRes.data.total / reviewsPerPage)); // Устанавливаем общее количество страниц
       } catch (err) {
-        setError(err.response?.data?.detail || err.message);
-        toast.error(err.response?.data?.detail || "Ошибка при загрузке данных", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        setError(err.response?.data?.detail || "Ошибка при загрузке данных");
       } finally {
         setLoading(false);
       }
@@ -91,7 +85,6 @@ const Profile = ({ userId: currentUserId, token }) => {
 
   // Обновление профиля после изменения аватарки
   const handleAvatarUpdated = (updatedUser) => {
-    console.log('Обновленный профиль:', updatedUser); // Логирование для отладки
     setProfile({ ...profile, user: updatedUser });
   };
 
@@ -107,26 +100,9 @@ const Profile = ({ userId: currentUserId, token }) => {
       setReviews(reviewsRes.data.reviews);
       setNewUsername(profileRes.data.user.username); // Обновляем имя на случай изменения
       setTotalPages(Math.ceil(countRes.data.total / reviewsPerPage)); // Обновляем количество страниц
-      toast.success("Данные профиля и отзывы обновлены!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.success("Данные профиля и отзывы обновлены!");
     } catch (err) {
-      toast.error(
-        err.response?.data?.detail || "Ошибка при обновлении данных профиля.",
-        {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        }
-      );
+      toast.error(err.response?.data?.detail || "Ошибка при обновлении данных профиля.");
     }
   };
 
@@ -139,46 +115,33 @@ const Profile = ({ userId: currentUserId, token }) => {
       });
       setProfile({ ...profile, user: response.data }); // Обновляем профиль
       setIsEditing(false); // Выключаем режим редактирования
-      toast.success("Имя успешно обновлено!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.success("Имя успешно обновлено!");
     } catch (err) {
-      setError(err.response?.data?.detail || "Ошибка при обновлении имени");
-      toast.error(err.response?.data?.detail || "Ошибка при обновлении имени", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.error(err.response?.data?.detail || "Ошибка при обновлении имени");
     }
   };
 
-  // Если пользователь не авторизован
   if (!currentUserId || !token) {
     return (
       <div className="profile-container container">
-        <h1>Доступ ограничен</h1>
-        <p>
-          Пожалуйста, зайдите через тг бот{" "}
-          <a href="https://t.me/energy_charts_styula_bot">@energy_charts_styula_bot</a>
-        </p>
+        <Card type="container">
+          <h1>Доступ ограничен</h1>
+          <p>
+            Пожалуйста, зайдите через тг бот{" "}
+            <a href="https://t.me/energy_charts_styula_bot">@energy_charts_styula_bot</a>
+          </p>
+        </Card>
       </div>
     );
   }
 
-  if (loading) return <div className="loading">Загрузка...</div>;
-  if (error) return <div className="error">Ошибка: {error}</div>;
-  if (!profile) return <div className="error">Профиль не найден</div>;
+  if (loading) return <Loader />;
+  if (error) return <Error message={error} />;
+  if (!profile) return <Error message="Профиль не найден" />;
 
   return (
-    <div className="profile-container container">
+    <div className="container">
+      {/* Контейнер для уведомлений */}
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -215,10 +178,12 @@ const Profile = ({ userId: currentUserId, token }) => {
               required
             />
             <div className="edit-buttons">
-              <button type="submit">Сохранить</button>
-              <button type="button" onClick={() => setIsEditing(false)}>
+              <Button type="submit" variant="primary">
+                Сохранить
+              </Button>
+              <Button variant="danger" onClick={() => setIsEditing(false)}>
                 Отмена
-              </button>
+              </Button>
             </div>
           </form>
         ) : (
@@ -226,12 +191,11 @@ const Profile = ({ userId: currentUserId, token }) => {
             <h1>{profile.user.username}</h1>
             {/* Кнопка редактирования только для своего профиля */}
             {targetUserId === currentUserId && (
-              <button
-                className="edit-profile-button"
-                onClick={() => setIsEditing(true)}
-              >
+              <Button
+                variant="primary" 
+                onClick={() => setIsEditing(true)}>
                 Редактировать имя
-              </button>
+              </Button>
             )}
           </>
         )}
@@ -239,21 +203,21 @@ const Profile = ({ userId: currentUserId, token }) => {
 
       {/* Оценки и средний балл */}
       <div className="stats-row">
-        <div className="card stat-card">
+        <Card type="container" className="stat-card">
           <h3>Всего оценок</h3>
           <p className="stat-value">{profile.total_ratings}</p>
-        </div>
-        <div className="card stat-card">
+        </Card>
+        <Card type="container" className="stat-card">
           <h3>Средний балл</h3>
           <p className="stat-value">
             {profile.average_rating ? `${profile.average_rating}/10` : "-"}
           </p>
-        </div>
+        </Card>
       </div>
 
       {/* Любимый энергетик и бренд */}
       <div className="stats-row">
-        <div className="card stat-card">
+        <Card type="container" className="stat-card">
           <h3>Любимый энергетик</h3>
           <p className="stat-value">
             {profile.favorite_energy ? (
@@ -267,8 +231,8 @@ const Profile = ({ userId: currentUserId, token }) => {
               "-"
             )}
           </p>
-        </div>
-        <div className="card stat-card">
+        </Card>
+        <Card type="container" className="stat-card">
           <h3>Любимый бренд</h3>
           <p className="stat-value">
             {profile.favorite_brand ? (
@@ -282,11 +246,11 @@ const Profile = ({ userId: currentUserId, token }) => {
               "-"
             )}
           </p>
-        </div>
+        </Card>
       </div>
 
       {/* История отзывов */}
-      <UnifiedCard>
+      <Card type="container">
         <h2>История отзывов ({profile.total_ratings})</h2>
         {reviews.length === 0 ? (
           <p className="no-reviews">Отзывов пока нет</p>
@@ -294,8 +258,9 @@ const Profile = ({ userId: currentUserId, token }) => {
           <>
             <div className="list-container">
               {reviews.map((review) => (
-                <ReviewCard
+                <Card
                   key={review.id}
+                  type="review"
                   review={review}
                   criteria={criteria}
                   isProfile={true}
@@ -312,7 +277,7 @@ const Profile = ({ userId: currentUserId, token }) => {
             />
           </>
         )}
-      </UnifiedCard>
+      </Card>
     </div>
   );
 };
