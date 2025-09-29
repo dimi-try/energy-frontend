@@ -205,7 +205,6 @@
 
 /* ранг карточки */
 .card-rank {
-  position: absolute;
   top: 10px;
   left: 10px;
   font-size: 1.2rem;
@@ -216,13 +215,11 @@
 .no-image-card {
   width: 100%;
   height: 100%;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  background-color: #f9f9f9;
-  font-size: 1.2rem;
-  color: #666;
+  background-color: #fff;
 }
 
 /* анимация заполнения звезды */

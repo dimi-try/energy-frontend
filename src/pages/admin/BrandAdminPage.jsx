@@ -233,7 +233,6 @@ const BrandAdminPage = ({ token }) => {
                     <Card key={brand.id} type="container" className="brand-card">
                       <div>
                         <p>
-                          <strong>Название: </strong>
                           <Link to={`/brands/${brand.id}`} className="details-link">
                             {brand.name}
                           </Link>

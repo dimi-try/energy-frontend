@@ -38,7 +38,7 @@
   border-radius: 8px;
 }
 
-.energy-image .no-image {
+.energy-image {
   width: 100%;
   max-width: 300px;
   height: 300px;
@@ -46,9 +46,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  background-color: #f9f9f9;
   font-size: 1.2rem;
-  color: #666;
 }
 
 /* Стили для деталей энергетика */
@@ -92,7 +90,7 @@
   }
 
   .energy-image img,
-  .energy-image .no-image {
+  .energy-image {
     max-width: 100%;
     max-height: 200px;
     height: auto;
@@ -124,7 +122,7 @@
   }
 
   .energy-image img,
-  .energy-image .no-image {
+  .energy-image {
     max-width: 100%;
     max-height: 150px;
     height: auto;
