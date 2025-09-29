@@ -40,6 +40,7 @@
 
 /* стили для отзыва */
 .card-review {
+  display: block;
 }
 
 /* изображение в карточке */
@@ -65,11 +66,11 @@
   margin-bottom: 10px;
 }
 
-/* элемент отзыва */
+/* юзернейм */
 .card-review-item {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #e5e7eb;
+  color: var(--primary-color);
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -82,7 +83,6 @@
   margin-bottom: 10px;
   font-size: 1rem;
   font-weight: 600;
-  color: #e5e7eb;
 }
 
 /* звезда рейтинга */
@@ -92,8 +92,9 @@
 }
 
 /* значение рейтинга */
-.card-review-average-rating .card-rating {
+.card-rating {
   font-weight: bold;
+  color: var(--primary-color);
 }
 
 /* футер карточки */
@@ -104,7 +105,7 @@
 /* дата отзыва */
 .card-review-date {
   font-size: 0.9rem;
-  color: #e5e7eb;
+  color: var(--text-color);
 }
 
 /* пользователь отзыва */
@@ -129,9 +130,15 @@
 
 /* имя пользователя */
 .card-username {
-  font-size: 1.2rem;
   font-weight: 700;
-  color: #e5e7eb;
+}
+
+/* элемент рейтинга */
+.card-rating-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 4px 0 8px;
+  width: 100%;
 }
 
 /* форма редактирования отзыва */
@@ -140,18 +147,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-/* текстовое поле формы */
-.card-edit-form textarea {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid rgba(var(--white-color-rgb), 0.25);
-  border-radius: 8px;
-  box-sizing: border-box;
-  background: rgba(var(--white-color-rgb), 0.1);
-  color: #e5e7eb;
 }
 
 /* кнопки действий отзыва */
