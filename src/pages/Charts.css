@@ -1,0 +1,79 @@
+/* Мини контейнер для кнопок переключения */
+.toggle-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* Стили для кнопок переключения (неактивная кнопка)*/
+.toggle-buttons button {
+  background-color: var(--card-background);
+  color: var(--primary-color);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+/* Стили для активной кнопки */
+.toggle-buttons button.active {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+}
+
+/* Стили для сетки карточек */
+.cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Стили для панели фильтрации */
+.filter-panel {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+/* Стили для фильтра рейтинга */
+.rating-filter {
+  margin: 20px 0;
+}
+
+.rating-filter h4 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Стили для ползунка */
+.rc-slider {
+  margin: 10px 0;
+}
+
+.rating-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 480px) {
+  .toggle-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .toggle-buttons button {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .filter-panel {
+    padding: 10px;
+  }
+}
