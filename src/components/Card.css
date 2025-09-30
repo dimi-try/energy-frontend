@@ -52,6 +52,10 @@
   height: 100%;
 }
 
+.card-image img {
+  max-height: 250px;
+}
+
 /* контент карточки */
 .card-content {
   flex: 1;
