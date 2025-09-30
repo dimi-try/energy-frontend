@@ -186,7 +186,7 @@ const Card = ({
 
         {/* изображение отзыва */}
         {review.image_url && (
-          <div className="card-image">
+          <div className="card-review-image">
             <img src={`${process.env.REACT_APP_BACKEND_URL}/${review.image_url}`} alt="Отзыв" />
           </div>
         )}

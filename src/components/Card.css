@@ -44,7 +44,7 @@
 }
 
 /* изображение в карточке */
-.card-image {
+.card-image, .card-review-image {
   flex: 0 0 120px;
   display: flex;
   justify-content: center;
@@ -55,6 +55,11 @@
 .card-image img {
   max-height: 250px;
   max-width: 150px;
+}
+
+.card-review-image img {
+  max-height: 300px;
+  max-width: 200px;
 }
 
 /* контент карточки */
@@ -264,6 +269,10 @@
     max-height: 200px;
     max-width: 100px;
   }
+  .card-review-image img {
+    max-height: 250px;
+    max-width: 150px;
+  }
   .card-review-item {
     font-size: 1.1rem;
   }
@@ -284,6 +293,10 @@
   .card-image img {
     max-height: 150px;
     max-width: 60px;
+  }
+  .card-review-image img {
+    max-height: 200px;
+    max-width: 100px;
   }
   .card-review-item {
     font-size: 1rem;
