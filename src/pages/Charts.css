@@ -61,6 +61,29 @@
   color: var(--text-color);
 }
 
+.filter-toggle {
+  cursor: pointer;
+  color: var(--primary-color);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  transition: var(--transition);
+}
+
+.filter-toggle:hover {
+  color: var(--primary-color-dark);
+  transform: scale(1.05);
+}
+
+/* Обновляем .toggle-buttons для выравнивания */
+.toggle-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  align-items: center; /* Добавляем выравнивание по центру */
+}
+
 /* Адаптивность для мобильных устройств */
 @media (max-width: 480px) {
   .toggle-buttons {
@@ -74,6 +97,12 @@
   }
 
   .filter-panel {
+    padding: 10px;
+  }
+
+  .filter-toggle {
+    width: 100%;
+    text-align: center;
     padding: 10px;
   }
 }

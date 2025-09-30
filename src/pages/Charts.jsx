@@ -175,9 +175,9 @@ const Charts = () => {
         >
           Топ Производителей
         </button>
-        <Button variant="primary" onClick={toggleFilter}>
-          Фильтр
-        </Button>
+        <div className="filter-toggle" onClick={toggleFilter}>
+          Фильтр {isFilterOpen ? '˄' : '˅'}
+        </div>
       </div>
 
       {/* Панель фильтрации */}
