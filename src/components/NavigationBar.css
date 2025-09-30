@@ -36,7 +36,7 @@
   color: var(--text-color);
   font-size: 12px;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease; /* Плавный переход для фона и цвета */
   padding: 8px;
   border-radius: 30px; /* Скругленные углы */
 }
