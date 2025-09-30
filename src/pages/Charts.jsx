@@ -193,7 +193,6 @@ const Charts = () => {
                 ? "Поиск по энергетику или бренду..."
                 : "Поиск по бренду..."
             }
-            className="search-input"
           />
           <div className="rating-filter">
             <h4>Диапазон рейтинга</h4>
