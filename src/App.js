@@ -50,9 +50,9 @@ function App() {
         console.log("Applying theme:", theme);
 
         // Устанавливаем все переменные из themeParams
-        document.documentElement.style.setProperty("--background-color", theme.secondary_bg_color || "#ffffff");
-        document.documentElement.style.setProperty("--text-color", theme.text_color);
-        document.documentElement.style.setProperty("--card-background", theme.bg_color);
+        document.documentElement.style.setProperty("--background-color", theme.secondary_bg_color || "#f5f5f5");
+        document.documentElement.style.setProperty("--text-color", theme.text_color || "#333333");
+        document.documentElement.style.setProperty("--card-background", theme.bg_color || "ffffff");
         document.documentElement.style.setProperty("--primary-color", theme.button_color || "#007aff");
         document.documentElement.style.setProperty("--button-text-color", theme.button_text_color || "#ffffff");
       };

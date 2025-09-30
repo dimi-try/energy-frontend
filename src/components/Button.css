@@ -12,7 +12,6 @@
   backdrop-filter: blur(15px);
   box-shadow: 0 4px 15px rgba(var(--black-color-rgb), 0.15), inset 0 0 8px rgba(var(--white-color-rgb), 0.2);
   border: 1px solid rgba(var(--white-color-rgb), 0.25);
-  cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   position: relative;
   overflow: hidden;

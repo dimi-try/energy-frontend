@@ -45,7 +45,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     border: 2px solid #fff;
     transition: var(--transition);
 }

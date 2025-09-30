@@ -101,37 +101,35 @@ const BrandPage = () => {
         <div className="list-container">
           {energies.length > 0 ? (
             <>
-              <div className="cards-grid">
-                {energies.map((energy, index) => (
-                  // Карточка энергетика
-                  <Card
-                    key={energy.id}
-                    type="list"
-                    rank={(page - 1) * energiesPerPage + index + 1}
-                    onClick={() => handleNavigate(`/energies/${energy.id}/`)}
-                  >
-                    <div className="card-image">
-                      {energy.image_url ? (
-                        <img
-                          src={`${process.env.REACT_APP_BACKEND_URL}/${energy.image_url}`}
-                          alt={energy.name}
-                        />
-                      ) : (
-                        <div className="no-image-card">Нет фото</div>
-                      )}
-                    </div>
-                    <div className="card-content">
-                      <h2>{energy.name}</h2>
-                      <p>
-                        <span className="star">★</span> 
-                        {energy.average_rating || "0.0"}/10 
-                        ({energy.review_count || 0} отзывов)
-                      </p>
-                      <p>{energy.category.name}</p>
-                    </div>
-                  </Card>
-                ))}
-              </div>
+              {energies.map((energy, index) => (
+                // Карточка энергетика
+                <Card
+                  key={energy.id}
+                  type="list"
+                  rank={(page - 1) * energiesPerPage + index + 1}
+                  onClick={() => handleNavigate(`/energies/${energy.id}/`)}
+                >
+                  <div className="card-image">
+                    {energy.image_url ? (
+                      <img
+                        src={`${process.env.REACT_APP_BACKEND_URL}/${energy.image_url}`}
+                        alt={energy.name}
+                      />
+                    ) : (
+                      <div className="no-image-card">Нет фото</div>
+                    )}
+                  </div>
+                  <div className="card-content">
+                    <h2>{energy.name}</h2>
+                    <p>
+                      <span className="star">★</span> 
+                      {energy.average_rating || "0.0"}/10 
+                      ({energy.review_count || 0} отзывов)
+                    </p>
+                    <p>{energy.category.name}</p>
+                  </div>
+                </Card>
+              ))}
               <Pagination
                 currentPage={page}
                 totalPages={totalPages}

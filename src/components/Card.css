@@ -192,7 +192,6 @@
 .card-star-rating {
   font-size: 20px;
   color: #ccc;
-  cursor: pointer;
   transition: transform 0.2s ease, color 0.2s ease;
   display: inline-block;
 }
