@@ -54,6 +54,7 @@
 
 .card-image img {
   max-height: 250px;
+  max-width: 150px;
 }
 
 /* контент карточки */
@@ -261,6 +262,7 @@
   }
   .card-image img {
     max-height: 200px;
+    max-width: 100px;
   }
   .card-review-item {
     font-size: 1.1rem;
@@ -281,6 +283,7 @@
   }
   .card-image img {
     max-height: 150px;
+    max-width: 60px;
   }
   .card-review-item {
     font-size: 1rem;
