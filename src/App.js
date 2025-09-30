@@ -7,10 +7,11 @@ import { useUserVerification } from "./hooks/useUserVerification";
 
 import NavigationBar from "./components/NavigationBar";
 
-import Top100 from "./pages/Top100";
+import Charts from "./pages/Charts";
 import Profile from "./pages/Profile";
 import EnergyDrinkPage from "./pages/EnergyDrinkPage";
 import BrandPage from "./pages/BrandPage";
+
 import AdminPanel from "./pages/AdminPanel";
 import BrandAdminPage from "./pages/admin/BrandAdminPage";
 import EnergyAdminPage from "./pages/admin/EnergyAdminPage";
@@ -105,7 +106,7 @@ function App() {
   return (
     <div className={`App ${telegram?.colorScheme || "light"}`}>
       <Routes>
-        <Route index element={<Top100 />} />
+        <Route index element={<Charts />} />
         <Route path="/profile" element={<Profile userId={userId} token={token} />} />
         <Route path="/profile/:profileUserId" element={<Profile userId={userId} token={token} />} />
         <Route path="/energies/:id" element={<EnergyDrinkPage userId={userId} token={token} />} />

@@ -11,10 +11,10 @@ import Card from "../components/Card";
 import Button from "../components/Button";
 import Pagination from "../components/Pagination";
 
-import "./Top100.css";
+import "./Charts.css";
 
 // Компонент страницы Топ 100
-const Top100 = () => {
+const Charts = () => {
   // Состояние для типа топа (энергетики или бренды)
   const [topType, setTopType] = useState(() => {
     // Загружаем сохраненный тип топа или по умолчанию "energies"
@@ -306,4 +306,4 @@ const Top100 = () => {
   );
 };
 
-export default Top100;
+export default Charts;
