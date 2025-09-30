@@ -5,7 +5,7 @@ import { BackButton } from "@vkruglikov/react-telegram-web-app";
 import { useTelegram } from "./hooks/useTelegram";
 import { useUserVerification } from "./hooks/useUserVerification";
 
-import BottomNav from "./components/BottomNav";
+import NavigationBar from "./components/NavigationBar";
 
 import Top100 from "./pages/Top100";
 import Profile from "./pages/Profile";
@@ -123,7 +123,7 @@ function App() {
           </>
         )}
       </Routes>
-      <BottomNav role={role} />
+      <NavigationBar role={role} />
       {showBackButton && <BackButton onClick={() => navigate(-1)} />}
     </div>
   );

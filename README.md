@@ -25,10 +25,8 @@ energy-frontend/
 │
 ├── src/
 │   ├── components/                   # Переиспользуемые UI-компоненты
-│   │   ├── BottomNav.jsx
-│   │   ├── BottomNav.css
-│   │   ├── Card.jsx
-│   │   └── ReviewCard.jsx
+│   │   ├── ... .jsx
+│   │   └── ... .css
 │   ├── hooks/                        # Кастомные хуки
 │   │   ├── useTelegram.js            # Telegram WebApp API
 │   │   └── useUserVerification.js    # Верификация пользователя

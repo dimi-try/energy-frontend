@@ -1,0 +1,86 @@
+/* Стили для нижней навигационной панели */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(var(--white-color-rgb), 0.1);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(var(--white-color-rgb), 0.25);
+  box-shadow: 0 -4px 20px rgba(var(--black-color-rgb), 0.15);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 0;
+  height: 70px;
+  touch-action: pan-y; /* Разрешаем только вертикальную прокрутку */
+}
+
+/* Контейнер для элементов навигации */
+.nav-container {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Стили для элементов навигации */
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-decoration: none;
+  color: var(--text-color);
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.3s ease, color 0.3s ease; /* Плавный переход для фона и цвета */
+  padding: 8px;
+  border-radius: 30px; /* Скругленные углы */
+}
+
+/* Стили для активного элемента */
+.nav-item.active {
+  background: rgba(var(--primary-color-rgb), 0.15);
+  backdrop-filter: blur(10px);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Контент элемента навигации */
+.nav-item-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+}
+
+/* Иконки навигации */
+.nav-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+/* Метка навигации */
+.nav-label {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 480px) {
+  .bottom-nav {
+    padding: 10px 0;
+    height: 60px;
+  }
+  .nav-icon {
+    font-size: 22px;
+  }
+  .nav-label {
+    font-size: 9px;
+  }
+}

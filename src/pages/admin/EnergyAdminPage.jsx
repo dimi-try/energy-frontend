@@ -400,7 +400,7 @@ const EnergyAdminPage = ({ token }) => {
                   {energies.map((energy) => (
                     <Card key={energy.id} type="container" className="energy-card">
                       <div>
-                        <div className="energy-image">
+                        <div className="card-image">
                           {energy.image_url ? (
                             <img
                               src={`${process.env.REACT_APP_BACKEND_URL}/${energy.image_url}`}
@@ -408,12 +408,11 @@ const EnergyAdminPage = ({ token }) => {
                               loading="lazy"
                             />
                           ) : (
-                            <div className="no-image">Нет фото</div>
+                            <div className="no-image-card">Нет фото</div>
                           )}
                         </div>
                         <div>
                           <p>
-                            <strong>Название: </strong>
                             <Link to={`/energies/${energy.id}`} className="details-link">
                               {energy.brand.name} {energy.name}
                             </Link>
