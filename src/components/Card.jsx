@@ -165,7 +165,7 @@ const Card = ({
                 )}
                 {/* имя пользователя */}
                 {userId && token ? (
-                  <Link to={`/profile/${review.user_id}`} className="card-username">
+                  <Link to={`/profile/${review.user_id}`} className="details-link">
                     {review.user?.username || "Имя пустое"}
                   </Link>
                 ) : (

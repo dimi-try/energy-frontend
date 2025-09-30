@@ -82,10 +82,15 @@ textarea {
 /* Стили для ссылок */
 .details-link {
   color: var(--primary-color); /* Цвет ссылки */
-  text-decoration: none; /* Убираем подчеркивание */
+  text-decoration: underline; /* Подчеркивание */
   font-weight: 600; /* Полужирный шрифт */
   margin-top: 10px; /* Отступ сверху */
   display: block; /* Блочный элемент */
+}
+
+/* Эффект наведения на ссылку */
+.details-link:hover {
+  text-decoration: none;
 }
 
 /* Стили для звезд рейтинга */
