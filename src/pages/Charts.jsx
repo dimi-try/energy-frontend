@@ -175,11 +175,11 @@ const Charts = () => {
         >
           Топ Производителей
         </button>
-        <div className="filter-toggle" onClick={toggleFilter}>
-          Фильтр {isFilterOpen ? '˄' : '˅'}
-        </div>
       </div>
 
+      <div className="filter-toggle" onClick={toggleFilter}>
+        Фильтр {isFilterOpen ? '˄' : '˅'}
+      </div>
       {/* Панель фильтрации */}
       {isFilterOpen && (
         <Card type="container" className="filter-panel">
