@@ -47,6 +47,7 @@
   margin-bottom: 10px;
   font-size: 1.1rem;
   font-weight: 600;
+  color: var(--text-color);
 }
 
 /* Стили для ползунка */
@@ -86,10 +87,6 @@
 
 /* Адаптивность для мобильных устройств */
 @media (max-width: 480px) {
-  .toggle-buttons {
-    flex-direction: column;
-    gap: 8px;
-  }
 
   .toggle-buttons button {
     width: 100%;
