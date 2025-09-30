@@ -178,7 +178,7 @@ const Charts = () => {
       </div>
 
       <div className="filter-toggle" onClick={toggleFilter}>
-        Фильтр {isFilterOpen ? '˄' : '˅'}
+        Фильтр <span className={`filter-icon ${isFilterOpen ? 'open' : ''}`}>{'˅'}</span>
       </div>
       {/* Панель фильтрации */}
       {isFilterOpen && (
@@ -232,7 +232,7 @@ const Charts = () => {
             <Error message={error} />
           ) : (
             // Отображаем список, если нет ошибок и загрузка завершена
-            <div className="cards-grid">
+            <>
               {topType === "energies" ? (
                 energies.length > 0 ? (
                   energies.map((item) => (
@@ -289,7 +289,7 @@ const Charts = () => {
               ) : (
                     <Error message={"Нет данных о брендах"} />
               )}
-            </div>
+            </>
           )}
           {/* Компонент пагинации */}
           {!loading && !error && (

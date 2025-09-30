@@ -21,11 +21,26 @@
   color: var(--button-text-color);
 }
 
-/* Стили для сетки карточек */
-.cards-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* Кнопка "Фильтр" */
+.filter-toggle {
+  color: var(--primary-color);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  text-align: right;
+  transition: var(--transition);
+  gap: 8px;
+}
+
+/* Стили для иконки фильтра */
+.filter-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+/* Поворот иконки при открытом фильтре */
+.filter-icon.open {
+  transform: rotate(180deg);
 }
 
 /* Стили для панели фильтрации */
@@ -38,11 +53,12 @@
   transition: var(--transition);
 }
 
-/* Стили для фильтра рейтинга */
+/* Диапазон рейтинга */
 .rating-filter {
   margin: 20px 0;
 }
 
+/* Диапазон рейтинга надпись */
 .rating-filter h4 {
   margin-bottom: 10px;
   font-size: 1.1rem;
@@ -55,34 +71,12 @@
   margin: 10px 0;
 }
 
+/* Цифры 0 и 10 */
 .rating-values {
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
   color: var(--text-color);
-}
-
-.filter-toggle {
-  cursor: pointer;
-  color: var(--primary-color);
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 8px 16px;
-  transition: var(--transition);
-}
-
-.filter-toggle:hover {
-  color: var(--primary-color-dark);
-  transform: scale(1.05);
-}
-
-/* Обновляем .toggle-buttons для выравнивания */
-.toggle-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 15px;
-  align-items: center; /* Добавляем выравнивание по центру */
 }
 
 /* Адаптивность для мобильных устройств */
