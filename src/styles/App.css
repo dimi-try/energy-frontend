@@ -21,7 +21,6 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Inter', 'Helvetica', 'Arial', sans-serif; /* Устанавливаем шрифт */
   background-color: var(--background-color); /* Фон страницы */
   color: var(--text-color); /* Цвет текста */
-  margin: 0; /* Убираем отступы */
   padding: 0; /* Убираем внутренние отступы */
   overflow-x: hidden; /* Запрещаем горизонтальную прокрутку */
 }
