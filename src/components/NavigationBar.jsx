@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoTrophyOutline, IoSettingsOutline, IoPersonOutline } from "react-icons/io5";
+
 import "./NavigationBar.css";
 
 const NavigationBar = ({ role }) => {

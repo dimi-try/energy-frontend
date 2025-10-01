@@ -38,8 +38,8 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     background-color: var(--primary-color);
     border-radius: 50%;
     display: flex;
@@ -55,8 +55,7 @@
 
 .upload-icon {
     color: var(--button-text-color);
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 28px;
 }
 
 @media (max-width: 768px) {
@@ -66,12 +65,12 @@
     }
 
     .avatar-upload-button {
-        width: 25px;
-        height: 25px;
+        width: 30px;
+        height: 30px;
     }
 
     .upload-icon {
-        font-size: 16px;
+        font-size: 25px;
     }
 }
 
@@ -82,11 +81,11 @@
     }
 
     .avatar-upload-button {
-        width: 20px;
-        height: 20px;
+        width: 25px;
+        height: 25px;
     }
 
     .upload-icon {
-        font-size: 14px;
+        font-size: 18px;
     }
 }

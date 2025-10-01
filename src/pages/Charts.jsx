@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import debounce from "lodash/debounce";
+import { IoChevronDown } from "react-icons/io5";
+
 import api from "../hooks/api";
 
 import Loader from "../components/Loader";
@@ -178,11 +180,11 @@ const Charts = () => {
       </div>
 
       <div className="filter-toggle" onClick={toggleFilter}>
-        Фильтр <span className={`filter-icon ${isFilterOpen ? 'open' : ''}`}>{'˅'}</span>
+        Фильтр <IoChevronDown className={`filter-icon ${isFilterOpen ? 'open' : ''}`} />
       </div>
       {/* Панель фильтрации */}
       {isFilterOpen && (
-        <Card type="container" className="filter-panel">
+        <Card type="container">
           <h3>Фильтры</h3>
           <input
             type="text"

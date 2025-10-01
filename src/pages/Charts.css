@@ -43,16 +43,6 @@
   transform: rotate(180deg);
 }
 
-/* Стили для панели фильтрации */
-.filter-panel {
-  margin-bottom: 20px;
-  padding: 15px;
-  background: var(--card-background);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  transition: var(--transition);
-}
-
 /* Диапазон рейтинга */
 .rating-filter {
   margin: 20px 0;
@@ -84,10 +74,6 @@
 
   .toggle-buttons button {
     width: 100%;
-    padding: 10px;
-  }
-
-  .filter-panel {
     padding: 10px;
   }
 
