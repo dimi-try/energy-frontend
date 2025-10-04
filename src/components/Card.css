@@ -58,8 +58,8 @@
 }
 
 .card-review-image img {
-  max-height: 300px;
-  max-width: 200px;
+  max-height: 400px;
+  max-width: 350px;
 }
 
 /* контент карточки */
@@ -270,8 +270,8 @@
     max-width: 100px;
   }
   .card-review-image img {
-    max-height: 250px;
-    max-width: 150px;
+    max-height: 350px;
+    max-width: 300px;
   }
   .card-review-item {
     font-size: 1.1rem;
@@ -295,8 +295,8 @@
     max-width: 60px;
   }
   .card-review-image img {
-    max-height: 200px;
-    max-width: 100px;
+    max-height: 300px;
+    max-width: 250px;
   }
   .card-review-item {
     font-size: 1rem;
