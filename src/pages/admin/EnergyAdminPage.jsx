@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import debounce from "lodash/debounce";
 
 import api from "../../hooks/api";
+import { useUploadWithProgress } from '../../hooks/useUploadWithProgress';
 
 import Loader from "../../components/Loader";
 import Error from "../../components/Error";
@@ -38,6 +39,9 @@ const EnergyAdminPage = ({ token }) => {
   });
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
+  
+  // Состояние для визуализации прогресса загрузки изображения
+  const { uploadFile, UploadProgressComponent } = useUploadWithProgress();
 
   // Загрузка списка энергетиков
   const fetchEnergies = async (page = 1, search = "") => {
@@ -146,12 +150,7 @@ const EnergyAdminPage = ({ token }) => {
     try {
       let imageUrl = null;
       if (newEnergy.image) {
-        const formData = new FormData();
-        formData.append("file", newEnergy.image);
-        const uploadRes = await api.post("/energies/upload-image/", formData, {
-          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
-        });
-        imageUrl = uploadRes.data.image_url;
+        imageUrl = await uploadFile(newEnergy.image, '/energies/upload-image/');
       }
 
       await api.post(
@@ -204,12 +203,7 @@ const EnergyAdminPage = ({ token }) => {
     try {
       let imageUrl = newEnergy.image_url;
       if (newEnergy.image) {
-        const formData = new FormData();
-        formData.append("file", newEnergy.image);
-        const uploadRes = await api.post("/energies/upload-image/", formData, {
-          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
-        });
-        imageUrl = uploadRes.data.image_url;
+        imageUrl = await uploadFile(newEnergy.image, '/energies/upload-image/');
       }
 
       await api.put(
@@ -370,6 +364,10 @@ const EnergyAdminPage = ({ token }) => {
               </Button>
             )}
           </div>
+
+          {/* Прогресс загрузки изображения */}
+          <UploadProgressComponent />
+          
         </form>
       </Card>
 

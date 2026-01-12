@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 import api from "../hooks/api";
 import { formatTimestamp } from "../hooks/formatDate";
+import { useUploadWithProgress } from '../hooks/useUploadWithProgress';
 
 import ImageUpload from "./ImageUpload";
 import Button from "./Button";
@@ -44,6 +45,9 @@ const Card = ({
   //состояние для подсветки звезд при наведении
   const [hoveredStars, setHoveredStars] = React.useState({});
 
+  // Состояние для визуализации прогресса загрузки изображения
+  const { uploadFile, UploadProgressComponent } = useUploadWithProgress();
+    
   //обработчик клика по звезде для установки рейтинга
   const handleStarClick = (criterionId, rating) => {
     setEditReview({
@@ -69,12 +73,7 @@ const Card = ({
       //загрузка изображения, если оно выбрано
       let imageUrl = editReview.image_url;
       if (editReview.image) {
-        const formData = new FormData();
-        formData.append("file", editReview.image);
-        const uploadRes = await api.post("/reviews/upload-image/", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        imageUrl = uploadRes.data.image_url;
+        imageUrl = await uploadFile(editReview.image, '/reviews/upload-image/');
       }
 
       //формирование массива оценок
@@ -241,6 +240,10 @@ const Card = ({
                 Отмена
               </Button>
             </div>
+            
+            {/* Прогресс загрузки изображения */}
+            {UploadProgressComponent && <UploadProgressComponent />}
+
           </form>
         ) : (
           <>
