@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import api from "../hooks/api";
+import { useUploadWithProgress } from '../hooks/useUploadWithProgress';
 
 import Loader from "../components/Loader";
 import Error from "../components/Error";
@@ -38,6 +39,8 @@ const EnergyDrinkPage = ({ userId, token }) => {
   const [totalPages, setTotalPages] = useState(1);
   // Количество отзывов на странице
   const reviewsPerPage = 10;
+  // Состояние для визуализации прогресса загрузки изображения
+  const { uploadFile, UploadProgressComponent } = useUploadWithProgress();
 
   // Загружаем данные об энергетике, отзывах, критериях и общем количестве отзывов
   useEffect(() => {
@@ -96,15 +99,13 @@ const EnergyDrinkPage = ({ userId, token }) => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Предотвращаем перезагрузку страницы
     if (!userId || !token) return; // Проверяем авторизацию
+
     try {
       let imageUrl = null;
+
+      // Блок загрузки изображения — выполняется только если пользователь выбрал файл
       if (newReview.image) {
-        const formData = new FormData();
-        formData.append("file", newReview.image);
-        const uploadRes = await api.post("/reviews/upload-image/", formData, {
-          headers: { "Content-Type": "multipart/form-data" }
-        });
-        imageUrl = uploadRes.data.image_url;
+        imageUrl = await uploadFile(newReview.image, '/reviews/upload-image/');
       }
 
       // Формируем массив оценок
@@ -283,6 +284,9 @@ const EnergyDrinkPage = ({ userId, token }) => {
             <Button type="submit" variant="primary">
               Отправить
             </Button>
+
+            {/* Прогресс загрузки изображения */}
+            <UploadProgressComponent />
           </form>
         )}
       </Card>
