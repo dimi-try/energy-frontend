@@ -64,7 +64,7 @@ const MySuggestions = ({ userId, token }) => {
     <div className="container">
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="colored" />
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div>
         <h1>Предложка</h1>
         <Button variant="primary" onClick={() => navigate("/suggest")}>
           <IoAddOutline style={{ marginRight: "8px" }} />

@@ -263,7 +263,7 @@ const SuggestionForm = ({ userId, token, isAdmin = false }) => {
             ))}
           </select>
           
-          <textarea name="description" value={form.description} onChange={handleInputChange} placeholder="Описание энергетика" />
+          <textarea name="description" value={form.description} onChange={handleInputChange} placeholder="Описание энергетика (необязательно)" />
 
           <h2>Отзыв</h2>
           <textarea name="review_text" value={form.review_text} onChange={handleInputChange} placeholder="Ваш отзыв (необязательно)" />
