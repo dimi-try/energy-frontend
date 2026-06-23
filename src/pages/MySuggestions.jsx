@@ -21,6 +21,21 @@ const MySuggestions = ({ userId, token }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Проверка аутентификации
+  if (!userId || !token) {
+    return (
+      <div className="container">
+        <Card type="container">
+          <h1>Доступ ограничен</h1>
+          <p>
+            Пожалуйста, зайдите через тг бот{" "}
+            <a href="https://t.me/energy_charts_styula_bot">@energy_charts_styula_bot</a>
+          </p>
+        </Card>
+      </div>
+    );
+  }
+
   const fetchSuggestions = async () => {
     setLoading(true);
     setError(null);
