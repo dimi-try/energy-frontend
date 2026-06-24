@@ -47,10 +47,14 @@ const Charts = () => {
   const [searchQuery, setSearchQuery] = useState("");
   // Состояние для диапазона рейтинга
   const [ratingRange, setRatingRange] = useState([0, 10]);
+  // Состояние для списка категорий
+  const [categories, setCategories] = useState([]);
+  // Состояние для выбранной категории (null = все напитки)
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   // Дебаунсинг для поиска
-  const debouncedFetchData = debounce((page, query, minRating, maxRating) => {
-    fetchData(page, query, minRating, maxRating);
+  const debouncedFetchData = debounce((page, query, minRating, maxRating, categoryId) => {
+    fetchData(page, query, minRating, maxRating, categoryId);
   }, 300);
 
   // Сохраняем выбранный тип топа
@@ -59,14 +63,16 @@ const Charts = () => {
   }, [topType]);
 
   // Функция загрузки данных
-  const fetchData = (page, searchQuery, minRating, maxRating) => {
+  const fetchData = (page, searchQuery, minRating, maxRating, categoryId) => {
     setLoading(true);
     setError(null);
     const url = `/top/${topType}/?limit=${itemsPerPage}&offset=${
       (page - 1) * itemsPerPage
     }${searchQuery ? `&search_query=${encodeURIComponent(searchQuery)}` : ""}${
       minRating !== 0 ? `&min_rating=${minRating}` : ""
-    }${maxRating !== 10 ? `&max_rating=${maxRating}` : ""}`;
+    }${maxRating !== 10 ? `&max_rating=${maxRating}` : ""}${
+      categoryId ? `&category_id=${categoryId}` : ""
+    }`;
     api
       .get(url)
       .then((res) => {
@@ -81,18 +87,30 @@ const Charts = () => {
       .finally(() => setLoading(false));
   };
 
-  // Загружаем общее количество записей
+  // Загружаем категории при монтировании
   useEffect(() => {
     api
-      .get(
-        `/top/${topType}/count/${
-          searchQuery || ratingRange[0] > 0 || ratingRange[1] < 10
-            ? `?${searchQuery ? `search_query=${encodeURIComponent(searchQuery)}&` : ""}${
-                ratingRange[0] > 0 ? `min_rating=${ratingRange[0]}&` : ""
-              }${ratingRange[1] < 10 ? `max_rating=${ratingRange[1]}` : ""}`
-            : ""
-        }`
-      )
+      .get("/categories/")
+      .then((res) => {
+        const data = Array.isArray(res.data) ? res.data : [];
+        setCategories(data);
+      })
+      .catch((err) => {
+        console.error("API Categories Error:", err);
+      });
+  }, []);
+
+  // Загружаем общее количество записей
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (searchQuery) params.append("search_query", searchQuery);
+    if (ratingRange[0] > 0) params.append("min_rating", ratingRange[0]);
+    if (ratingRange[1] < 10) params.append("max_rating", ratingRange[1]);
+    if (selectedCategory) params.append("category_id", selectedCategory);
+    
+    const queryString = params.toString();
+    api
+      .get(`/top/${topType}/count/${queryString ? `?${queryString}` : ""}`)
       .then((res) => {
         const totalItems = res.data.total || 0;
         setTotalPages(Math.ceil(totalItems / itemsPerPage));
@@ -100,13 +118,13 @@ const Charts = () => {
       .catch((err) => {
         console.error("API Count Error:", err);
       });
-  }, [topType, searchQuery, ratingRange]);
+  }, [topType, searchQuery, ratingRange, selectedCategory]);
 
-  // Загружаем данные при изменении типа топа, страницы, поиска или рейтинга
+  // Загружаем данные при изменении типа топа, страницы, поиска, рейтинга или категории
   useEffect(() => {
-    debouncedFetchData(page, searchQuery, ratingRange[0], ratingRange[1]);
+    debouncedFetchData(page, searchQuery, ratingRange[0], ratingRange[1], selectedCategory);
     return () => debouncedFetchData.cancel();
-  }, [topType, page, searchQuery, ratingRange]);
+  }, [topType, page, searchQuery, ratingRange, selectedCategory]);
 
   // Сохранение текущей страницы при изменении page или topType
   useEffect(() => {
@@ -131,6 +149,13 @@ const Charts = () => {
     setPage(1); // Сбрасываем страницу при изменении рейтинга
   };
 
+  // Обработчик изменения категории
+  const handleCategoryChange = (e) => {
+    const value = e.target.value;
+    setSelectedCategory(value === "" ? null : parseInt(value, 10));
+    setPage(1); // Сбрасываем страницу при изменении категории
+  };
+
   // Обработчик открытия/закрытия фильтра
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
@@ -140,6 +165,7 @@ const Charts = () => {
   const resetFilters = () => {
     setSearchQuery("");
     setRatingRange([0, 10]);
+    setSelectedCategory(null);
     setPage(1);
   };
 
@@ -157,6 +183,7 @@ const Charts = () => {
             });
             setSearchQuery("");
             setRatingRange([0, 10]);
+            setSelectedCategory(null);
             setIsFilterOpen(false);
           }}
         >
@@ -172,6 +199,7 @@ const Charts = () => {
             });
             setSearchQuery("");
             setRatingRange([0, 10]);
+            setSelectedCategory(null);
             setIsFilterOpen(false);
           }}
         >
@@ -196,6 +224,23 @@ const Charts = () => {
                 : "Поиск по бренду..."
             }
           />
+          {topType === "energies" && (
+            <div className="category-filter">
+              <h4>Категория</h4>
+              <select
+                value={selectedCategory || ""}
+                onChange={handleCategoryChange}
+                className="category-select"
+              >
+                <option value="">Все напитки</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <div className="rating-filter">
             <h4>Диапазон рейтинга</h4>
             <Slider

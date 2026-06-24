@@ -43,6 +43,40 @@
   transform: rotate(180deg);
 }
 
+/* Фильтр категорий */
+.category-filter {
+  margin: 15px 0;
+}
+
+.category-filter h4 {
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.category-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 8px;
+  background-color: var(--card-background);
+  color: var(--text-color);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.category-select:hover {
+  border-color: var(--primary-color);
+}
+
+.category-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+}
+
 /* Диапазон рейтинга */
 .rating-filter {
   margin: 20px 0;
